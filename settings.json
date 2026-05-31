@@ -1,4 +1,5 @@
 {
+    "window.zoomLevel": 1,
     "github.copilot.nextEditSuggestions.enabled": true,
     "csharp.inlayHints.enableInlayHintsForTypes": true,
     "csharp.inlayHints.enableInlayHintsForLambdaParameterTypes": true,
