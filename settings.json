@@ -141,16 +141,18 @@
             ]
         },
     ],
-    "vim.statusBarColors.normal": "#47c24d",
+    "vim.statusBarColors.normal": "#7d7d7d",
     "vim.statusBarColors.insert": "#446ac4",
     "vim.statusBarColors.visual": "#ceb244",
     "vim.statusBarColors.replace": "#B46378",
     "vim.statusBarColors.commandlineinprogress": "#a947c2",
+    "vim.statusBarColors.easymotioninputmode": "#75a149",
+    "vim.statusBarColors.easymotionmode": "#75a149",
     // Ctrlキーの組み合わせをすべてVimに処理させる
     "workbench.colorCustomizations": {
-        "statusBar.background": "#47c24d",
-        "statusBar.noFolderBackground": "#47c24d",
-        "statusBar.debuggingBackground": "#47c24d",
+        "statusBar.background": "#7d7d7d",
+        "statusBar.noFolderBackground": "#7d7d7d",
+        "statusBar.debuggingBackground": "#7d7d7d",
         "statusBar.foreground": "#ffffff",
         "statusBar.debuggingForeground": "#ffffff"
     },
