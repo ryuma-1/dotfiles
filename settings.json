@@ -10,6 +10,7 @@
     "editor.lineNumbers": "relative",
     "editor.smoothScrolling": true,
     "editor.formatOnSave": true,
+    "editor.editContext": false,
     "workbench.list.smoothScrolling": true,
     "editor.codeActionsOnSave": {
         "source.organizeImports": "always"
@@ -161,5 +162,7 @@
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,
     "notebook.insertFinalNewline": true,
-    "files.insertFinalNewline": true
+    "files.insertFinalNewline": true,
+    "vim.autoSwitchInputMethod.enable": false,
+    "vim.composeInIsertMode": true,
 }
