@@ -6,11 +6,10 @@
     "csharp.inlayHints.enableInlayHintsForImplicitVariableTypes": true,
     "csharp.inlayHints.enableInlayHintsForImplicitObjectCreation": true,
     "chat.viewSessions.orientation": "stacked",
-    "workbench.colorTheme": "One Dark Pro Night Flat",
+    "workbench.colorTheme": "Tokyo Night",
     "editor.lineNumbers": "relative",
     "editor.smoothScrolling": true,
     "editor.formatOnSave": true,
-    "editor.editContext": false,
     "workbench.list.smoothScrolling": true,
     "editor.codeActionsOnSave": {
         "source.organizeImports": "always"
@@ -141,6 +140,94 @@
                 "workbench.action.splitEditorRight"
             ]
         },
+        {
+            "before": [
+                "<leader>",
+                "b"
+            ],
+            "commands": [
+                "workbench.action.toggleSidebarVisibility"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "o"
+            ],
+            "commands": [
+                "workbench.view.explorer"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "j"
+            ],
+            "commands": [
+                "workbench.action.togglePanel"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "p"
+            ],
+            "commands": [
+                "workbench.action.quickOpen"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "c"
+            ],
+            "commands": [
+                "workbench.action.chat.open"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "i"
+            ],
+            "commands": [
+                "inlineChat.start"
+            ]
+        }
+    ],
+    "vim.visualModeKeyBindings": [
+        {
+            "before": [
+                "t"
+            ],
+            "after": [
+                "<leader>",
+                "<leader>",
+                "f"
+            ]
+        },
+        {
+            "before": [
+                "T"
+            ],
+            "after": [
+                "<leader>",
+                "<leader>",
+                "F"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "i"
+            ],
+            "commands": [
+                "inlineChat.start"
+            ]
+        }
     ],
     "vim.statusBarColors.normal": "#7d7d7d",
     "vim.statusBarColors.insert": "#446ac4",
@@ -162,7 +249,5 @@
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,
     "notebook.insertFinalNewline": true,
-    "files.insertFinalNewline": true,
-    "vim.autoSwitchInputMethod.enable": false,
-    "vim.composeInIsertMode": true,
+    "files.insertFinalNewline": true
 }
