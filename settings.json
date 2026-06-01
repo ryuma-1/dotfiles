@@ -22,6 +22,10 @@
     "vim.visualstar": true,
     "vim.hlsearch": true,
     "vim.leader": "<space>",
+    "vim.handleKeys": {
+        "<C-j>": true,
+        "<C-k>": true,
+    },
     "vim.insertModeKeyBindings": [
         {
             "before": [
@@ -98,6 +102,7 @@
         {
             "before": [
                 "<leader>",
+                "l",
                 "l"
             ],
             "commands": [
@@ -107,7 +112,8 @@
         {
             "before": [
                 "<leader>",
-                "m"
+                "l",
+                "a"
             ],
             "commands": [
                 "workbench.action.showErrorsWarnings"
@@ -195,6 +201,154 @@
             "commands": [
                 "inlineChat.start"
             ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "w",
+                "w"
+            ],
+            "commands": [
+                "workbench.action.closeAllEditors"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "w",
+                "a"
+            ],
+            "commands": [
+                "workbench.action.closeAllEditors"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "w",
+                "p"
+            ],
+            "commands": [
+                "workbench.action.pinEditor"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "w",
+                "u"
+            ],
+            "commands": [
+                "workbench.action.unpinEditor"
+            ]
+        },
+        {
+            "before": [
+                "<C-w>",
+            ],
+            "commands": [
+                "workbench.action.closeActiveEditor"
+            ]
+        },
+        {
+            "before": [
+                "<C-h>"
+            ],
+            "commands": [
+                "workbench.action.previousEditor"
+            ]
+        },
+        {
+            "before": [
+                "<C-l>"
+            ],
+            "commands": [
+                "workbench.action.nextEditor"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "m",
+                "h"
+            ],
+            "commands": [
+                "workbench.action.navigateLeft"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "m",
+                "l"
+            ],
+            "commands": [
+                "workbench.action.navigateRight"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "m",
+                "j"
+            ],
+            "commands": [
+                "workbench.action.navigateDown"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "m",
+                "k"
+            ],
+            "commands": [
+                "workbench.action.navigateUp"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "m",
+                "w",
+                "h"
+            ],
+            "commands": [
+                "workbench.action.moveEditorToLeftGroup"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "m",
+                "w",
+                "l"
+            ],
+            "commands": [
+                "workbench.action.moveEditorToRightGroup"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "m",
+                "w",
+                "k"
+            ],
+            "commands": [
+                "workbench.action.moveEditorToAboveGroup"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "m",
+                "w",
+                "j"
+            ],
+            "commands": [
+                "workbench.action.moveEditorToBelowGroup"
+            ]
         }
     ],
     "vim.visualModeKeyBindings": [
@@ -227,7 +381,7 @@
             "commands": [
                 "inlineChat.start"
             ]
-        }
+        },
     ],
     "vim.statusBarColors.normal": "#7d7d7d",
     "vim.statusBarColors.insert": "#446ac4",
