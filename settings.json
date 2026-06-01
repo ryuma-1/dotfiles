@@ -196,10 +196,35 @@
             "before": [
                 "<leader>",
                 "c",
-                "i"
+                "g"
+            ],
+            "commands": [
+                {
+                    "command": "workbench.action.chat.open",
+                    "args": {
+                        "query": "/add-comment"
+                    }
+                }
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "i",
             ],
             "commands": [
                 "inlineChat.start"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "q"
+            ],
+            "commands": [
+                "workbench.action.toggleAuxiliaryBar"
             ]
         },
         {
@@ -349,7 +374,7 @@
             "commands": [
                 "workbench.action.moveEditorToBelowGroup"
             ]
-        }
+        },
     ],
     "vim.visualModeKeyBindings": [
         {

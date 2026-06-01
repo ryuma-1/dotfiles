@@ -3,6 +3,6 @@
     {
         "key": "escape",
         "command": "workbench.action.focusActiveEditorGroup",
-        "when": "terminalFocus"
-    }
+        "when": "terminalFocus || ((chatInputForcus || inChat) && !inlineChatVisible)"
+    },
 ]
