@@ -211,6 +211,21 @@
             "before": [
                 "<leader>",
                 "c",
+                "p"
+            ],
+            "commands": [
+                {
+                    "command": "workbench.action.chat.open",
+                    "args": {
+                        "query": "/profread"
+                    }
+                }
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
                 "i",
             ],
             "commands": [
@@ -428,5 +443,11 @@
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,
     "notebook.insertFinalNewline": true,
-    "files.insertFinalNewline": true
+    "files.insertFinalNewline": true,
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": true,
+        "scminput": false
+    }
 }
