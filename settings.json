@@ -6,10 +6,12 @@
     "csharp.inlayHints.enableInlayHintsForImplicitVariableTypes": true,
     "csharp.inlayHints.enableInlayHintsForImplicitObjectCreation": true,
     "chat.viewSessions.orientation": "stacked",
-    "workbench.colorTheme": "Tokyo Night",
+    "workbench.colorTheme": "One Dark Pro Night Flat",
     "editor.lineNumbers": "relative",
     "editor.smoothScrolling": true,
     "editor.formatOnSave": true,
+    "editor.editContext": false,
+    "editor.experimentalEditContextEnabled": false,
     "workbench.list.smoothScrolling": true,
     "editor.codeActionsOnSave": {
         "source.organizeImports": "always"
@@ -428,5 +430,7 @@
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,
     "notebook.insertFinalNewline": true,
-    "files.insertFinalNewline": true
+    "files.insertFinalNewline": true,
+    "editor.wordWrap": "on",
+    "editor.minimap.enabled": false
 }
