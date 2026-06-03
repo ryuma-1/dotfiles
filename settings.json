@@ -219,7 +219,7 @@
                 {
                     "command": "workbench.action.chat.open",
                     "args": {
-                        "query": "/profread"
+                        "query": "/profread-tex"
                     }
                 }
             ]

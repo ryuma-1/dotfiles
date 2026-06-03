@@ -61,3 +61,6 @@ setopt always_last_prompt
 setopt extended_glob
 # 一覧を詰めて表示
 setopt list_packed
+
+# 自作のコマンド省略形（エイリアス）
+alias xc='xclip -selection clipboard'
