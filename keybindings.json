@@ -5,4 +5,62 @@
         "command": "workbench.action.focusActiveEditorGroup",
         "when": "terminalFocus || ((chatInputForcus || inChat) && !inlineChatVisible)"
     },
+    {
+        "key": "ctrl+w",
+        "command": "workbench.action.closeActiveEditor"
+    },
+    {
+        "key": "ctrl+h",
+        "command": "workbench.action.previousEditor"
+    },
+    {
+        "key": "ctrl+l",
+        "command": "workbench.action.nextEditor"
+    },
+    // ==========================================
+    // 1. タブグループ（画面）間のフォーカス移動 (Option + hjkl)
+    // ==========================================
+    {
+        "key": "alt+h",
+        "mac": "option+h",
+        "command": "workbench.action.navigateLeft"
+    },
+    {
+        "key": "alt+l",
+        "mac": "option+l",
+        "command": "workbench.action.navigateRight"
+    },
+    {
+        "key": "alt+j",
+        "mac": "option+j",
+        "command": "workbench.action.navigateDown"
+    },
+    {
+        "key": "alt+k",
+        "mac": "option+k",
+        "command": "workbench.action.navigateUp"
+    },
+    // ==========================================
+    // 2. 現在のタブを隣のグループへ移動 (Ctrl + Option + hjkl)
+    // ==========================================
+    {
+        "key": "ctrl+alt+h",
+        "mac": "ctrl+option+h",
+        "command": "workbench.action.moveEditorToLeftGroup"
+    },
+    {
+        "key": "ctrl+alt+l",
+        "mac": "ctrl+option+l",
+        "command": "workbench.action.moveEditorToRightGroup"
+    },
+    {
+        "key": "ctrl+alt+k",
+        "mac": "ctrl+option+k",
+        "command": "workbench.action.moveEditorToAboveGroup"
+    },
+    {
+        "key": "ctrl+alt+j",
+        "mac": "ctrl+option+j",
+        "command": "workbench.action.moveEditorToBelowGroup"
+    }
 ]
