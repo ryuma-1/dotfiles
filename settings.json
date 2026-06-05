@@ -284,6 +284,33 @@
                 "workbench.action.unpinEditor"
             ]
         },
+        {
+            "before": [
+                "g",
+                "r"
+            ],
+            "commands": [
+                "editor.action.goToReferences"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "n"
+            ],
+            "commands": [
+                "editor.action.rename"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "a"
+            ],
+            "commands": [
+                "editor.action.quickFix"
+            ]
+        }
     ],
     "vim.visualModeKeyBindings": [
         {
@@ -346,5 +373,6 @@
     },
     "editor.wordWrap": "on",
     "editor.minimap.enabled": false,
-    "hediet.vscode-drawio.resizeImages": null
+    "hediet.vscode-drawio.resizeImages": null,
+    "window.restoreWindows": "one"
 }
