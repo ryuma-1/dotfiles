@@ -64,6 +64,7 @@ setopt list_packed
 
 # 自作のコマンド省略形（エイリアス）
 alias xc='xclip -selection clipboard'
+alias xp='xclip -selection clipboard -o'
 
 # meeting フォルダへ一発で移動するエイリアス
 alias cdm='cd ~/gitlab/ikeda-r/mydocuments/meeting'
