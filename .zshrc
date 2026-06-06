@@ -67,3 +67,5 @@ alias xc='xclip -selection clipboard'
 
 # meeting フォルダへ一発で移動するエイリアス
 alias cdm='cd ~/gitlab/ikeda-r/mydocuments/meeting'
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
