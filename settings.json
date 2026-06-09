@@ -78,7 +78,7 @@
             "commands": [
                 "editor.action.triggerSuggest"
             ]
-        }
+        },
     ],
     "vim.normalModeKeyBindingsNonRecursive": [
         {
@@ -268,6 +268,16 @@
             "before": [
                 "<leader>",
                 "w",
+                "o"
+            ],
+            "commands": [
+                "workbench.action.closeOtherEditors"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "w",
                 "g"
             ],
             "commands": [
@@ -384,5 +394,6 @@
     "editor.wordWrap": "on",
     "editor.minimap.enabled": false,
     "hediet.vscode-drawio.resizeImages": null,
-    "window.restoreWindows": "one"
+    "window.restoreWindows": "one",
+    "workbench.activityBar.location": "hidden"
 }

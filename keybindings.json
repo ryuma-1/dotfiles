@@ -66,7 +66,7 @@
         "command": "workbench.action.moveEditorToBelowGroup"
     },
     {
-        "key": "ctrl+enter",
+        "key": "ctrl+p",
         "command": "editor.action.inlineSuggest.commit",
         "when": "inlineEditIsVisible && tabShouldAcceptInlineEdit && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible || inlineEditIsVisible && inlineSuggestionVisible && tabShouldAcceptInlineEdit && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible || inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editor.hasSelection && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible || inlineEditIsVisible && inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editor.hasSelection && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible"
     },
@@ -76,14 +76,24 @@
         "when": "inlineEditIsVisible && tabShouldAcceptInlineEdit && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible || inlineEditIsVisible && inlineSuggestionVisible && tabShouldAcceptInlineEdit && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible || inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editor.hasSelection && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible || inlineEditIsVisible && inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editor.hasSelection && !editorHoverFocused && !editorTabMovesFocus && !suggestWidgetVisible"
     },
     {
-        "key": "ctrl+enter",
+        "key": "ctrl+p",
         "command": "editor.action.inlineSuggest.commit",
         "when": "inInlineEditsPreviewEditor"
+    },
+    {
+        "key": "ctrl+p",
+        "command": "github.copilot.nextEditSuggestions.accept",
+        "when": "editorTextFocus && github.copilot.nextEditSuggestions.hasSuggestions"
     },
     {
         "key": "tab",
         "command": "-editor.action.inlineSuggest.commit",
         "when": "inInlineEditsPreviewEditor"
+    },
+    {
+        "key": "alt+l",
+        "command": "editor.action.inlineSuggest.acceptNextWord",
+        "when": "inlineSuggestionVisible && editorTextFocus"
     },
     {
         "key": "alt+j",
