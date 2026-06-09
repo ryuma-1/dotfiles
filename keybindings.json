@@ -81,9 +81,19 @@
         "when": "inInlineEditsPreviewEditor"
     },
     {
+        "key": "ctrl+enter",
+        "command": "github.copilot.nextEditSuggestions.accept",
+        "when": "editorTextFocus && github.copilot.nextEditSuggestions.hasSuggestions"
+    },
+    {
         "key": "tab",
         "command": "-editor.action.inlineSuggest.commit",
         "when": "inInlineEditsPreviewEditor"
+    },
+    {
+        "key": "alt+l",
+        "command": "editor.action.inlineSuggest.acceptNextWord",
+        "when": "inlineSuggestionVisible && editorTextFocus"
     },
     {
         "key": "alt+j",

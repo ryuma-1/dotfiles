@@ -1,0 +1,90 @@
+return {
+    -- カラースキーム (onedarkpro)
+    {
+        'olimorris/onedarkpro.nvim',
+        lazy = false,
+        priority = 1000,
+        config = function()
+            require('onedarkpro').setup({
+                colors = {
+                    fg = '#f0f0f0',
+                    bg = '#101010',
+                },
+                options = {
+                    semantic_hi = false;
+                },
+            })
+        end
+    },
+    -- カラースキーム (tokyonight)
+    {
+        "folke/tokyonight.nvim",
+        lazy = true,
+        event = 'BufEnter',
+        priority = 1000,
+        cmd = { 'ColorSchemeToggle' },
+        opts = {},
+    },
+    -- カラースキーム (nightfox)
+    {
+        "EdenEast/nightfox.nvim",
+        priority = 1000, -- 起動時に最優先で読み込む
+        config = function()
+            require("nightfox").setup({
+                palettes = {
+                    all = {
+                        bg1 = "#101010", -- 基本の背景色 (Background)
+                        fg1 = "#f0f0f0", -- 基本の文字色 (Foreground)
+                    },
+                }
+            })
+
+            vim.cmd("colorscheme onedark") -- デフォルトのカラースキームを設定
+        end
+    },
+    -- ステータスライン
+    {
+        'nvim-lualine/lualine.nvim',
+        lazy = false,
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        config = function()
+            local my_sections = {
+                lualine_a = { 'filename' },
+                lualine_b = { 'branch', 'diff', 'diagnostics' },
+                lualine_c = { { 'filename', file_status = false, path = 3 }, 'selectioncount' },
+                lualine_x = { { require('lazy.status').updates, cond = require('lazy.status').has_updates } },
+                lualine_y = { 'encoding', 'fileformat', 'filetype' },
+                lualine_z = { '%l/%L:%c (%p%%)' }
+            }
+            require('lualine').setup({ sections = my_sections })
+        end
+    },
+    -- バッファライン
+    {
+        'akinsho/bufferline.nvim',
+        event = 'VimEnter',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        opts = { options = { separator_style = 'padded_slant' } },
+    },
+    -- カラーコード着色
+    {
+        'norcalli/nvim-colorizer.lua',
+        event = { 'BufReadPre', 'BufNewFile' },
+        config = function() require('colorizer').setup() end
+    },
+    -- Whitespace強調
+    {
+        'ntpeters/vim-better-whitespace',
+        event = 'VeryLazy',
+        config = function()
+            vim.g.better_whitespace_filetypes_blacklist = { 'toggleterm', 'diff', 'qf', 'help', 'snacks_dashboard' }
+            vim.api.nvim_set_hl(0, 'ExtraWhitespace', { bg = '#CF572D' })
+        end
+    },
+    -- UI 改善 (Dressing)
+    {
+        'stevearc/dressing.nvim',
+        event = 'VeryLazy',
+        opts = {},
+    }
+}
