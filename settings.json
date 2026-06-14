@@ -395,5 +395,6 @@
     "editor.minimap.enabled": false,
     "hediet.vscode-drawio.resizeImages": null,
     "window.restoreWindows": "one",
-    "workbench.activityBar.location": "hidden"
+    "workbench.activityBar.location": "hidden",
+    "extensions.ignoreRecommendations": true
 }
