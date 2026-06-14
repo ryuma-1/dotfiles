@@ -1,1 +1,1 @@
-set number
+/home/ikeda-r/.vimrc
