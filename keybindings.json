@@ -1,9 +1,12 @@
 // Place your key bindings in this file to override the defaults
 [
+    // ==========================================
+    // 1. エディタ・UIの基本操作
+    // ==========================================
     {
         "key": "escape",
         "command": "workbench.action.focusActiveEditorGroup",
-        "when": "terminalFocus || ((chatInputForcus || inChat) && !inlineChatVisible)"
+        "when": "terminalFocus || ((chatInputFocus || inChat) && !inlineChatVisible)"
     },
     {
         "key": "ctrl+w",
@@ -20,7 +23,7 @@
         "when": "vim.mode != 'Insert'"
     },
     // ==========================================
-    // 1. タブグループ（画面）間のフォーカス移動 (Option + hjkl)
+    // 2. タブグループ（画面分割）間のフォーカス移動
     // ==========================================
     {
         "key": "alt+h",
@@ -43,7 +46,7 @@
         "command": "workbench.action.navigateUp"
     },
     // ==========================================
-    // 2. 現在のタブを隣のグループへ移動 (Ctrl + Option + hjkl)
+    // 3. 現在のタブを隣のグループへ移動
     // ==========================================
     {
         "key": "ctrl+alt+h",
@@ -65,36 +68,9 @@
         "mac": "ctrl+option+j",
         "command": "workbench.action.moveEditorToBelowGroup"
     },
-    {
-        "key": "ctrl+p",
-        "command": "editor.action.inlineSuggest.commit",
-        "when": "inlineEditIsVisible && tabShouldAcceptInlineEdit && !editorHoverFocused && !editorTabMovesFocus || inlineEditIsVisible && inlineSuggestionVisible && tabShouldAcceptInlineEdit && !editorHoverFocused && !editorTabMovesFocus || inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editor.hasSelection && !editorHoverFocused && !editorTabMovesFocus || inlineEditIsVisible && inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editor.hasSelection && !editorHoverFocused && !editorTabMovesFocus"
-    },
-    {
-        "key": "tab",
-        "command": "-editor.action.inlineSuggest.commit",
-        "when": "inlineEditIsVisible && tabShouldAcceptInlineEdit && !editorHoverFocused && !editorTabMovesFocus || inlineEditIsVisible && inlineSuggestionVisible && tabShouldAcceptInlineEdit && !editorHoverFocused && !editorTabMovesFocus || inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editor.hasSelection && !editorHoverFocused && !editorTabMovesFocus || inlineEditIsVisible && inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editor.hasSelection && !editorHoverFocused && !editorTabMovesFocus"
-    },
-    {
-        "key": "ctrl+p",
-        "command": "editor.action.inlineSuggest.commit",
-        "when": "inInlineEditsPreviewEditor"
-    },
-    {
-        "key": "ctrl+enter",
-        "command": "github.copilot.nextEditSuggestions.accept",
-        "when": "editorTextFocus && github.copilot.nextEditSuggestions.hasSuggestions"
-    },
-    {
-        "key": "tab",
-        "command": "-editor.action.inlineSuggest.commit",
-        "when": "inInlineEditsPreviewEditor"
-    },
-    {
-        "key": "alt+l",
-        "command": "editor.action.inlineSuggest.acceptNextWord",
-        "when": "inlineSuggestionVisible && editorTextFocus"
-    },
+    // ==========================================
+    // 4. コードの行移動 (Vim ノーマルモード専用)
+    // ==========================================
     {
         "key": "alt+j",
         "command": "editor.action.moveLinesDownAction",
@@ -105,6 +81,35 @@
         "command": "editor.action.moveLinesUpAction",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     },
+    // ==========================================
+    // 5. GitHub Copilot: インラインサジェストの受け入れ
+    // ==========================================
+    // ① 提案が出ている時は Ctrl+Enter で一括受け入れ
+    {
+        "key": "ctrl+enter",
+        "command": "editor.action.inlineSuggest.commit",
+        "when": "inlineSuggestionVisible || inlineEditIsVisible || inInlineEditsPreviewEditor"
+    },
+    // ② 次の編集提案 (Next Edit Suggestion) がある場合の受け入れ
+    {
+        "key": "ctrl+enter",
+        "command": "github.copilot.nextEditSuggestions.accept",
+        "when": "editorTextFocus && github.copilot.nextEditSuggestions.hasSuggestions"
+    },
+    // ③ 単語（部分）ごとの受け入れ
+    {
+        "key": "alt+l",
+        "command": "editor.action.inlineSuggest.acceptNextWord",
+        "when": "inlineSuggestionVisible && editorTextFocus"
+    },
+    // ④ 標準の Tab キーによる提案受け入れを完全に無効化
+    {
+        "key": "tab",
+        "command": "-editor.action.inlineSuggest.commit"
+    },
+    // ==========================================
+    // 6. GitHub Copilot: チャットの送信設定
+    // ==========================================
     {
         "key": "ctrl+enter",
         "command": "workbench.action.chat.submit",
