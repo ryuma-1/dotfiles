@@ -1,4 +1,5 @@
 # --------------------------------------------------
+# P
 # Git ブランチ名表示の設定
 # --------------------------------------------------
 # zshの関数呼び出し機能を有効にする
@@ -7,8 +8,8 @@ setopt prompt_subst
 
 # バージョン管理システム（Git）から情報を取得する設定
 zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ':vcs_info:git:*' formats '%F{yellow}(%b%u%c%F{yellow})%f'
-zstyle ':vcs_info:git:*' actionformats '%F{yellow}(%b|%a%u%c%F{yellow})%f'
+zstyle ':vcs_info:git:*' formats '%F{#beb3ff}(%b%u%c%F{#beb3ff})%f'
+zstyle ':vcs_info:git:*' actionformats '%F{#beb3ff}(%b|%a%u%c%F{#beb3ff})%f'
 zstyle ':vcs_info:git:*' unstagedstr '%F{#E06C75}*%f'
 zstyle ':vcs_info:git:*' stagedstr '%F{#93CD7E}+%f'
 # コマンド実行前に毎回実行される関数

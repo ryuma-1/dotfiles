@@ -6,7 +6,7 @@
     "csharp.inlayHints.enableInlayHintsForImplicitVariableTypes": true,
     "csharp.inlayHints.enableInlayHintsForImplicitObjectCreation": true,
     "chat.viewSessions.orientation": "stacked",
-    "workbench.colorTheme": "One Dark Pro Night Flat",
+    "workbench.colorTheme": "One Dark Pro",
     "editor.lineNumbers": "relative",
     "editor.smoothScrolling": true,
     "editor.formatOnSave": true,
@@ -81,6 +81,14 @@
         },
     ],
     "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "<Enter>"
+            ],
+            "commands": [
+                "editor.action.insertLineAfter"
+            ]
+        },
         {
             "before": [
                 "t"
@@ -373,6 +381,7 @@
     "vim.statusBarColors.easymotionmode": "#75a149",
     // Ctrlキーの組み合わせをすべてVimに処理させる
     "workbench.colorCustomizations": {
+        "editor.background": "#09070e",
         "statusBar.background": "#7d7d7d",
         "statusBar.noFolderBackground": "#7d7d7d",
         "statusBar.debuggingBackground": "#7d7d7d",
@@ -396,5 +405,5 @@
     "hediet.vscode-drawio.resizeImages": null,
     "window.restoreWindows": "one",
     "workbench.activityBar.location": "hidden",
-    "extensions.ignoreRecommendations": true
+    "extensions.ignoreRecommendations": true,
 }

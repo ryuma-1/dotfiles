@@ -119,5 +119,13 @@
         "key": "enter",
         "command": "-workbench.action.chat.submit",
         "when": "chatInputHasText && chatSessionOptionsValid && inChatInput && !chatSessionRequestInProgress && !withinEditSessionDiff || chatInputHasText && chatSessionOptionsValid && inChatInput && !withinEditSessionDiff && chatEditingSentRequest == 's'"
+    },
+    // ==========================================
+    // 7. shift を交えた vim のコマンドの設定
+    // ==========================================
+    {
+        "key": "shift+enter",
+        "command": "editor.action.insertLineBefore",
+        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
     }
 ]
