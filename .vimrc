@@ -23,11 +23,29 @@ Plug 'joshdick/onedark.vim'
 " 滑らかなスクロール
 Plug 'terryma/vim-smooth-scroll'
 
+" インデントラインを表示
+Plug 'Yggdroot/indentLine'
+
+" 高機能のジャンプ
+Plug 'easymotion/vim-easymotion'
+
 call plug#end()
 
+" ====================================================================
+" 3. カーソルの設定
+" ====================================================================
+
+" ノーマルモード: ブロックカーソル
+let &t_EI = "\e[2 q"
+
+" インサートモード: 縦線カーソル（I-beam）
+let &t_SI = "\e[6 q"
+
+" 置換モード: 下線カーソル
+let &t_SR = "\e[4 q"
 
 " ====================================================================
-" 3. カラーテーマ（One Dark）の設定
+" 4. カラーテーマ（One Dark）の設定
 " ====================================================================
 " ターミナルで24bit True Color（真色）を有効にする
 if (has("nvim"))
@@ -48,9 +66,32 @@ let g:onedark_color_overrides = {
 " カラーテーマをonedarkに指定
 colorscheme onedark
 
+" ====================================================================
+" 5. インデントラインの設定
+" ====================================================================
+" indentLine 有効化
+let g:indentLine_enabled = 1
+
+" ガイドラインの文字
+let g:indentLine_char = '│'   " 縦線
+
+" 色の設定（ターミナルの場合）
+let g:indentLine_color_trm = 239   " 0〜255のターミナルカラー番号
+
+" GVimの場合
+let g:indentLine_color_gui = '#4a4a4a'
+
+" 先頭のインデントも表示
+let g:indentLine_showFirstIndentLevel = 1
+
+" 特定のファイルタイプで無効化
+let g:indentLine_fileTypeExclude = ['markdown', 'json', 'text']
+
+" Markdownなどでテキストが消える問題を防ぐ
+let g:indentLine_setConceal = 2
 
 " ====================================================================
-" 4. キーマッピング（基本操作・ショートカット）
+" 6. キーマッピング（基本操作・ショートカット）
 " ====================================================================
 " リーダーキーの設定
 let mapleader = " "
@@ -104,7 +145,7 @@ nnoremap <leader>q <C-w>q
 
 
 " ====================================================================
-" 5. プラグイン固有のキーマッピング設定
+" 7. プラグイン固有のキーマッピング設定
 " ====================================================================
 " vim-smooth-scroll：滑らかにスクロール
 " （プラグインの関数を呼び出すため、必ず一番下に配置します）
@@ -112,3 +153,8 @@ noremap <silent> <C-d> :call smooth_scroll#down(&scroll, 12, 2)<CR>
 noremap <silent> <C-u> :call smooth_scroll#up(&scroll, 12, 2)<CR>
 noremap <silent> <C-f> :call smooth_scroll#down(&scroll*2, 12, 4)<CR>
 noremap <silent> <C-b> :call smooth_scroll#up(&scroll*2, 12, 4)<CR>
+
+" 6{char} → カーソルより下の文字候補にジャンプ
+nmap t <Plug>(easymotion-t)
+" T{char} → カーソルより上の文字候補にジャンプ
+nmap T <Plug>(easymotion-T)

@@ -1,6 +1,7 @@
 {
     "window.zoomLevel": 1,
     "github.copilot.nextEditSuggestions.enabled": true,
+    "editor.inlayHints.enabled": "offUnlessPressed",
     "csharp.inlayHints.enableInlayHintsForTypes": true,
     "csharp.inlayHints.enableInlayHintsForLambdaParameterTypes": true,
     "csharp.inlayHints.enableInlayHintsForImplicitVariableTypes": true,
@@ -386,7 +387,8 @@
         "statusBar.noFolderBackground": "#7d7d7d",
         "statusBar.debuggingBackground": "#7d7d7d",
         "statusBar.foreground": "#ffffff",
-        "statusBar.debuggingForeground": "#ffffff"
+        "statusBar.debuggingForeground": "#ffffff",
+        "editorIndentGuide.activeBackground1": "#4393c1"
     },
     "workbench.activityBar.compact": true,
     "editor.renderWhitespace": "trailing",
