@@ -41,26 +41,10 @@
         },
         {
             "before": [
-                "<C-h>"
+                "<C-h>",
             ],
             "after": [
                 "<Left>"
-            ]
-        },
-        {
-            "before": [
-                "<C-j>"
-            ],
-            "after": [
-                "<Down>"
-            ]
-        },
-        {
-            "before": [
-                "<C-k>"
-            ],
-            "after": [
-                "<Up>"
             ]
         },
         {
@@ -69,6 +53,26 @@
             ],
             "after": [
                 "<Right>"
+            ]
+        },
+        {
+            "before": [
+                "<C-j>"
+            ],
+            "after": [
+                "<C-o>",
+                "g",
+                "j"
+            ]
+        },
+        {
+            "before": [
+                "<C-k>"
+            ],
+            "after": [
+                "<C-o>",
+                "g",
+                "k"
             ]
         },
         {
@@ -88,6 +92,24 @@
             ],
             "commands": [
                 "editor.action.insertLineAfter"
+            ]
+        },
+        {
+            "before": [
+                "j"
+            ],
+            "after": [
+                "g",
+                "j"
+            ]
+        },
+        {
+            "before": [
+                "k"
+            ],
+            "after": [
+                "g",
+                "k"
             ]
         },
         {
