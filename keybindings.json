@@ -22,6 +22,16 @@
         "command": "workbench.action.nextEditor",
         "when": "vim.mode != 'Insert'"
     },
+    {
+        "key": "ctrl+j",
+        "command": "workbench.action.moveEditorLeftInGroup",
+        "when": "vim.mode != 'Insert'"
+    },
+    {
+        "key": "ctrl+k",
+        "command": "workbench.action.moveEditorRightInGroup",
+        "when": "vim.mode != 'Insert'"
+    },
     // ==========================================
     // 2. タブグループ（画面分割）間のフォーカス移動
     // ==========================================
