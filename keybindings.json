@@ -6,7 +6,7 @@
     {
         "key": "escape",
         "command": "workbench.action.focusActiveEditorGroup",
-        "when": "terminalFocus || ((chatInputFocus || inChat) && !inlineChatVisible)"
+        "when": "terminalFocus || ((chatInputFocus || inChat) && !inlineChatVisible) || sideBarFocus || panelFocus"
     },
     {
         "key": "ctrl+w",
