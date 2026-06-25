@@ -191,6 +191,42 @@
         {
             "before": [
                 "<leader>",
+                "f"
+            ],
+            "commands": [
+                "workbench.action.findInFiles"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "e"
+            ],
+            "commands": [
+                "workbench.view.explorer"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "g"
+            ],
+            "commands": [
+                "workbench.view.scm"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "x"
+            ],
+            "commands": [
+                "workbench.view.extensions"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
                 "o"
             ],
             "commands": [
@@ -410,7 +446,7 @@
         "statusBar.debuggingBackground": "#7d7d7d",
         "statusBar.foreground": "#ffffff",
         "statusBar.debuggingForeground": "#ffffff",
-        "editorIndentGuide.activeBackground1": "#4393c1"
+        "editorIndentGuide.activeBackground1": "#f0f0f0"
     },
     "workbench.activityBar.compact": true,
     "editor.renderWhitespace": "trailing",
@@ -428,6 +464,5 @@
     "editor.minimap.enabled": false,
     "hediet.vscode-drawio.resizeImages": null,
     "window.restoreWindows": "one",
-    "workbench.activityBar.location": "hidden",
     "extensions.ignoreRecommendations": true,
 }
