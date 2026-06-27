@@ -441,9 +441,9 @@
     // Ctrlキーの組み合わせをすべてVimに処理させる
     "workbench.colorCustomizations": {
         "editor.background": "#09070e",
-        "statusBar.background": "#446ac4",
-        "statusBar.noFolderBackground": "#446ac4",
-        "statusBar.debuggingBackground": "#446ac4",
+        "statusBar.background": "#7d7d7d",
+        "statusBar.noFolderBackground": "#7d7d7d",
+        "statusBar.debuggingBackground": "#7d7d7d",
         "statusBar.foreground": "#ffffff",
         "statusBar.debuggingForeground": "#ffffff",
         "editorIndentGuide.activeBackground1": "#f0f0f0"
