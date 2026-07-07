@@ -7,7 +7,7 @@
     "csharp.inlayHints.enableInlayHintsForImplicitVariableTypes": true,
     "csharp.inlayHints.enableInlayHintsForImplicitObjectCreation": true,
     "chat.viewSessions.orientation": "stacked",
-    "workbench.colorTheme": "One Dark Pro",
+    "workbench.colorTheme": "Monokai Pro",
     "editor.lineNumbers": "relative",
     "editor.smoothScrolling": true,
     "editor.formatOnSave": true,
@@ -440,13 +440,14 @@
     "vim.statusBarColors.easymotionmode": "#75a149",
     // Ctrlキーの組み合わせをすべてVimに処理させる
     "workbench.colorCustomizations": {
-        "editor.background": "#09070e",
+        "editor.background": "#000000",
+        "editorGutter.background": "#000000",
         "statusBar.background": "#7d7d7d",
         "statusBar.noFolderBackground": "#7d7d7d",
         "statusBar.debuggingBackground": "#7d7d7d",
         "statusBar.foreground": "#ffffff",
         "statusBar.debuggingForeground": "#ffffff",
-        "editorIndentGuide.activeBackground1": "#f0f0f0"
+        "editorIndentGuide.activeBackground1": "#b8b6b6"
     },
     "workbench.activityBar.compact": true,
     "editor.renderWhitespace": "trailing",
@@ -458,7 +459,8 @@
         "*": true,
         "plaintext": false,
         "markdown": true,
-        "scminput": false
+        "scminput": false,
+        "csharp": true
     },
     "editor.wordWrap": "on",
     "editor.minimap.enabled": false,

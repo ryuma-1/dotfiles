@@ -30,10 +30,16 @@ vmap P p
 
 " インサートモードでのカーソル移動・削除
 imap <C-h> <Left>
+
 imap <C-l> <Right>
+
 imap <C-j> <Down>
+
 imap <C-k> <Up>
+
+" 削除系のマッピング
 imap <C-q> <BS>
+
 imap <C-e> <Del>
 
 " --- ObsidianのコマンドをVimキーにバインドする設定 ---

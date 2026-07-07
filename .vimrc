@@ -26,8 +26,8 @@ set expandtab     " Tabキーを押したときに、タブ文字ではなくス
 " ====================================================================
 call plug#begin('~/.vim/plugged')
 
-" カラーテーマ「One Dark」
-Plug 'joshdick/onedark.vim'
+" カラースキーム
+Plug 'phanviet/vim-monokai-pro'
 
 " 滑らかなスクロール
 Plug 'terryma/vim-smooth-scroll'
@@ -54,7 +54,7 @@ let &t_SI = "\e[6 q"
 let &t_SR = "\e[4 q"
 
 " ====================================================================
-" 4. カラーテーマ（One Dark）の設定
+" 4. カラーテーマの設定
 " ====================================================================
 " ターミナルで24bit True Color（真色）を有効にする
 if (has("nvim"))
@@ -67,13 +67,12 @@ endif
 " 背景を暗く設定
 set background=dark
 
-" ※重要: colorscheme を呼び出す前に背景色のオーバーライドを記述
-let g:onedark_color_overrides = {
-\ "background": {"gui": "#050505", "cterm": "232", "cterm16": "0" }
-\}
+" カラーテーマを Monokai Pro に指定
+colorscheme monokai_pro
 
-" カラーテーマをonedarkに指定
-colorscheme onedark
+" Monokai Proを読み込んだ後に、背景色を真っ黒に上書きする設定
+highlight Normal guibg=#000000 ctermbg=black
+highlight NonText guibg=#000000 ctermbg=black
 
 " ====================================================================
 " 5. インデントラインの設定
