@@ -21,6 +21,9 @@ export RASK_URL="http://rask.nomlab.org"
 # =============================================================================
 # 2. 履歴 (History) の設定
 # =============================================================================
+# 履歴を保存するファイルのパス
+export HISTFILE=$HOME/.zsh_history
+
 # メモリ上に保存する履歴の件数
 export HISTSIZE=100000
 # 履歴ファイルに保存する履歴の件数
@@ -112,3 +115,10 @@ alias xp='xclip -selection clipboard -o'
 
 # 特定のプロジェクトディレクトリへのショートカット
 alias cdm='cd ~/gitlab/ikeda-r/mydocuments/meeting'
+
+# bun completions
+[ -s "/home/ikeda-r/.bun/_bun" ] && source "/home/ikeda-r/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

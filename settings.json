@@ -17,6 +17,10 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": "always"
     },
+    "[markdown]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
+    },
     // vim settings
     "vim.useSystemClipboard": true,
     "vim.easymotion": true,

@@ -25,23 +25,6 @@ return {
         cmd = { 'ColorSchemeToggle' },
         opts = {},
     },
-    -- カラースキーム (nightfox)
-    {
-        "EdenEast/nightfox.nvim",
-        priority = 1000, -- 起動時に最優先で読み込む
-        config = function()
-            require("nightfox").setup({
-                palettes = {
-                    all = {
-                        bg1 = "#101010", -- 基本の背景色 (Background)
-                        fg1 = "#f0f0f0", -- 基本の文字色 (Foreground)
-                    },
-                }
-            })
-
-            vim.cmd("colorscheme onedark") -- デフォルトのカラースキームを設定
-        end
-    },
     -- ステータスライン
     {
         'nvim-lualine/lualine.nvim',
