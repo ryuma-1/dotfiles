@@ -137,5 +137,148 @@
         "key": "shift+enter",
         "command": "editor.action.insertLineBefore",
         "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    // ==========================================
+    // 8. Markdown All in One x VSCode Vim 連携
+    // ==========================================
+    // インサートモードでのTab/Shift+TabをMarkdown All in Oneのリスト操作として確実に発火させる
+    {
+        "key": "tab",
+        "command": "markdown.extension.onTabKey",
+        "when": "editorLangId == 'markdown' && editorTextFocus && !suggestWidgetVisible && vim.mode == 'Insert'"
+    },
+    {
+        "key": "shift+tab",
+        "command": "markdown.extension.onShiftTabKey",
+        "when": "editorLangId == 'markdown' && editorTextFocus && !suggestWidgetVisible && vim.mode == 'Insert'"
+    },
+    // ノーマル/ビジュアルモードでもTabキーを使って Markdown All in One 基準のリストインデントができるようにする
+    {
+        "key": "tab",
+        "command": "markdown.extension.onTabKey",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.mode != 'Insert'"
+    },
+    {
+        "key": "shift+tab",
+        "command": "markdown.extension.onShiftTabKey",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.mode != 'Insert'"
+    },
+    // ==========================================
+    // 9. Markdown: m b でボールド化 (Visual / Normal)
+    // ==========================================
+    {
+        "key": "m b",
+        "command": "markdown.extension.editing.toggleBold",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Visual'"
+    },
+    // ついでにノーマルモードでも現在の単語をボールド化できるようにすると便利です
+    {
+        "key": "m b",
+        "command": "markdown.extension.editing.toggleBold",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    // ==========================================
+    // 10. Markdown: m i でイタリック化 (Visual / Normal)
+    // ==========================================
+    {
+        "key": "m i",
+        "command": "markdown.extension.editing.toggleItalic",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Visual'"
+    },
+    {
+        "key": "m i",
+        "command": "markdown.extension.editing.toggleItalic",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    // ==========================================
+    // 11. Markdown: m s で取り消し線 (Visual / Normal)
+    // ==========================================
+    {
+        "key": "m s",
+        "command": "markdown.extension.editing.toggleStrikethrough",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Visual'"
+    },
+    {
+        "key": "m s",
+        "command": "markdown.extension.editing.toggleStrikethrough",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    // ==========================================
+    // 12. Markdown: m m で数式化 (Visual / Normal)
+    // ==========================================
+    {
+        "key": "m m",
+        "command": "markdown.extension.editing.toggleMath",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Visual'"
+    },
+    {
+        "key": "m m",
+        "command": "markdown.extension.editing.toggleMath",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    // ==========================================
+    // 13. Markdown: Markdown All in One を使った行移動 (Normal)
+    // ==========================================
+    {
+        "key": "alt+j",
+        "command": "markdown.extension.onMoveLineDown",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    {
+        "key": "alt+k",
+        "command": "markdown.extension.onMoveLineUp",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    // ==========================================
+    // 14. Markdown: Markdown All in One を使った複数行移動 (Visual)
+    // ==========================================
+    {
+        "key": "alt+j",
+        "command": "markdown.extension.onMoveLineDown",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Visual'"
+    },
+    {
+        "key": "alt+k",
+        "command": "markdown.extension.onMoveLineUp",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Visual'"
+    },
+    // ==========================================
+    // 15. Markdown: m c でタスクリストのチェックをトグル (Visual / Normal)
+    // ==========================================
+    {
+        "key": "m c",
+        "command": "markdown.extension.checkTaskList",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Visual'"
+    },
+    {
+        "key": "m c",
+        "command": "markdown.extension.checkTaskList",
+        "when": "editorLangId == 'markdown' && editorTextFocus && vim.active && vim.mode == 'Normal'"
+    },
+    // ==========================================
+    // 16. Markdown: m v v でプレビューを開く (Visual / Normal)
+    // ==========================================
+    {
+        "key": "m v v",
+        "command": "markdown.showPreview",
+        "when": "editorLangId == 'markdown' && vim.active && vim.mode == 'Visual'"
+    },
+    {
+        "key": "m v v",
+        "command": "markdown.showPreview",
+        "when": "editorLangId == 'markdown' && vim.active && vim.mode == 'Normal'"
+    },
+    // ==========================================
+    // 17. Markdown: m v k でプレビューを横に開く (Visual / Normal)
+    // ==========================================
+    {
+        "key": "m v k",
+        "command": "markdown.showPreviewToSide",
+        "when": "editorLangId == 'markdown' && vim.active && vim.mode == 'Visual'"
+    },
+    {
+        "key": "m v k",
+        "command": "markdown.showPreviewToSide",
+        "when": "editorLangId == 'markdown' && vim.active && vim.mode == 'Normal'"
     }
 ]

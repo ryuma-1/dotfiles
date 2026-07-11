@@ -446,12 +446,16 @@
     "workbench.colorCustomizations": {
         "editor.background": "#000000",
         "editorGutter.background": "#000000",
+        "editor.selectionBackground": "#3b82f680",
+        "editor.selectionHighlightBackground": "#3b82f640",
         "statusBar.background": "#7d7d7d",
+        "statusBar.foreground": "#ffffff",
+        "statusBarItem.foreground": "#ffffff",
+        "statusBarItem.hoverForeground": "#ffffff",
+        "statusBarItem.activeForeground": "#ffffff",
         "statusBar.noFolderBackground": "#7d7d7d",
         "statusBar.debuggingBackground": "#7d7d7d",
-        "statusBar.foreground": "#ffffff",
-        "statusBar.debuggingForeground": "#ffffff",
-        "editorIndentGuide.activeBackground1": "#b8b6b6"
+        "statusBar.debuggingForeground": "#ffffff"
     },
     "workbench.activityBar.compact": true,
     "editor.renderWhitespace": "trailing",

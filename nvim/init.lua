@@ -116,20 +116,35 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 -- 3. プラグイン定義
 ----------------------------------------------------------------------
 require("lazy").setup({
-  -- カラーテーマ (One Dark Pro 相当)
+  -- カラーテーマ (Monokai Pro)
   {
-    "navarasu/onedark.nvim",
+    "loctvl88/monokai-pro.nvim",
     priority = 1000,
+    lazy = false,
     config = function()
-      require("onedark").setup({ style = "dark" })
-      require("onedark").load()
+      require("monokai-pro").setup({
+        filter = "pro", -- フィルターの選択: "pro", "classic", "machine", "octagon", "spectrum", "ristretto"
+        styles = {
+          comment = { italic = true },
+          keyword = { italic = true },
+        },
+      })
+      
+      -- Monokai Pro のテーマを最終適用
+      vim.cmd("colorscheme monokai-pro")
 
-      -- workbench.colorCustomizations 相当の上書き
-      vim.api.nvim_set_hl(0, "Normal", { bg = "#09070e" })
-      vim.api.nvim_set_hl(0, "StatusLine", { bg = "#a947c2", fg = "#ffffff" })
+      -- workbench.colorCustomizations 相当の上書き（Monokai Proスタイル）
+      -- Normal: エディタ全体の背景色（お好みで漆黒に近い #101010 や、Monokai特有の #2d2a2e に微調整してください）
+      vim.api.nvim_set_hl(0, "Normal", { bg = "#2d2a2e" }) 
+      
+      -- StatusLine: ステータスライン（Monokaiを象徴する鮮やかなプロ・ピンク #ff61ef に設定）
+      vim.api.nvim_set_hl(0, "StatusLine", { bg = "#ff61ef", fg = "#2d2a2e" })
+      
+      -- インデント強調線（snacks.nvim 等と連動するアクティブなインデント色をハッキリとした白に指定）
       vim.api.nvim_set_hl(0, "IndentBlanklineContextChar", { fg = "#f0f0f0" })
     end,
   },
+})
 
   -- アイコン
   { "nvim-tree/nvim-web-devicons" },
