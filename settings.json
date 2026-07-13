@@ -446,7 +446,7 @@
     "workbench.colorCustomizations": {
         "editor.background": "#000000",
         "editorGutter.background": "#000000",
-        "editor.selectionBackground": "#3b82f680",
+        "editor.selectionBackground": "#70cdff9e",
         "editor.selectionHighlightBackground": "#3b82f640",
         "editorIndentGuide.background1": "#444444",
         "editorIndentGuide.activeBackground1": "#adadad",
