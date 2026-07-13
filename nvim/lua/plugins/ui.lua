@@ -1,29 +1,25 @@
 return {
-    -- カラースキーム (onedarkpro)
+-- カラースキーム (Monokai Pro)
     {
-        'olimorris/onedarkpro.nvim',
+        "loctvl842/monokai-pro.nvim", -- 💡 「loctvl842」に修正しました
         lazy = false,
         priority = 1000,
         config = function()
-            require('onedarkpro').setup({
-                colors = {
-                    fg = '#f0f0f0',
-                    bg = '#101010',
+            require("monokai-pro").setup({
+                filter = "pro",
+                styles = {
+                    comment = { italic = true },
+                    keyword = { italic = true },
                 },
-                options = {
-                    semantic_hi = false;
-                },
+                override = function(c)
+                    return {
+                        Normal = { bg = "#101010" },
+                    }
+                end,
             })
+
+            vim.cmd("colorscheme monokai-pro")
         end
-    },
-    -- カラースキーム (tokyonight)
-    {
-        "folke/tokyonight.nvim",
-        lazy = true,
-        event = 'BufEnter',
-        priority = 1000,
-        cmd = { 'ColorSchemeToggle' },
-        opts = {},
     },
     -- ステータスライン
     {

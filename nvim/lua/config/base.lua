@@ -7,7 +7,7 @@ IsWSL = (res.code == 0)
 vim.opt.encoding = 'utf8'
 vim.scriptencoding = 'utf8'
 
--- 共通オプション (既存の設定とマージ済み)
+-- 共通オプション
 vim.opt.termguicolors = true
 vim.opt.signcolumn = 'yes:1'
 vim.opt.foldenable = false
