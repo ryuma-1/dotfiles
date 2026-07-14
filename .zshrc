@@ -95,9 +95,9 @@ precmd() { vcs_info }
 # 変更の有無をチェックする
 zstyle ':vcs_info:git:*' check-for-changes true
 # 通常時の表示フォーマット
-zstyle ':vcs_info:git:*' formats '%F{#beb3ff}(%b%u%c%F{#beb3ff})%f'
+zstyle ':vcs_info:git:*' formats '%F{#ad9eff}(%b%u%c%F{#ad9eff})%f'
 # rebase や merge などのアクション実行中の表示フォーマット
-zstyle ':vcs_info:git:*' actionformats '%F{#beb3ff}(%b|%a%u%c%F{#beb3ff})%f'
+zstyle ':vcs_info:git:*' actionformats '%F{#ad9eff}(%b|%a%u%c%F{#ad9eff})%f'
 # unstaged (変更あり・未add) のマーク（赤色の *）
 zstyle ':vcs_info:git:*' unstagedstr '%F{#E06C75}*%f'
 # staged (add済み) のマーク（緑色の +）
