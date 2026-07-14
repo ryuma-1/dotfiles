@@ -21,6 +21,9 @@ set tabstop=4     " 画面上でタブ文字が占める幅（ここでは半角
 set shiftwidth=4  " 自動インデントや「>」「<」コマンドで動くスペースの幅
 set expandtab     " Tabキーを押したときに、タブ文字ではなくスペースに変換する
 
+" 文字を入力するたびに、動的に一致する候補へジャンプする
+set incsearch
+
 " ====================================================================
 " 2. プラグイン管理 (vim-plug)
 " ====================================================================
@@ -73,6 +76,16 @@ colorscheme monokai_pro
 " Monokai Proを読み込んだ後に、背景色を真っ黒に上書きする設定
 highlight Normal guibg=#000000 ctermbg=black
 highlight NonText guibg=#000000 ctermbg=black
+
+" 通常の行番号エリア（左側の帯）の設定
+highlight LineNr guifg=#5c6370 guibg=#000000
+
+" カーソルがいる行の「行番号だけ」の色設定
+highlight CursorLineNr guifg=#e5c07b guibg=#2c313c cterm=bold gui=bold
+
+" カーソルがいる行の「全体の背景色」の設定
+set cursorline
+highlight CursorLine guibg=#2c313c cterm=NONE gui=NONE
 
 " ====================================================================
 " 5. インデントラインの設定

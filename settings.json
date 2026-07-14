@@ -458,9 +458,9 @@
         "statusBar.noFolderBackground": "#7d7d7d",
         "statusBar.debuggingBackground": "#7d7d7d",
         "statusBar.debuggingForeground": "#ffffff",
-        "diffEditor.insertedTextBackground": "#38a2348f",
+        "diffEditor.insertedTextBackground": "#7acd868f",
         "diffEditor.insertedLineBackground": "#0f2a0f95",
-        "diffEditor.removedTextBackground": "#c1373794",
+        "diffEditor.removedTextBackground": "#bd6d6d94",
         "diffEditor.removedLineBackground": "#2d0f0f89"
     },
     "workbench.activityBar.compact": true,
