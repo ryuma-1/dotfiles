@@ -104,7 +104,7 @@ zstyle ':vcs_info:git:*' unstagedstr '%F{#E06C75}*%f'
 zstyle ':vcs_info:git:*' stagedstr '%F{#93CD7E}+%f'
 
 # 実際のプロンプト表示（左側にシアン色でカレントパス、右側に Git 情報を表示）
-PROMPT='%F{cyan}%~%f ${vcs_info_msg_0_} '
+PROMPT='%F{#00FFFF}%~%f ${vcs_info_msg_0_} '
 
 # =============================================================================
 # 6. エイリアス (Aliases)
