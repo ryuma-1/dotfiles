@@ -43,6 +43,8 @@ vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.updatetime = 300
 vim.opt.virtualedit:append("block")
+vim.opt.wrap = true
+vim.opt.breakindent = true
 
 -- Unityなどの外部ファイル変更を自動反映する設定
 vim.opt.autoread = true
