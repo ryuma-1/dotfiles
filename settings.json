@@ -444,24 +444,23 @@
     "vim.statusBarColors.easymotionmode": "#75a149",
     // Ctrlキーの組み合わせをすべてVimに処理させる
     "workbench.colorCustomizations": {
-        "editor.background": "#000000",
-        "editorGutter.background": "#000000",
-        "editor.selectionBackground": "#70cdff9e",
-        "editor.selectionHighlightBackground": "#3b82f640",
-        "editorIndentGuide.background1": "#444444",
-        "editorIndentGuide.activeBackground1": "#adadad",
+        "[Monokai Pro]": {
+            "editor.background": "#000000",
+            "editorGutter.background": "#000000",
+            "editor.selectionBackground": "#70cdff9e",
+            "editor.selectionHighlightBackground": "#3b82f640",
+            "editorIndentGuide.background1": "#444444",
+            "editorIndentGuide.activeBackground1": "#adadad",
+            "diffEditor.insertedTextBackground": "#7acd868f",
+            "diffEditor.insertedLineBackground": "#0f2a0f95",
+            "diffEditor.removedTextBackground": "#bd6d6d94",
+            "diffEditor.removedLineBackground": "#2d0f0f89"
+        },
         "statusBar.background": "#7d7d7d",
-        "statusBar.foreground": "#ffffff",
-        "statusBarItem.foreground": "#ffffff",
-        "statusBarItem.hoverForeground": "#ffffff",
-        "statusBarItem.activeForeground": "#ffffff",
         "statusBar.noFolderBackground": "#7d7d7d",
         "statusBar.debuggingBackground": "#7d7d7d",
-        "statusBar.debuggingForeground": "#ffffff",
-        "diffEditor.insertedTextBackground": "#7acd868f",
-        "diffEditor.insertedLineBackground": "#0f2a0f95",
-        "diffEditor.removedTextBackground": "#bd6d6d94",
-        "diffEditor.removedLineBackground": "#2d0f0f89"
+        "statusBar.foreground": "#ffffff",
+        "statusBar.debuggingForeground": "#ffffff"
     },
     "workbench.activityBar.compact": true,
     "editor.renderWhitespace": "trailing",
