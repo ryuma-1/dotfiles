@@ -13,7 +13,7 @@ return {
                 },
                 override = function(c)
                     return {
-                        Normal = { bg = "#101010" },
+                        Normal = { bg = "#000000" },
                     }
                 end,
             })
