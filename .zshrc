@@ -97,6 +97,14 @@ autoload -U promptinit
 promptinit
 prompt pure
 
+# add したときにマークを追加
+zstyle ':prompt:pure:git:dirty' detailed yes
+
+# ▼▼▼ ここから追加：pure の配色カスタマイズ ▼▼▼
+zstyle ':prompt:pure:path' color '#00FFFF' # パスを明るいシアンに
+zstyle ':prompt:pure:prompt:success' color '#ad9eff'  # 成功時
+# ▲▲▲ ここまで追加 ▲▲▲
+
 # --- zsh-history-substring-search ---
 # 上下矢印キーで履歴の部分文字列検索を行う
 bindkey "$terminfo[kcuu1]" history-substring-search-up
