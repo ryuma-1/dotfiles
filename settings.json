@@ -446,8 +446,11 @@
     "workbench.colorCustomizations": {
         "[Monokai Pro]": {
             "editor.background": "#000000",
+            "sideBar.background": "#000000",
+            "terminal.background": "#000000",
+            "panel.background": "#000000",
             "editorGutter.background": "#000000",
-            "editor.selectionBackground": "#70cdff9e",
+            "editor.selectionBackground": "#4d9aff9e",
             "editor.selectionHighlightBackground": "#3b82f640",
             "editorIndentGuide.background1": "#444444",
             "editorIndentGuide.activeBackground1": "#adadad",
