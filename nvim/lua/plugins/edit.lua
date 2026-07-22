@@ -5,7 +5,12 @@ return {
     {
         'timakro/vim-yadi',
         event = 'VeryLazy',
-        config = function() vim.cmd('DetectIndent') end
+        config = function()
+            -- Markdown は after/ftplugin/markdown.lua の 2 スペース設定を優先する
+            if vim.bo.filetype ~= 'markdown' then
+                vim.cmd('DetectIndent')
+            end
+        end
     },
     -- 括弧の自動補完
     {

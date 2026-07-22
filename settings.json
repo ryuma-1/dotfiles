@@ -484,4 +484,5 @@
     "window.restoreWindows": "one",
     "extensions.ignoreRecommendations": true,
     "workbench.activityBar.location": "hidden",
+    "claudeCode.preferredLocation": "panel",
 }

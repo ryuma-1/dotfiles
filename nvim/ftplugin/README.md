@@ -2,12 +2,11 @@
 
 このディレクトリには、filetype ごとのローカル設定を置く。
 
-- `ftplugin/markdown.lua`: Markdown 専用のインデント設定
-- `ftplugin/lua.lua`: Lua 専用の 2 スペース設定
-- `ftplugin/tex.lua`: TeX 専用の文章編集設定
+標準 ftplugin の設定より後に適用するため、独自設定は
+`after/ftplugin/<filetype>.lua` に置く。
 
-基本方針:
+- `after/ftplugin/markdown.lua`: Markdown 専用のインデント設定
+- `after/ftplugin/lua.lua`: Lua 専用の 2 スペース設定
+- `after/ftplugin/tex.lua`: TeX 専用の文章編集設定
 
-- 全体設定は `lua/config/base.lua`
-- ファイルタイプ固有の上書きは `ftplugin/<filetype>.lua`
-- さらに後勝ちにしたい場合は `after/ftplugin/<filetype>.lua`
+全体設定は `lua/config/base.lua` に置く。

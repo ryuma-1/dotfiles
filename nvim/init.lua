@@ -26,6 +26,9 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- ftplugin/<filetype>.lua にあるファイルタイプ別設定を読み込む
+vim.cmd("filetype plugin indent on")
+
 require('config.base')
 require('config.keymaps')
 
