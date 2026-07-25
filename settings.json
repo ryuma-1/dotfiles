@@ -63,20 +63,16 @@
             "before": [
                 "<C-j>"
             ],
-            "after": [
-                "<C-o>",
-                "g",
-                "j"
+            "commands": [
+                "cursorDown"
             ]
         },
         {
             "before": [
                 "<C-k>"
             ],
-            "after": [
-                "<C-o>",
-                "g",
-                "k"
+            "commands": [
+                "cursorUp"
             ]
         },
         {
@@ -102,18 +98,16 @@
             "before": [
                 "j"
             ],
-            "after": [
-                "g",
-                "j"
+            "commands": [
+                "cursorDown"
             ]
         },
         {
             "before": [
                 "k"
             ],
-            "after": [
-                "g",
-                "k"
+            "commands": [
+                "cursorUp"
             ]
         },
         {
@@ -483,6 +477,5 @@
     "hediet.vscode-drawio.resizeImages": null,
     "window.restoreWindows": "one",
     "extensions.ignoreRecommendations": true,
-    "workbench.activityBar.location": "hidden",
     "claudeCode.preferredLocation": "panel",
 }

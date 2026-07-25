@@ -47,6 +47,14 @@ vim.opt.wrap = true
 vim.opt.breakindent = true
 vim.opt.showbreak = "↳ "
 
+vim.api.nvim_create_autocmd("ColorScheme", {
+    callback = function()
+        vim.api.nvim_set_hl(0, "NonText", {
+            fg = "#696969",
+        })
+    end,
+})
+
 -- Unityなどの外部ファイル変更を自動反映する設定
 vim.opt.autoread = true
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {

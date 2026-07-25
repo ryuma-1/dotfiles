@@ -133,5 +133,8 @@ fi
 # 特定のプロジェクトディレクトリへのショートカット
 alias cdm='cd ~/gitlab/ikeda-r/mydocuments/meeting'
 
+# 一時的なメモを作成するためのエイリアス
+alias m='nvim ~/Documents/tmp.md'
+
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
