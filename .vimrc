@@ -46,6 +46,8 @@ Plug 'Yggdroot/indentLine'
 " 高機能のジャンプ
 Plug 'easymotion/vim-easymotion'
 
+Plug 'miraihack/VimnaganoYabo'
+
 call plug#end()
 
 " ====================================================================

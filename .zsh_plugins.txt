@@ -1,0 +1,28 @@
+# =============================================================================
+# antidote プラグインリスト
+# 読み込み順序に注意:
+#   - zsh-completions は compinit より前に fpath へ追加する必要があるため先頭
+#   - zsh-syntax-highlighting は zsh-vi-mode より前に、かつ同期的に読み込む必要がある
+#   - zsh-vi-mode は最後に読み込む
+# =============================================================================
+
+# 補完定義の追加 (compinit 前に fpath へ追加させる)
+zsh-users/zsh-completions kind:fpath path:src
+
+# プロンプトテーマ (pure)。fpath に追加してから prompt_pure_setup を呼ぶ
+sindresorhus/pure kind:fpath
+
+# ディレクトリジャンプ
+rupa/z
+
+# 履歴の部分文字列検索 (上下矢印用)
+zsh-users/zsh-history-substring-search
+
+# 入力補完のサジェスト (灰色のゴーストテキスト)
+zsh-users/zsh-autosuggestions
+
+# シンタックスハイライト。zsh-vi-mode より前に、同期的に読み込む(defer厳禁)
+zsh-users/zsh-syntax-highlighting
+
+# vi モードのキーバインド。必ず最後に読み込む
+jeffreytse/zsh-vi-mode

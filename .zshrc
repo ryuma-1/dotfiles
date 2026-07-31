@@ -33,6 +33,12 @@ setopt extended_glob          # 拡張グロブを有効化 (~ や ^ などを�
 setopt magic_equal_subst      # --prefix=/usr などの = 以降でもパスを補完する
 setopt prompt_subst           # プロンプトでの変数展開を有効にする (pure テーマが利用)
 
+# zsh-vi-mode の再帰エラー対策として ZLE エンジンを使用
+ZVM_READKEY_ENGINE=$ZVM_READKEY_ENGINE_ZLE
+
+# 全モード共通で jk を脱出キーに設定
+ZVM_VI_ESCAPE_BINDKEY=jk
+
 # =============================================================================
 # 4. antidote によるプラグイン管理
 # =============================================================================
@@ -105,15 +111,20 @@ zstyle ':prompt:pure:path' color '#00FFFF' # パスを明るいシアンに
 zstyle ':prompt:pure:prompt:success' color '#ad9eff'  # 成功時
 # ▲▲▲ ここまで追加 ▲▲▲
 
+# --- zsh-autosuggestions (お好みで調整可) ---
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
 # --- zsh-history-substring-search ---
 # 上下矢印キーで履歴の部分文字列検索を行う
 bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
 
-# --- zsh-autosuggestions (お好みで調整可) ---
-export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# zsh-vi-mode の初期化完了後に vicmd(ノーマルモード)用のキーを設定
+# ※ zsh-vi-mode がキーマップを再構築するため、この関数の中で設定する必要がある
+function zvm_after_init() {
+  bindkey -M vicmd 'k' history-substring-search-up
+  bindkey -M vicmd 'j' history-substring-search-down
+}
 
 # --- rupa/z ---
 # `z <キーワード>` でよく使うディレクトリへジャンプ可能
@@ -135,6 +146,24 @@ alias cdm='cd ~/gitlab/ikeda-r/mydocuments/meeting'
 
 # 一時的なメモを作成するためのエイリアス
 alias m='nvim ~/Documents/tmp.md'
+
+# プロジェクトの個人タスクを開くためのエイリアス
+task() {
+    local dir="$PWD"
+
+    while [[ "$dir" != "/" ]]; do
+        if [[ -d "$dir/Local" ]]; then
+            mkdir -p "$dir/Local"
+            touch "$dir/Local/task.md"
+            nvim "$dir/Local/task.md"
+            return
+        fi
+
+        dir="$(dirname "$dir")"
+    done
+
+    echo "Local フォルダが見つかりませんでした。"
+}
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"

@@ -14,9 +14,30 @@ return {
     },
     -- 括弧の自動補完
     {
-        'hrsh7th/nvim-insx',
-        event = 'InsertEnter',
-        config = function() require('insx.preset.standard').setup() end
+        "windwp/nvim-autopairs",
+        event = "InsertEnter",
+        config = function()
+            require("nvim-autopairs").setup({
+                check_ts = true, -- Treesitter連携
+                ts_config = {
+                    lua = { "string" },
+                    javascript = { "template_string" },
+                },
+                disable_filetype = {
+                    "TelescopePrompt",
+                    "vim",
+                },
+            })
+
+            -- nvim-cmp連携
+            local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+            local cmp = require("cmp")
+
+            cmp.event:on(
+                "confirm_done",
+                cmp_autopairs.on_confirm_done()
+            )
+        end,
     },
     -- TODOコメント強調
     {

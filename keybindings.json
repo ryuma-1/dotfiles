@@ -280,5 +280,5 @@
         "key": "m v k",
         "command": "markdown.showPreviewToSide",
         "when": "editorLangId == 'markdown' && vim.active && vim.mode == 'Normal'"
-    }
+    },
 ]
