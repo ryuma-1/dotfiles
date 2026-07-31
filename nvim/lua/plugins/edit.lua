@@ -39,6 +39,14 @@ return {
             )
         end,
     },
+    {
+        "kylechui/nvim-surround",
+        version = "*", -- 最新の安定版
+        event = "VeryLazy",
+        config = function()
+            require("nvim-surround").setup({})
+        end,
+    },
     -- TODOコメント強調
     {
         'folke/todo-comments.nvim',

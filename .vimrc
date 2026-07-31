@@ -46,6 +46,9 @@ Plug 'Yggdroot/indentLine'
 " 高機能のジャンプ
 Plug 'easymotion/vim-easymotion'
 
+" 囲い文字のコマンド
+Plug 'tpope/vim-surround'
+
 Plug 'miraihack/VimnaganoYabo'
 
 call plug#end()
