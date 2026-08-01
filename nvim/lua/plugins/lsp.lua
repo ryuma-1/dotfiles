@@ -78,8 +78,15 @@ return {
                     vim.diagnostic.config({ virtual_text = false })
 
 
+                    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ll', '<cmd>Lspsaga hover_doc<CR>', {
+                        noremap = true, silent = true, desc = 'LSP Hover',
+                    })
+                    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>la', '<cmd>Lspsaga show_workspace_diagnostics<CR>', {
+                        noremap = true, silent = true, desc = 'LSP Workspace Diagnostics',
+                    })
+
                     vim.g.show_diagnostics = true
-                    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l', '', {
+                    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ul', '', {
                         noremap = true, silent = true, desc = 'Change Diagnostic View',
                         callback = function()
                             vim.g.show_diagnostics = not vim.g.show_diagnostics

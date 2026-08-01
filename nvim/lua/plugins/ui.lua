@@ -59,11 +59,5 @@ return {
             vim.g.better_whitespace_filetypes_blacklist = { 'toggleterm', 'diff', 'qf', 'help', 'snacks_dashboard' }
             vim.api.nvim_set_hl(0, 'ExtraWhitespace', { bg = '#CF572D' })
         end
-    },
-    -- UI 改善 (Dressing)
-    {
-        'stevearc/dressing.nvim',
-        event = 'VeryLazy',
-        opts = {},
     }
 }

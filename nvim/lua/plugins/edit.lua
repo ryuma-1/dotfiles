@@ -97,18 +97,27 @@ return {
     {
         'uga-rosa/translate.nvim',
         opts = {},
-        keys = { { '<leader>t', ':Translate ja -output=floating<CR>', mode = { 'n', 'v' }, desc = 'Translate', silent = true } },
+        keys = { { '<leader>r', ':Translate ja -output=floating<CR>', mode = { 'n', 'v' }, desc = 'Translate', silent = true } },
     },
     -- ファイラ (NvimTree)
     {
         'nvim-tree/nvim-tree.lua',
-        keys = { { "<leader>o", "<cmd>NvimTreeToggle<CR>", desc = "NvimTreeToggle" } },
+        keys = {
+            { "<leader>b", "<cmd>NvimTreeToggle<CR>", desc = "NvimTreeToggle" },
+            { "<leader>e", "<cmd>NvimTreeFocus<CR>", desc = "NvimTreeFocus" },
+            { "<leader>o", "<cmd>NvimTreeFocus<CR>", desc = "NvimTreeFocus" },
+        },
         opts = {},
     },
     -- ウィンドウを維持してバッファ削除
     {
         'ojroques/nvim-bufdel',
-        keys = { { "<leader>w", "<cmd>BufDel<CR>", desc = "Buffer Delete" } },
+        keys = {
+            { "<leader>ww", "<cmd>BufDelAll<CR>", desc = "Close All Buffers" },
+            { "<leader>wa", "<cmd>BufDelAll<CR>", desc = "Close All Buffers" },
+            { "<leader>wo", "<cmd>BufDelOthers<CR>", desc = "Close Other Buffers" },
+            { "<leader>wd", "<cmd>BufDel<CR>", desc = "Close Current Buffer" },
+        },
         opts = { next = 'tabs', quit = false },
     },
     -- 組み込みターミナル改善
@@ -116,6 +125,7 @@ return {
         'akinsho/toggleterm.nvim',
         keys = {
             { '<C-t>', '<CMD>ToggleTerm direction=float<CR>', mode = {'n', 'v', 'i'}, desc = 'ToggleTerm open float' },
+            { '<leader>t', '<CMD>ToggleTerm<CR>', mode = {'n', 'v'}, desc = 'ToggleTerm toggle' },
             { '<leader>yt', '<CMD>ToggleTerm direction=horizontal size=10<CR>', mode = {'n', 'v'}, desc = 'ToggleTerm open horizontal' },
             { '<leader>yy', '<CMD>ToggleTerm direction=vertical size=50<CR>', mode = {'n', 'v'}, desc = 'ToggleTerm open side' },
         },
@@ -197,7 +207,7 @@ return {
             { "gP", "<Plug>(YankyGPutBefore)", mode = { "n", "x" } },
             { "=p", "<Plug>(YankyPutAfterFilter)" },
             { "=P", "<Plug>(YankyPutBeforeFilter)" },
-            { "<leader>p", function() Snacks.picker.yanky() end, mode = { "n", "x" }, desc = "Open Yank History" },
+            { "<leader>P", function() Snacks.picker.yanky() end, mode = { "n", "x" }, desc = "Open Yank History" },
         },
     },
     -- ファジーファインダー (Telescope)
@@ -206,7 +216,9 @@ return {
         cmd = 'Telescope',
         dependencies = { 'nvim-lua/plenary.nvim' },
         keys = {
+            { '<leader>p', '<CMD>Telescope find_files<CR>', desc = 'Telescope find files'},
             { '<leader>ff', '<CMD>Telescope find_files<CR>', desc = 'Telescope find files'},
+            { '<leader>f', '<CMD>Telescope live_grep<CR>', desc = 'Telescope live grep'},
             { '<leader>fg', '<CMD>Telescope live_grep<CR>', desc = 'Telescope live grep'},
         },
         config = function()

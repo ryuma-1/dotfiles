@@ -3,63 +3,43 @@ return {
     {
         "zbirenbaum/copilot.lua",
         event = 'InsertEnter',
+        dependencies = { "copilotlsp-nvim/copilot-lsp" }, -- Next Edit Suggestions 用
         config = function()
             require("copilot").setup({
-                suggestion = { enabled = true },
-                panel = { enabled = false },
+                -- Ctrl+Enter は端末では Enter と同一バイト列になり判別できないため、
+                -- 確実に判別できる Option+Enter (<M-CR>) を確定キーとして使う。
+                -- 既定の panel.keymap.open も <M-CR> のため、後述の重複検知を避けるために無効化する
+                panel = { enabled = false, keymap = { open = false } },
+                suggestion = {
+                    enabled = true,
+                    -- タイピング中に自動で候補を表示する (VSCode の Copilot と同じ挙動。既定値は false で無効)
+                    auto_trigger = true,
+                    -- Option+Enter で提案を確定 (VSCode: editor.action.inlineSuggest.commit)
+                    keymap = {
+                        accept = '<M-CR>',
+                        -- Alt+l で単語単位の確定 (VSCode: editor.action.inlineSuggest.acceptNextWord)
+                        accept_word = '<M-l>',
+                    },
+                },
+                -- Next Edit Suggestions (VSCode: github.copilot.nextEditSuggestions.enabled)
+                -- nes.keymap 経由で <M-CR> を登録すると、copilot.lua 側のモード判定バグにより
+                -- suggestion.keymap.accept (Insert) と "Duplicate keymap" に誤検知されるため、
+                -- ここでは登録せず、下記で Normal モード用に自前でキーマップする
+                nes = {
+                    enabled = true,
+                    auto_trigger = true,
+                },
             })
+
+            -- Option+Enter で Next Edit Suggestion を確定 (VSCode: github.copilot.nextEditSuggestions.accept)
+            -- suggestion.keymap.accept (Insert) と物理キーは同じだが実行モードが異なるため衝突しない
+            vim.keymap.set('n', '<M-CR>', function()
+                local nes_api = require('copilot.nes.api')
+                if nes_api.nes_apply_pending_nes() then
+                    nes_api.nes_walk_cursor_end_edit()
+                end
+            end, { silent = true, desc = 'Copilot: Accept Next Edit Suggestion' })
         end,
-    },
-    -- Copilot を nvim-cmp のソース化
-    {
-        "zbirenbaum/copilot-cmp",
-        event = 'InsertEnter',
-        dependencies = {"zbirenbaum/copilot.lua"},
-        config = function() require("copilot_cmp").setup() end
-    },
-    -- AIチャットツール (Avante)
-    {
-        "CopilotC-Nvim/CopilotChat.nvim",
-        dependencies = {
-            { "zbirenbaum/copilot.lua" }, -- すでに設定済みのインライン補完と連携
-            { "nvim-lua/plenary.nvim" },  -- 必須の補助プラグイン
-        },
-        build = "make tiktoken", -- 動作を高速化するための設定（Mac/Linux推奨）
-        opts = {
-            -- チャットウィンドウの設定
-            window = {
-                layout = 'vertical', -- 'vertical' (サイドバー) や 'float' (浮き出し) を選べます
-                width = 0.3,
-                height = 0.8,
-            },
-            -- デフォルトのシステムプロンプト（日本語で返答してもらうための工夫）
-            prompts = {
-                Explain = {
-                    prompt = "/COPILOT_EXPLAIN 選択したコードを日本語で分かりやすく説明してください。",
-                },
-                Review = {
-                    prompt = "/COPILOT_REVIEW 選択したコードをレビューし、日本語で改善点を提案してください。",
-                },
-                Fix = {
-                    prompt = "/COPILOT_FIX このコードのバグを修正し、原因を日本語で説明してください。",
-                },
-            },
-        },
-        -- 呼び出し用のショートカットキー登録
-        keys = {
-            {
-                "<leader>cc", -- スペース(またはバックスラッシュ) + c + c
-                ":CopilotChatToggle<CR>",
-                mode = { "n", "v" },
-                desc = "CopilotChat - チャット画面の開閉",
-            },
-            {
-                "<leader>ce", -- スペース + c + e
-                ":CopilotChatExplain<CR>",
-                mode = { "n", "v" },
-                desc = "CopilotChat - コードの解説",
-            },
-        },
     },
     -- スニペットエンジン
     {
@@ -77,7 +57,7 @@ return {
         dependencies = {
             'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-path', 'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-cmdline', 'hrsh7th/cmp-vsnip', 'hrsh7th/cmp-calc',
-            'hrsh7th/vim-vsnip', 'zbirenbaum/copilot-cmp', "onsails/lspkind.nvim",
+            'hrsh7th/vim-vsnip', "onsails/lspkind.nvim",
         },
         config = function()
             vim.opt.completeopt = 'menu,menuone,noselect'
@@ -119,7 +99,7 @@ return {
                 }),
                 sources = cmp.config.sources({
                     { name = 'nvim_lsp' }, { name = 'vsnip' }, { name = 'path' },
-                    { name = 'buffer', keyword_length = 3 }, { name = 'copilot' },
+                    { name = 'buffer', keyword_length = 3 },
                     { name = 'calc' }, { name = "lazydev", group_index = 0 },
                 }),
                 formatting = {

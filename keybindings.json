@@ -49,6 +49,7 @@
         "key": "alt+j",
         "mac": "option+j",
         "command": "workbench.action.navigateDown"
+        j
     },
     {
         "key": "alt+k",
