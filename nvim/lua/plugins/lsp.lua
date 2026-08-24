@@ -181,6 +181,11 @@ return {
         build = "cd app && yarn install",
         init = function() vim.g.mkdp_filetypes = { "markdown" } end,
     },
+    {
+        'gaoDean/autolist.nvim',
+        ft = 'markdown',
+        config = function() require('autolist').setup() end,
+    },
     -- LaTeX 拡張 (VimTex)
     {
         'lervag/vimtex',

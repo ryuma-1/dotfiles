@@ -54,16 +54,6 @@ return {
         dependencies = { 'nvim-lua/plenary.nvim' },
         opts = {},
     },
-    -- キーマップガイド
-    {
-        'folke/which-key.nvim',
-        event = 'VeryLazy',
-        config = function()
-            require('which-key').setup()
-            vim.o.timeout = true
-            vim.o.timeoutlen = 1000
-        end,
-    },
     -- スムーズスクロール
     {
         'karb94/neoscroll.nvim',
@@ -75,8 +65,6 @@ return {
     },
     -- コメントアウト
     { 'numToStr/Comment.nvim', event = 'VeryLazy', opts = {} },
-    -- マクロステータス表示
-    { 'chrisgrieser/nvim-recorder', event = 'VeryLazy', dependencies = "rcarriga/nvim-notify", opts = {} },
     -- 高機能な文字ジャンプ (f, F, t, T)
     {
         'smoka7/hop.nvim',
@@ -105,7 +93,6 @@ return {
         keys = {
             { "<leader>b", "<cmd>NvimTreeToggle<CR>", desc = "NvimTreeToggle" },
             { "<leader>e", "<cmd>NvimTreeFocus<CR>", desc = "NvimTreeFocus" },
-            { "<leader>o", "<cmd>NvimTreeFocus<CR>", desc = "NvimTreeFocus" },
         },
         opts = {},
     },
@@ -113,10 +100,9 @@ return {
     {
         'ojroques/nvim-bufdel',
         keys = {
-            { "<leader>ww", "<cmd>BufDelAll<CR>", desc = "Close All Buffers" },
+            { "<leader>ww", "<cmd>BufDel<CR>", desc = "Close Current Buffer" },
             { "<leader>wa", "<cmd>BufDelAll<CR>", desc = "Close All Buffers" },
             { "<leader>wo", "<cmd>BufDelOthers<CR>", desc = "Close Other Buffers" },
-            { "<leader>wd", "<cmd>BufDel<CR>", desc = "Close Current Buffer" },
         },
         opts = { next = 'tabs', quit = false },
     },
@@ -229,7 +215,7 @@ return {
                         "%.meta$",       -- Unityの.metaファイルを完全に除外
                         "%.asset$",      -- .assetファイルを除外（必要なら）
                         "%.unity$",      -- シーンファイルを除外（コードだけに集中したい場合）
-			"%.prefab$",	 -- prefabファイルの除外
+                        "%.prefab$",	 -- prefabファイルの除外
                         "^Library/",     -- Unityの内部キャッシュフォルダを除外
                         "^Temp/",        -- 一時フォルダを除外
                         "^Logs/",        -- ログフォルダを除外

@@ -4,6 +4,14 @@ vim.opt_local.tabstop = 2
 vim.opt_local.shiftwidth = 2
 vim.opt_local.softtabstop = 2
 
+-- 箇条書き・タスクリストの自動継続 (autolist.nvim)
+-- (Vim 標準の formatoptions/comments では記号のみで [ ] チェックボックスや
+--  番号付きリストの採番まで再現できないため，専用プラグインに委譲する)
+vim.keymap.set('i', '<CR>', '<CR><cmd>AutolistNewBullet<CR>', { buffer = true })
+vim.keymap.set('n', 'o', 'o<cmd>AutolistNewBullet<CR>', { buffer = true })
+vim.keymap.set('n', 'O', 'O<cmd>AutolistNewBulletBefore<CR>', { buffer = true })
+vim.keymap.set('n', '<C-r>', '<cmd>AutolistRecalculate<CR>', { buffer = true, desc = 'Markdown: Recalculate List' })
+
 -- VSCode (Markdown All in One) の m 系キーバインドに合わせた装飾トグル
 -- 現在の Visual 選択範囲を marker で囲む
 -- (終端側を先に編集して、開始位置がずれないようにする)
