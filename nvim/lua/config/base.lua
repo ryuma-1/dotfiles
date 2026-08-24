@@ -46,6 +46,7 @@ vim.opt.virtualedit:append("block")
 vim.opt.wrap = true
 vim.opt.breakindent = true
 vim.opt.showbreak = "↳ "
+vim.opt.scrolloff = 5
 
 vim.api.nvim_create_autocmd("ColorScheme", {
     callback = function()
