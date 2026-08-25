@@ -478,4 +478,5 @@
     "window.restoreWindows": "one",
     "extensions.ignoreRecommendations": true,
     "claudeCode.preferredLocation": "panel",
+    "workbench.experimental.modernUI": false,
 }
