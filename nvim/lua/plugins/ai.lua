@@ -79,11 +79,17 @@ return {
                         if cmp.visible() then cmp.select_next_item()
                         elseif vim.fn["vsnip#available"](1) == 1 then feedkey("<Plug>(vsnip-expand-or-jump)", "")
                         elseif has_words_before() then cmp.complete()
+                        -- Markdown はリスト・チェックボックスのインデント変更を autolist.nvim に委譲する
+                        -- (cmp がバッファローカルの <Tab> を InsertEnter 毎に再設定し、
+                        --  after/ftplugin/markdown.lua 側のマッピングを上書きしてしまうため)
+                        elseif vim.bo.filetype == 'markdown' then vim.cmd('AutolistTab')
                         else fallback() end
                     end, { 'i', 's' }),
-                    ["<S-Tab>"] = cmp.mapping(function()
+                    ["<S-Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then cmp.select_prev_item()
-                        elseif vim.fn["vsnip#jumpable"](-1) == 1 then feedkey("<Plug>(vsnip-jump-prev)", "") end
+                        elseif vim.fn["vsnip#jumpable"](-1) == 1 then feedkey("<Plug>(vsnip-jump-prev)", "")
+                        elseif vim.bo.filetype == 'markdown' then vim.cmd('AutolistShiftTab')
+                        else fallback() end
                     end, { "i", "s" }),
                     ['<C-s>'] = cmp.mapping.complete(),
                     ['<C-c>'] = cmp.mapping.abort(),

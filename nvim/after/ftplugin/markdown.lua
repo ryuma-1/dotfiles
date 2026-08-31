@@ -11,6 +11,9 @@ vim.keymap.set('i', '<CR>', '<CR><cmd>AutolistNewBullet<CR>', { buffer = true })
 vim.keymap.set('n', 'o', 'o<cmd>AutolistNewBullet<CR>', { buffer = true })
 vim.keymap.set('n', 'O', 'O<cmd>AutolistNewBulletBefore<CR>', { buffer = true })
 vim.keymap.set('n', '<C-r>', '<cmd>AutolistRecalculate<CR>', { buffer = true, desc = 'Markdown: Recalculate List' })
+-- Tab / Shift-Tab での箇条書き（チェックボックス含む）インデント変更は，
+-- nvim-cmp が InsertEnter 毎に <Tab> を再設定してここでの定義を上書きしてしまうため，
+-- lua/plugins/ai.lua の cmp mapping 側 (AutolistTab / AutolistShiftTab 呼び出し) で処理する
 
 -- VSCode (Markdown All in One) の m 系キーバインドに合わせた装飾トグル
 -- 現在の Visual 選択範囲を marker で囲む
