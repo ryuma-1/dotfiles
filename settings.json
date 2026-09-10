@@ -21,6 +21,14 @@
         "editor.tabSize": 2,
         "editor.insertSpaces": true
     },
+    "indentRainbow.colors": [
+        "rgba(255, 0, 0, 0.2)",
+        "rgba(255, 255, 0, 0.2)",
+        "rgba(0, 255, 0, 0.2)",
+        "rgba(0, 255, 255, 0.2)",
+        "rgba(0, 0, 255, 0.2)",
+        "rgba(255, 0, 255, 0.2)"
+    ],
     // vim settings
     "vim.useSystemClipboard": true,
     "vim.easymotion": true,
@@ -30,8 +38,8 @@
     "vim.hlsearch": true,
     "vim.leader": "<space>",
     "vim.handleKeys": {
-        "<C-j>": true,
-        "<C-k>": true,
+        "<c-j>": true,
+        "<c-k>": true,
     },
     "vim.insertModeKeyBindings": [
         {
@@ -451,7 +459,9 @@
             "diffEditor.insertedTextBackground": "#7acd868f",
             "diffEditor.insertedLineBackground": "#0f2a0f95",
             "diffEditor.removedTextBackground": "#bd6d6d94",
-            "diffEditor.removedLineBackground": "#2d0f0f89"
+            "diffEditor.removedLineBackground": "#2d0f0f89",
+            "tab.activeBackground": "#2f3236",
+            "tab.activeForeground": "#ffffff"
         },
         "statusBar.background": "#7d7d7d",
         "statusBar.noFolderBackground": "#7d7d7d",
