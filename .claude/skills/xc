@@ -1,0 +1,114 @@
+---
+name: plan-from-issue
+description: Given a GitHub Issue number, fetches the Issue via the `gh` CLI and generates an implementation plan with a task breakdown as a Markdown file. Use when the user says things like "make a plan from this issue number," "create an implementation plan for #42," or "turn this issue into a plan." If $output_dir or $issue_number is not already clear from the conversation, confirm it with the user before using this skill.
+argument-hint: "[output_dir] [issue_number]"
+arguments:
+  - output_dir
+  - issue_number
+---
+
+# Plan From Issue
+
+Takes a GitHub Issue number, fetches the Issue body via the `gh` CLI, and saves an implementation plan and task list as a Markdown file in `$output_dir`.
+
+## Arguments
+
+- **$output_dir**: Path to the folder where the plan Markdown file should be created (1st argument)
+- **$issue_number**: The target GitHub Issue number (2nd argument; either `#42`-style or a plain number is fine)
+
+If either is not clear from the conversation, confirm it with the user before starting work.
+
+## Prerequisite
+
+This skill is for Plan Mode only. If not currently in Plan Mode, do not proceed to fetching the Issue or creating files — tell the user so and stop (e.g. "Please run this in Plan Mode"). Don't fall back to Plan-Mode-like behavior by assumption.
+
+## Steps
+
+### 1. Fetch the Issue
+
+```bash
+gh issue view $issue_number --json number,title,body,url,labels,assignees,state
+```
+
+- If the command fails (Issue doesn't exist, repository not identified, `gh` not authenticated, etc.), don't fall back by guessing — report the error as-is to the user and stop.
+- If the Issue is already closed (`state: CLOSED`), it's fine to continue creating the plan, but note this briefly in the final report.
+- If the Issue body alone isn't enough to determine the implementation approach, you may fetch additional context (don't over-fetch):
+  ```bash
+  gh issue view $issue_number --comments
+  ```
+
+### 2. Organize the Issue content
+
+Based on the fetched `title` and `body`, organize the following. Don't guess at anything not stated in the body — mark it clearly as "unknown" or "needs confirmation" instead.
+
+- The goal of the implementation (what will become possible)
+- What's in scope vs. out of scope
+- Assumptions and constraints (tech stack, integration with existing systems, etc.)
+- Open questions / things that need confirmation
+
+If the Issue has structured sections originating from `.github/ISSUE_TEMPLATE/` (background, requirements, acceptance criteria, etc.), respect that structure and use it as-is for organizing.
+
+### 3. Decide the implementation approach
+
+Summarize how the implementation should proceed, scaled to the size of the requirement. If it naturally splits into multiple phases, briefly note the goal of each phase. Don't force a phase breakdown — a single phase is fine for a small requirement.
+
+### 4. Break down the tasks
+
+Based on the implementation approach, decompose the work down to units someone could actually act on. Each task should:
+
+- Be at a granularity where starting and finishing it can be judged independently (not too large, not trivially small)
+- Start with an actionable verb (e.g. "Implement...", "Write tests for...", "Configure...")
+- Note dependencies where they exist (e.g. "※ start after Task A is complete")
+- Be grouped by phase or category where relevant (e.g. Design/Backend/Frontend/Testing/Infra)
+
+List tasks as Markdown checkboxes (`- [ ] `), so the user can check them off as they implement.
+
+### 5. Diagram structural changes where applicable
+
+If the Issue involves a change in structure that a diagram would make clearer — e.g. system/component architecture, data flow, folder/file structure before vs. after, or a state machine — express it as a Mermaid diagram under its own heading. Pick the Mermaid diagram type that fits the change (`graph`/`flowchart` for architecture or data flow, `classDiagram` or a tree-like `graph` for file/folder structure, `stateDiagram-v2` for state transitions, `sequenceDiagram` for interaction order). If nothing about the Issue changes structure in a way a diagram would clarify, omit this section entirely rather than forcing one.
+
+### 6. Note risks and open questions
+
+If there are ambiguous parts that can't be resolved from the Issue body alone, technical concerns, or external dependencies, list them briefly. In particular, note it here if the Issue body and comments disagree on approach. Omit this section if there's nothing to note.
+
+### 7. Create the Markdown file
+
+Following the template below, create a Markdown file in `$output_dir`. **The file content itself must be written in Japanese** (headings, body text, and task descriptions), even though these instructions are in English. Keep proper nouns, code identifiers, and URLs as-is.
+
+- Filename: `implementation-plan-issue-<issue_number>-<slug>.md`. `<slug>` is a short alphanumeric slug derived from the Issue title. If a file with that name already exists, append a number.
+- Create `$output_dir` first if it doesn't exist.
+- Write the file so the user can use it directly to track implementation progress — be concise and concrete, without a wordy preamble.
+
+## Markdown template
+
+```markdown
+# 実装計画: <Issueタイトルから要約したタイトル>
+
+## 元Issue
+- #<issue_number>: <title>
+- <url>
+
+## 概要
+<何を実現するための実装か、2〜4行で>
+
+## 要件
+<Issue本文の内容を整理して要約。原文の重要な制約は落とさない>
+
+## 実装方針
+<フェーズ分けや進め方の方針。1フェーズのみなら省略可>
+
+## 構成の変化
+<Mermaid図（graph / classDiagram / stateDiagram-v2 / sequenceDiagram など該当するもの）。図で表せる構成変化がない場合はセクションごと省略>
+
+## タスク一覧
+### <カテゴリ名（任意）>
+- [ ] タスク1
+- [ ] タスク2（※タスク1の完了後）
+
+## リスク・確認事項
+- <あれば記載。なければセクションごと省略>
+```
+
+## After completion
+
+After creating the file, report the save path and briefly share the key points (e.g. number of tasks, phase structure, link to the source Issue) in 1-2 sentences. There's no need to re-paste the full file content in chat.
