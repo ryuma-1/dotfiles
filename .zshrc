@@ -147,6 +147,15 @@ alias cdm='cd ~/gitlab/ikeda-r/mydocuments/meeting'
 # 一時的なメモを作成するためのエイリアス
 alias m='nvim ~/Documents/tmp.md'
 
+# md-cosense-bridge の起動エイリアス
+mts () {
+  local md_path=$(realpath "$1")
+  cd ~/git/md-cosense-bridge || return 1
+  npm start -- import nompedia test "$md_path"
+  cat input.txt | xc
+  cd - > /dev/null
+}
+
 # プロジェクトの個人タスクを開くためのエイリアス
 task() {
     local dir="$PWD"

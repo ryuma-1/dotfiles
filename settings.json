@@ -463,11 +463,11 @@
             "tab.activeBackground": "#2c2c2c",
             "tab.activeForeground": "#ffffff",
             "tab.hoverBackground": "#2c2c2c",
-            "tab.hoverForeground": "#ffffff",
+            "tab.hoverForeground": "#ffffff"
         },
-        "statusBar.background": "#446ac4",
-        "statusBar.noFolderBackground": "#446ac4",
-        "statusBar.debuggingBackground": "#446ac4",
+        "statusBar.background": "#7d7d7d",
+        "statusBar.noFolderBackground": "#7d7d7d",
+        "statusBar.debuggingBackground": "#7d7d7d",
         "statusBar.foreground": "#ffffff",
         "statusBar.debuggingForeground": "#ffffff"
     },
