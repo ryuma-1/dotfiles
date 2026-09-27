@@ -179,3 +179,6 @@ task() {
 
 # Unity CLI
 . "/Users/ryuma/.unity/env"
+
+# wft: share state across machines via pCloud
+export WFT_STATE_DIR="$HOME/pCloud Drive/wft"
