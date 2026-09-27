@@ -1,0 +1,35 @@
+# 背景
+background = #111111
+
+# フォントサイズ
+font-size = 14
+
+# ANSI
+palette = 1=#CC0000
+palette = 2=#00A600
+
+# 分割線
+split-divider-color = #444444
+
+# ペイン移動
+keybind = ctrl+h=goto_split:left
+keybind = ctrl+j=goto_split:down
+keybind = ctrl+k=goto_split:up
+keybind = ctrl+l=goto_split:right
+
+# タブ移動
+keybind = ctrl+shift+h=previous_tab
+keybind = ctrl+shift+l=next_tab
+
+# タブ
+keybind = ctrl+w=close_surface
+
+# 水平分割
+keybind = ctrl+s=new_split:down
+
+# 垂直分割
+keybind = ctrl+v=new_split:right
+
+# 新しいウィンドウ
+keybind = ctrl+t=new_window
+
