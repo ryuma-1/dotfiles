@@ -180,5 +180,9 @@ task() {
 # Unity CLI
 . "/Users/ryuma/.unity/env"
 
+if [[ -f ~/.zshrc.local ]]; then
+    source ~/.zshrc.local
+fi
+
 # wft: share state across machines via pCloud
-export WFT_STATE_DIR="$HOME/pCloud Drive/wft"
+export WFT_STATE_DIR="$HOME/pCloudDrive/wft"
