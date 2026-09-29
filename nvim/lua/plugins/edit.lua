@@ -194,7 +194,8 @@ return {
             bigfile = { enabled = true },
             dashboard = { enabled = true },
             explorer = { enabled = false },
-            indent = { enabled = true },
+            -- Disabled to avoid double rendering with hlchunk.nvim, which now draws indent guides.
+            indent = { enabled = false },
             input = { enabled = true },
             picker = { enabled = true },
             notifier = { enabled = true },

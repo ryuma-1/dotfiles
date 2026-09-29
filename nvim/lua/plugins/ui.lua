@@ -55,6 +55,16 @@ return {
         event = { 'BufReadPre', 'BufNewFile' },
         config = function() require('colorizer').setup() end
     },
+    -- Highlights the current chunk and draws indent guides.
+    -- Replaces snacks.nvim indent so that guides are rendered by a single plugin.
+    {
+        'shellRaining/hlchunk.nvim',
+        event = { 'BufReadPre', 'BufNewFile' },
+        opts = {
+            chunk = { enable = true },
+            indent = { enable = true },
+        },
+    },
     -- Whitespace強調
     {
         'ntpeters/vim-better-whitespace',
