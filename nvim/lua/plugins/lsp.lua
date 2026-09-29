@@ -53,7 +53,11 @@ return {
         'mason-org/mason-lspconfig.nvim',
         dependencies = { 'mason-org/mason.nvim', 'neovim/nvim-lspconfig' },
         lazy = false,
-        opts = { automatic_enable = { exclude = { "rust_analyzer" } } },
+        opts = {
+            -- Install ts_ls automatically so a fresh environment gets TS/JS support
+            ensure_installed = { "ts_ls" },
+            automatic_enable = { exclude = { "rust_analyzer" } },
+        },
     },
     -- LSP 本体設定
     {
@@ -61,6 +65,28 @@ return {
         lazy = false, -- 起動時から :LspInfo などを有効にする
         config = function()
             vim.lsp.config('*', { capabilities = require('cmp_nvim_lsp').default_capabilities() })
+
+            ---Inlay hint settings for ts_ls.
+            ---ts_ls returns no inlay hints unless they are explicitly enabled on the
+            ---server side, so the global vim.lsp.inlay_hint.enable() alone is not enough.
+            ---"literals" is used for parameter names to avoid excessive noise.
+            local ts_inlay_hints = {
+                includeInlayParameterNameHints = 'literals',
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayVariableTypeHints = true,
+                includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+            }
+            vim.lsp.config('ts_ls', {
+                settings = {
+                    typescript = { inlayHints = ts_inlay_hints },
+                    javascript = { inlayHints = ts_inlay_hints },
+                },
+            })
+
             vim.lsp.inlay_hint.enable()
 
             vim.api.nvim_create_user_command('InlayHintToggle', function()
