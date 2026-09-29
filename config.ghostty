@@ -2,7 +2,7 @@
 background = #111111
 
 # フォントサイズ
-font-size = 14
+font-size = 16
 
 # ANSI
 palette = 1=#CC0000
@@ -14,7 +14,7 @@ split-divider-color = #444444
 
 # ========================================
 # Ghostty Leader
-# Ctrl+Space + key
+# Ctrl+Space / Option+Space + key
 # ========================================
 
 # ペイン移動
@@ -23,18 +23,35 @@ keybind = ctrl+space>j=goto_split:down
 keybind = ctrl+space>k=goto_split:up
 keybind = ctrl+space>l=goto_split:right
 
+keybind = alt+space>h=goto_split:left
+keybind = alt+space>j=goto_split:down
+keybind = alt+space>k=goto_split:up
+keybind = alt+space>l=goto_split:right
+
+
 # タブ移動
 keybind = ctrl+space>shift+h=previous_tab
 keybind = ctrl+space>shift+l=next_tab
 
+keybind = alt+space>shift+h=previous_tab
+keybind = alt+space>shift+l=next_tab
+
+
 # ペイン・タブを閉じる
 keybind = ctrl+space>w=close_surface
+keybind = alt+space>w=close_surface
+
 
 # 水平分割
 keybind = ctrl+space>s=new_split:down
+keybind = alt+space>s=new_split:down
+
 
 # 垂直分割
 keybind = ctrl+space>v=new_split:right
+keybind = alt+space>v=new_split:right
+
 
 # 新しいウィンドウ
 keybind = ctrl+space>t=new_window
+keybind = alt+space>t=new_window
