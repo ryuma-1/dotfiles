@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(nvim --headless -u nvim/init.lua -c \"lua vim.cmd\\('e /tmp/test.md'\\)\" -c \"set ft=markdown\" -c \"qa\")",
+      "Bash(nvim --headless -u nvim/init.lua -c \"redir! > /tmp/cmdcheck.txt\" -c \"silent! command BufferLineMovePrev\" -c \"silent! command BufferLineMoveNext\" -c \"silent! command MarkdownPreview\" -c \"redir END\" -c \"qa\")",
+      "Read(//tmp/**)",
+      "Bash(nvim --headless -u nvim/init.lua -c \"redir! > /tmp/cmdcheck2.txt\" -c \"silent! command BufferLine\" -c \"redir END\" -c \"qa\")",
+      "Bash(nvim --headless -u nvim/init.lua -c \"redir! > /tmp/cmdcheck3.txt\" -c \"lua local ok, bl = pcall\\(require, 'bufferline'\\); vim.g.__bl_ok = tostring\\(ok\\)\" -c \"lua print\\('bufferline require ok=', vim.g.__bl_ok\\)\" -c \"lua print\\(vim.inspect\\(vim.fn.getcompletion\\('BufferLine', 'command'\\)\\)\\)\" -c \"redir END\" -c \"qa\")",
+      "Bash(nvim *)",
+      "Read(//Users/ryuma/.local/share/nvim/lazy/copilot.lua/**)",
+      "Bash(git -C ~/.local/share/nvim/lazy/copilot.lua log -1 --format='%h %ad %s')"
+    ]
+  }
+}
