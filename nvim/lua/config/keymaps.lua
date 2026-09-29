@@ -42,14 +42,23 @@ set_keymap('v', '<A-k>', ":move '<-2<CR>gv=gv", opts)
 -- Ctrl+h/l: バッファ切替 (VSCode: previousEditor / nextEditor)
 set_keymap('n', '<C-h>', ':bprevious<CR>', opts)
 set_keymap('n', '<C-l>', ':bnext<CR>', opts)
+-- Ctrl+w: バッファを閉じる (VSCode: closeActiveEditor)
+-- :bdelete だと最後のウィンドウレイアウトが崩れるため，ウィンドウを保持する Snacks.bufdelete を使う
+-- Neovim 標準の <C-w>d / <C-w><C-d> が残ると後続キー待ち (timeoutlen) で遅延するため削除する
+vim.keymap.del('n', '<C-w>d')
+vim.keymap.del('n', '<C-w><C-d>')
+set_keymap('n', '<C-w>', '<CMD>lua Snacks.bufdelete()<CR>', opts)
 
 -- Ctrl+j/k: バッファの並び替え (VSCode: moveEditorLeftInGroup / moveEditorRightInGroup)
-set_keymap('n', '<C-j>', '<CMD>BufferLineMovePrev<CR>', opts)
-set_keymap('n', '<C-k>', '<CMD>BufferLineMoveNext<CR>', opts)
+set_keymap('n', '<C-j>', '<CMD>BufferMovePrevious<CR>', opts)
+set_keymap('n', '<C-k>', '<CMD>BufferMoveNext<CR>', opts)
 -- Alt+h/l: ウィンドウ(分割)フォーカス移動 (VSCode: navigateLeft / navigateRight)
--- 上下 (Alt+j/k) は行移動 (下記) と衝突するため素の <C-w>j / <C-w>k を使用する
 set_keymap('n', '<A-h>', '<C-w>h', opts)
 set_keymap('n', '<A-l>', '<C-w>l', opts)
+-- Leader+w j/k: ウィンドウ上下フォーカス移動
+-- Alt+j/k は行移動 (下記) と衝突し，<C-w> はバッファを閉じる操作に専念させたため leader に逃がす
+set_keymap('n', '<leader>wj', '<C-w>j', opts)
+set_keymap('n', '<leader>wk', '<C-w>k', opts)
 -- Ctrl+Alt+h/j/k/l: ウィンドウを画面端へ移動 (VSCode: moveEditorToLeftGroup 等)
 set_keymap('n', '<C-A-h>', '<C-w>H', opts)
 set_keymap('n', '<C-A-l>', '<C-w>L', opts)

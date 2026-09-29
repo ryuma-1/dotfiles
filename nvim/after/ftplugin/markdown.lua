@@ -10,10 +10,14 @@ vim.opt_local.softtabstop = 2
 vim.keymap.set('i', '<CR>', '<CR><cmd>AutolistNewBullet<CR>', { buffer = true })
 vim.keymap.set('n', 'o', 'o<cmd>AutolistNewBullet<CR>', { buffer = true })
 vim.keymap.set('n', 'O', 'O<cmd>AutolistNewBulletBefore<CR>', { buffer = true })
-vim.keymap.set('n', '<C-r>', '<cmd>AutolistRecalculate<CR>', { buffer = true, desc = 'Markdown: Recalculate List' })
+-- <C-r> は Vim 標準の redo と衝突し Markdown で redo できなくなるため使わず，
+-- 他の Markdown 専用キー (m 系) に揃えて mr に割り当てる．
+vim.keymap.set('n', 'mr', '<cmd>AutolistRecalculate<CR>', { buffer = true, silent = true, desc = 'Markdown: Recalculate List' })
 -- Tab / Shift-Tab での箇条書き（チェックボックス含む）インデント変更は，
 -- nvim-cmp が InsertEnter 毎に <Tab> を再設定してここでの定義を上書きしてしまうため，
--- lua/plugins/ai.lua の cmp mapping 側 (AutolistTab / AutolistShiftTab 呼び出し) で処理する
+-- lua/plugins/ai.lua の cmp mapping 側 (AutolistTab / AutolistShiftTab 呼び出し) で処理する．
+-- (cmp 側の <Tab>/<S-Tab> は補完候補の選択には使わずインデント調整専用のマッピングであり，
+--  Markdown 以外では素の <Tab>/<S-Tab> にフォールバックする)
 
 -- VSCode (Markdown All in One) の m 系キーバインドに合わせた装飾トグル
 -- 現在の Visual 選択範囲を marker で囲む

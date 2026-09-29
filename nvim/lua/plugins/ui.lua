@@ -40,16 +40,30 @@ return {
     },
     -- バッファライン
     {
-        'akinsho/bufferline.nvim',
+        'romgrk/barbar.nvim',
         event = 'VimEnter',
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
-        opts = { options = { separator_style = 'padded_slant' } },
+        dependencies = { 'nvim-tree/nvim-web-devicons', 'lewis6991/gitsigns.nvim' },
+        init = function()
+            -- lazy.nvim calls setup() via opts, so disable barbar's auto setup to avoid a double setup
+            vim.g.barbar_auto_setup = false
+        end,
+        opts = {},
     },
     -- カラーコード着色
     {
         'norcalli/nvim-colorizer.lua',
         event = { 'BufReadPre', 'BufNewFile' },
         config = function() require('colorizer').setup() end
+    },
+    -- Highlights the current chunk and draws indent guides.
+    -- Replaces snacks.nvim indent so that guides are rendered by a single plugin.
+    {
+        'shellRaining/hlchunk.nvim',
+        event = { 'BufReadPre', 'BufNewFile' },
+        opts = {
+            chunk = { enable = true },
+            indent = { enable = true },
+        },
     },
     -- Whitespace強調
     {

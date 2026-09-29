@@ -1,3 +1,56 @@
+-- 方向ごとに独立したセッションを持たせ，同じキーで開閉トグルできるよう，
+-- toggleterm の Terminal インスタンスを遅延生成して保持する
+local edge_terminals = {}
+
+--- Per-direction terminal definitions.
+--- `wincmd` moves the window to the screen edge, and `dim`/`size` fix its width or height afterwards.
+--- Both are applied in on_open because toggleterm ignores `size` on Terminal:new, has no left/top direction,
+--- and splits the most recently opened terminal window when another one is already open.
+--- `id` is a fixed high number and `hidden` is set so that `:ToggleTerm` (default target id 1),
+--- <C-t>, <leader>yt and <leader>yy never pick up or rewrite these terminals.
+local edge_terminal_defs = {
+    float = { id = 101, direction = 'float' },
+    left = { id = 102, direction = 'vertical', wincmd = 'H', dim = 'width', size = 50 },
+    bottom = { id = 103, direction = 'horizontal', wincmd = 'J', dim = 'height', size = 10 },
+    top = { id = 104, direction = 'horizontal', wincmd = 'K', dim = 'height', size = 10 },
+    right = { id = 105, direction = 'vertical', wincmd = 'L', dim = 'width', size = 50 },
+}
+
+--- Re-apply the fixed size of every open split terminal.
+--- Moving a window to an edge redistributes the other windows, which would otherwise shrink or grow the terminals opened earlier.
+local function apply_edge_sizes()
+    for name, term in pairs(edge_terminals) do
+        local def = edge_terminal_defs[name]
+        if def.dim and term:is_open() then
+            if def.dim == 'width' then
+                vim.api.nvim_win_set_width(term.window, def.size)
+            else
+                vim.api.nvim_win_set_height(term.window, def.size)
+            end
+        end
+    end
+end
+
+--- Toggle the terminal registered under `name`, creating it on first use.
+--- Creation is deferred because `toggleterm.terminal` is only available after the plugin is lazy loaded.
+---@param name string one of 'float', 'left', 'bottom', 'top', 'right'
+local function toggle_edge_terminal(name)
+    if not edge_terminals[name] then
+        local Terminal = require('toggleterm.terminal').Terminal
+        local def = edge_terminal_defs[name]
+        edge_terminals[name] = Terminal:new({
+            id = def.id,
+            hidden = true,
+            direction = def.direction,
+            on_open = def.wincmd and function()
+                vim.cmd('wincmd ' .. def.wincmd)
+                apply_edge_sizes()
+            end or nil,
+        })
+    end
+    edge_terminals[name]:toggle()
+end
+
 return {
     -- 囲い文字操作
     { 'machakann/vim-sandwich', event = 'VeryLazy' },
@@ -114,7 +167,12 @@ return {
             -- autolist.nvim の AutolistTab が内部でこれを発火してリストをインデントするため，
             -- ここに割り当てると markdown でリスト行を Tab したときにターミナルが開いてしまう
             { '<C-t>', '<CMD>ToggleTerm direction=float<CR>', mode = {'n', 'v'}, desc = 'ToggleTerm open float' },
-            { '<leader>t', '<CMD>ToggleTerm<CR>', mode = {'n', 'v'}, desc = 'ToggleTerm toggle' },
+            -- 旧 <leader>t を残すと <leader>t* の prefix になり timeoutlen 待ちの遅延が出るため削除した
+            { '<leader>tt', function() toggle_edge_terminal('float') end, mode = {'n', 'v'}, desc = 'Toggle terminal (float)' },
+            { '<leader>th', function() toggle_edge_terminal('left') end, mode = {'n', 'v'}, desc = 'Toggle terminal (left)' },
+            { '<leader>tj', function() toggle_edge_terminal('bottom') end, mode = {'n', 'v'}, desc = 'Toggle terminal (bottom)' },
+            { '<leader>tk', function() toggle_edge_terminal('top') end, mode = {'n', 'v'}, desc = 'Toggle terminal (top)' },
+            { '<leader>tl', function() toggle_edge_terminal('right') end, mode = {'n', 'v'}, desc = 'Toggle terminal (right)' },
             { '<leader>yt', '<CMD>ToggleTerm direction=horizontal size=10<CR>', mode = {'n', 'v'}, desc = 'ToggleTerm open horizontal' },
             { '<leader>yy', '<CMD>ToggleTerm direction=vertical size=50<CR>', mode = {'n', 'v'}, desc = 'ToggleTerm open side' },
         },
@@ -136,7 +194,8 @@ return {
             bigfile = { enabled = true },
             dashboard = { enabled = true },
             explorer = { enabled = false },
-            indent = { enabled = true },
+            -- Disabled to avoid double rendering with hlchunk.nvim, which now draws indent guides.
+            indent = { enabled = false },
             input = { enabled = true },
             picker = { enabled = true },
             notifier = { enabled = true },
