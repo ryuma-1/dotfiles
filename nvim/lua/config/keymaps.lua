@@ -44,8 +44,8 @@ set_keymap('n', '<C-h>', ':bprevious<CR>', opts)
 set_keymap('n', '<C-l>', ':bnext<CR>', opts)
 
 -- Ctrl+j/k: バッファの並び替え (VSCode: moveEditorLeftInGroup / moveEditorRightInGroup)
-set_keymap('n', '<C-j>', '<CMD>BufferLineMovePrev<CR>', opts)
-set_keymap('n', '<C-k>', '<CMD>BufferLineMoveNext<CR>', opts)
+set_keymap('n', '<C-j>', '<CMD>BufferMovePrevious<CR>', opts)
+set_keymap('n', '<C-k>', '<CMD>BufferMoveNext<CR>', opts)
 -- Alt+h/l: ウィンドウ(分割)フォーカス移動 (VSCode: navigateLeft / navigateRight)
 -- 上下 (Alt+j/k) は行移動 (下記) と衝突するため素の <C-w>j / <C-w>k を使用する
 set_keymap('n', '<A-h>', '<C-w>h', opts)
