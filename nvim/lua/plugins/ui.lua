@@ -158,4 +158,17 @@ return {
             tint = -80,
         },
     },
+    -- Scrollbar that marks diagnostics and git changes, giving a whole-file overview like VSCode
+    {
+        'petertriho/nvim-scrollbar',
+        event = 'VeryLazy',
+        dependencies = { 'lewis6991/gitsigns.nvim' },
+        ---Sets up the scrollbar, then registers the gitsigns handler.
+        ---The handler is registered explicitly (not via `handlers.gitsigns`) as the README recommends,
+        ---so gitsigns hunks are guaranteed to be wired after gitsigns itself is loaded.
+        config = function()
+            require('scrollbar').setup()
+            require('scrollbar.handlers.gitsigns').setup()
+        end,
+    },
 }
