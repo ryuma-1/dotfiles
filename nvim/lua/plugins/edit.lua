@@ -118,6 +118,17 @@ return {
     },
     -- コメントアウト
     { 'numToStr/Comment.nvim', event = 'VeryLazy', opts = {} },
+    -- Treesitter によるコードブロックの分割/結合
+    {
+        'Wansmer/treesj',
+        dependencies = { 'nvim-treesitter/nvim-treesitter' },
+        keys = {
+            { '<leader>st', function() require('treesj').toggle() end, desc = 'Toggle split/join (treesj)' },
+        },
+        cmd = { 'TSJToggle', 'TSJSplit', 'TSJJoin' },
+        -- デフォルトの <leader>s は分割系 prefix (<leader>sh/sv) と衝突するため無効化し，必要なキーだけ keys で定義する
+        opts = { use_default_keymaps = false, max_join_length = 150 },
+    },
     -- 高機能な文字ジャンプ (f, F, t, T)
     {
         'smoka7/hop.nvim',

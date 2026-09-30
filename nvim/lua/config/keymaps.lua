@@ -66,8 +66,9 @@ set_keymap('n', '<leader>wk', '<C-w>k', opts)
 -- Ctrl+Alt+j/k は行移動に割り当てたため，上下端への移動は持たない
 set_keymap('n', '<C-A-h>', '<C-w>H', opts)
 set_keymap('n', '<C-A-l>', '<C-w>L', opts)
-set_keymap('n', '<leader>s', ':split<CR>', opts)
-set_keymap('n', '<leader>v', ':vsplit<CR>', opts)
+-- <leader>s を分割系の prefix にまとめ，treesj の <leader>st と共存させる
+set_keymap('n', '<leader>sh', ':split<CR>', opts)
+set_keymap('n', '<leader>sv', ':vsplit<CR>', opts)
 set_keymap('n', '<leader>q', '<C-w>q', opts)
 -- <leader>x: プラグイン管理UI (VSCode: view.extensions)
 set_keymap('n', '<leader>x', ':Lazy<CR>', opts)
