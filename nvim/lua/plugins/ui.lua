@@ -14,6 +14,9 @@ return {
                 override = function(c)
                     return {
                         Normal = { bg = "#000000" },
+                        -- navic icons define only fg and inherit WinBar's bg, so keep it equal to Normal
+                        WinBar = { bg = "#000000" },
+                        WinBarNC = { bg = "#000000" },
                     }
                 end,
             })
@@ -41,7 +44,16 @@ return {
             local my_winbar = {
                 lualine_c = { { function() return navic.get_location() end, cond = navic.is_available } },
             }
-            require('lualine').setup({ sections = my_sections, winbar = my_winbar })
+            ---Monokai Pro lualine theme whose middle sections share the editor background,
+            ---so the winbar (drawn with section c) blends into the code area.
+            local my_theme = vim.deepcopy(require('lualine.themes.monokai-pro'))
+            my_theme.normal.c.bg = '#000000'
+            my_theme.normal.x.bg = '#000000'
+            require('lualine').setup({
+                options = { theme = my_theme },
+                sections = my_sections,
+                winbar = my_winbar,
+            })
         end
     },
     -- Breadcrumbs of the current code context, provided by LSP document symbols
@@ -54,6 +66,16 @@ return {
             lsp = { auto_attach = true },
             highlight = true,
         },
+        ---Sets up navic, then repaints WinBar to match the code background.
+        ---monokai-pro applies its navic highlights (including WinBar) when nvim-navic is first
+        ---required, bypassing the user `override`, so the bg has to be reapplied afterwards.
+        config = function(_, opts)
+            require('nvim-navic').setup(opts)
+            for _, group in ipairs({ 'WinBar', 'WinBarNC' }) do
+                local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
+                vim.api.nvim_set_hl(0, group, vim.tbl_extend('force', hl, { bg = '#000000' }))
+            end
+        end,
     },
     -- バッファライン
     {
