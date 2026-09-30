@@ -118,7 +118,12 @@ return {
         'nvimdev/lspsaga.nvim',
         dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
         event = 'LspAttach',
-        opts = { ui = { code_action = '' }, lightbulb = { virtual_text = false } },
+        opts = {
+            ui = { code_action = '' },
+            lightbulb = { virtual_text = false },
+            -- Breadcrumbs are shown by nvim-navic in the lualine winbar instead
+            symbol_in_winbar = { enable = false },
+        },
     },
     -- LSP インストーラ (Mason)
     { 

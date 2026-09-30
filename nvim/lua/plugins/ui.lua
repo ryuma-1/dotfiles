@@ -25,8 +25,9 @@ return {
     {
         'nvim-lualine/lualine.nvim',
         lazy = false,
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        dependencies = { 'nvim-tree/nvim-web-devicons', 'SmiteshP/nvim-navic' },
         config = function()
+            local navic = require('nvim-navic')
             local my_sections = {
                 lualine_a = { 'filename' },
                 lualine_b = { 'branch', 'diff', 'diagnostics' },
@@ -35,8 +36,24 @@ return {
                 lualine_y = { 'encoding', 'fileformat', 'filetype' },
                 lualine_z = { '%l/%L:%c (%p%%)' }
             }
-            require('lualine').setup({ sections = my_sections })
+            ---Winbar showing the nvim-navic breadcrumbs of the cursor position.
+            ---The component is hidden while no LSP with documentSymbol is attached.
+            local my_winbar = {
+                lualine_c = { { function() return navic.get_location() end, cond = navic.is_available } },
+            }
+            require('lualine').setup({ sections = my_sections, winbar = my_winbar })
         end
+    },
+    -- Breadcrumbs of the current code context, provided by LSP document symbols
+    {
+        'SmiteshP/nvim-navic',
+        dependencies = { 'neovim/nvim-lspconfig' },
+        lazy = true,
+        opts = {
+            -- Attach automatically on LspAttach, so no on_attach wiring is needed in lsp.lua
+            lsp = { auto_attach = true },
+            highlight = true,
+        },
     },
     -- バッファライン
     {
