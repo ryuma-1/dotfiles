@@ -81,8 +81,28 @@ return {
         'shellRaining/hlchunk.nvim',
         event = { 'BufReadPre', 'BufNewFile' },
         opts = {
-            chunk = { enable = true },
-            indent = { enable = true },
+            chunk = {
+                enable = true,
+                -- The second entry is used for invalid chunks, so it stays red to keep errors noticeable.
+                style = {
+                    { fg = '#FFFFFF' },
+                    { fg = '#C21F30' },
+                },
+            },
+            indent = {
+                enable = true,
+                -- Cycled per indent level (red, yellow, green, cyan, blue, violet, orange).
+                -- Dark tones are used so the guides stay in the background and don't distract from the code.
+                style = {
+                    '#70363A',
+                    '#72603D',
+                    '#4C613C',
+                    '#2B5B61',
+                    '#305777',
+                    '#633C6E',
+                    '#684D33',
+                },
+            },
         },
     },
     -- Whitespace強調
