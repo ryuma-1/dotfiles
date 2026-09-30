@@ -1,16 +1,12 @@
 # 背景
 background = #111111
 
-# フォントサイズ
-font-size = 16
-
 # ANSI
 palette = 1=#CC0000
 palette = 2=#00A600
 
 # 分割線
 split-divider-color = #444444
-
 
 # ========================================
 # Ghostty Leader
@@ -55,3 +51,6 @@ keybind = alt+space>v=new_split:right
 # 新しいウィンドウ
 keybind = ctrl+space>t=new_window
 keybind = alt+space>t=new_window
+
+# ローカルの設定の読み込み
+config-file = ?local.conf
