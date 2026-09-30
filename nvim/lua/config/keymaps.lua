@@ -40,8 +40,9 @@ set_keymap('v', '<A-k>', ":move '<-2<CR>gv=gv", opts)
 
 -- バッファ / ウィンドウ操作 (VSCode の keybindings.json と対応させる)
 -- Ctrl+h/l: バッファ切替 (VSCode: previousEditor / nextEditor)
-set_keymap('n', '<C-h>', ':bprevious<CR>', opts)
-set_keymap('n', '<C-l>', ':bnext<CR>', opts)
+-- :bnext/:bprevious はバッファ番号順なので，並び替え後の表示順で移動するため bufferline のコマンドを使う
+set_keymap('n', '<C-h>', '<CMD>BufferLineCyclePrev<CR>', opts)
+set_keymap('n', '<C-l>', '<CMD>BufferLineCycleNext<CR>', opts)
 -- Ctrl+w: バッファを閉じる (VSCode: closeActiveEditor)
 -- :bdelete だと最後のウィンドウレイアウトが崩れるため，ウィンドウを保持する Snacks.bufdelete を使う
 -- Neovim 標準の <C-w>d / <C-w><C-d> が残ると後続キー待ち (timeoutlen) で遅延するため削除する
@@ -50,8 +51,8 @@ vim.keymap.del('n', '<C-w><C-d>')
 set_keymap('n', '<C-w>', '<CMD>lua Snacks.bufdelete()<CR>', opts)
 
 -- Ctrl+j/k: バッファの並び替え (VSCode: moveEditorLeftInGroup / moveEditorRightInGroup)
-set_keymap('n', '<C-j>', '<CMD>BufferMovePrevious<CR>', opts)
-set_keymap('n', '<C-k>', '<CMD>BufferMoveNext<CR>', opts)
+set_keymap('n', '<C-j>', '<CMD>BufferLineMovePrev<CR>', opts)
+set_keymap('n', '<C-k>', '<CMD>BufferLineMoveNext<CR>', opts)
 -- Alt+h/l: ウィンドウ(分割)フォーカス移動 (VSCode: navigateLeft / navigateRight)
 set_keymap('n', '<A-h>', '<C-w>h', opts)
 set_keymap('n', '<A-l>', '<C-w>l', opts)

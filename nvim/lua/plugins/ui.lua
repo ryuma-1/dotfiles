@@ -40,14 +40,17 @@ return {
     },
     -- バッファライン
     {
-        'romgrk/barbar.nvim',
+        'akinsho/bufferline.nvim',
+        version = '*',
         event = 'VimEnter',
-        dependencies = { 'nvim-tree/nvim-web-devicons', 'lewis6991/gitsigns.nvim' },
-        init = function()
-            -- lazy.nvim calls setup() via opts, so disable barbar's auto setup to avoid a double setup
-            vim.g.barbar_auto_setup = false
-        end,
-        opts = {},
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        opts = {
+            options = {
+                -- Slanted tab edges, as shown in the bufferline.nvim README
+                separator_style = 'slant',
+                diagnostics = 'nvim_lsp',
+            },
+        },
     },
     -- カラーコード着色
     {
