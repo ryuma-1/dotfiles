@@ -40,12 +40,13 @@ return {
         config = function()
             local navic = require('nvim-navic')
             local my_sections = {
-                lualine_a = { 'filename' },
+                -- Rounded outer caps give the bubbles look from lualine's examples/bubbles.lua
+                lualine_a = { { 'filename', separator = { left = '' }, right_padding = 2 } },
                 lualine_b = { 'branch', 'diff', 'diagnostics' },
                 lualine_c = { { 'filename', file_status = false, path = 3 }, 'selectioncount' },
                 lualine_x = { { require('lazy.status').updates, cond = require('lazy.status').has_updates } },
                 lualine_y = { 'encoding', 'fileformat', 'filetype' },
-                lualine_z = { '%l/%L:%c (%p%%)' }
+                lualine_z = { { '%l/%L:%c (%p%%)', separator = { right = '' }, left_padding = 2 } }
             }
             ---Winbar showing the nvim-navic breadcrumbs of the cursor position.
             ---The component is hidden while no LSP with documentSymbol is attached.
@@ -58,7 +59,11 @@ return {
             my_theme.normal.c.bg = '#000000'
             my_theme.normal.x.bg = '#000000'
             require('lualine').setup({
-                options = { theme = my_theme },
+                options = {
+                    theme = my_theme,
+                    component_separators = '',
+                    section_separators = { left = '', right = '' },
+                },
                 sections = my_sections,
                 winbar = my_winbar,
             })
