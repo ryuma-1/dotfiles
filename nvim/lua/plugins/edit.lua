@@ -143,6 +143,8 @@ return {
     -- ファイラ (NvimTree)
     {
         'nvim-tree/nvim-tree.lua',
+        -- `nvim <dir>` のディレクトリバッファを起動時に乗っ取るため，キー押下を待たずに読み込む
+        lazy = false,
         keys = {
             { "<leader>b", "<cmd>NvimTreeToggle<CR>", desc = "NvimTreeToggle" },
             { "<leader>e", "<cmd>NvimTreeFocus<CR>", desc = "NvimTreeFocus" },

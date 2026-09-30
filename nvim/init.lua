@@ -26,6 +26,11 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- ディレクトリ表示は nvim-tree に任せる．netrw が残ると `nvim <dir>` で重複バッファを作り
+-- bufferline に余計なタブが出るため，nvim-tree の推奨どおりプラグイン読み込み前に無効化する
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- ftplugin/<filetype>.lua にあるファイルタイプ別設定を読み込む
 vim.cmd("filetype plugin indent on")
 
