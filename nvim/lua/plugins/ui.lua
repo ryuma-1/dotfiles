@@ -19,6 +19,9 @@ return {
                 override = function(c)
                     return {
                         Normal = { bg = "#000000" },
+                        -- Inactive windows use NormalNC, which otherwise keeps the theme's gray bg;
+                        -- tint.nvim already marks unfocused windows, so the bg stays identical to Normal
+                        NormalNC = { bg = "#000000" },
                         -- navic icons define only fg and inherit WinBar's bg, so keep it equal to Normal
                         WinBar = { bg = "#000000" },
                         WinBarNC = { bg = "#000000" },
@@ -140,5 +143,14 @@ return {
             vim.g.better_whitespace_filetypes_blacklist = { 'toggleterm', 'diff', 'qf', 'help', 'snacks_dashboard' }
             vim.api.nvim_set_hl(0, 'ExtraWhitespace', { bg = '#CF572D' })
         end
-    }
+    },
+    -- Dims inactive windows so the focused one stands out when the screen is split
+    {
+        'levouh/tint.nvim',
+        event = 'VeryLazy',
+        opts = {
+            -- Darker than the default (-40) so unfocused text fades further toward the black bg
+            tint = -80,
+        },
+    },
 }
