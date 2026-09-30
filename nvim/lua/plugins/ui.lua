@@ -11,6 +11,11 @@ return {
                     comment = { italic = true },
                     keyword = { italic = true },
                 },
+                -- bufferline is themable, so monokai-pro's BufferLine*Selected groups (including devicons)
+                -- take precedence; they all derive from tab.activeBackground, so match it to the code bg here
+                override_scheme = function()
+                    return { tab = { activeBackground = "#000000" } }
+                end,
                 override = function(c)
                     return {
                         Normal = { bg = "#000000" },
