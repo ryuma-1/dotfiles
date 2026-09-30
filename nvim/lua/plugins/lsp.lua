@@ -176,7 +176,35 @@ return {
                 },
             })
 
-            vim.lsp.inlay_hint.enable()
+            ---Show inlay hints only while <C-A-i> is held.
+            ---Terminals never report modifier-only presses, so holding Ctrl+Alt alone
+            ---is undetectable. Instead we rely on key auto-repeat: each repeat restarts
+            ---a timer, and once repeats stop (key released) the timer hides the hints.
+            ---Two timeouts are used: the first press must outlast the OS initial repeat
+            ---delay (500ms) to avoid flicker, but once repeats flow (every 30ms) a short
+            ---timeout suffices, which makes the hints disappear quickly on release.
+            local hold_first_ms = 600
+            local hold_repeat_ms = 100
+            local hold_timer = assert(vim.uv.new_timer())
+            -- Remember whether hints were already on (e.g. via <leader>uh) so releasing
+            -- the key does not turn off a persistent toggle.
+            local enabled_before_hold = nil
+            vim.keymap.set({ 'n', 'i', 'x' }, '<C-A-i>', function()
+                -- nil means this is the first press of a hold, not an auto-repeat
+                local is_first_press = enabled_before_hold == nil
+                if is_first_press then
+                    enabled_before_hold = vim.lsp.inlay_hint.is_enabled()
+                    vim.lsp.inlay_hint.enable(true)
+                end
+                hold_timer:stop()
+                local timeout = is_first_press and hold_first_ms or hold_repeat_ms
+                hold_timer:start(timeout, 0, vim.schedule_wrap(function()
+                    if not enabled_before_hold then
+                        vim.lsp.inlay_hint.enable(false)
+                    end
+                    enabled_before_hold = nil
+                end))
+            end, { silent = true, desc = 'Show inlay hints while held' })
 
             vim.api.nvim_create_user_command('InlayHintToggle', function()
                 vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
