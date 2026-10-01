@@ -31,6 +31,7 @@
   "monokai-pro.nvim": { "branch": "master", "commit": "a68e38b8e55d69a215d0f02598900a79c356da9d" },
   "neoscroll.nvim": { "branch": "master", "commit": "c8d29979cb0cb3a2437a8e0ae683fd82f340d3b8" },
   "numb.nvim": { "branch": "master", "commit": "40548e23f3b053defdc5daa99943e05132b99cc9" },
+  "numbers.vim": { "branch": "master", "commit": "9657aed1d9eeff7e9c0ac2a97db60f1e4e47fe4d" },
   "nvim-autopairs": { "branch": "master", "commit": "430522f95fe4fb7c511ec64f8c1a90cc6a66c05c" },
   "nvim-bufdel": { "branch": "main", "commit": "523d58e94e7212fff3e05c247b962dc8f93bcfde" },
   "nvim-cmp": { "branch": "main", "commit": "2ffe79f1f021def8dd1fcd81deb16f1bb0d989f3" },

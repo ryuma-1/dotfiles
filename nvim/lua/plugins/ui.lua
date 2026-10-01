@@ -188,4 +188,18 @@ return {
             max_lines = 3,
         },
     },
+    -- Switches to absolute numbers in insert mode and unfocused windows, relative numbers otherwise
+    {
+        'myusuf3/numbers.vim',
+        event = { 'BufReadPost', 'BufNewFile' },
+        ---Sets the exclude list before the plugin script is sourced, since it is read when autocmds fire.
+        ---Overrides the default list (unite/nerdtree etc.) with the special buffers used in this config,
+        ---so numbers.vim does not force line numbers onto them.
+        init = function()
+            vim.g.numbers_exclude = {
+                'NvimTree', 'toggleterm', 'snacks_dashboard', 'lazy', 'mason',
+                'help', 'qf', 'TelescopePrompt', 'lazygit', 'DiffviewFiles', 'Avante',
+            }
+        end,
+    },
 }
