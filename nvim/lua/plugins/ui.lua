@@ -19,11 +19,18 @@ return {
                 -- bufferline is themable, so monokai-pro's BufferLine*Selected groups (including devicons)
                 -- take precedence; they all derive from tab.activeBackground, so match it to the code bg here.
                 -- editor.background is also overridden because plugin highlights (Telescope, FloatBorder, ...)
-                -- are built from it directly, so overriding only Normal would leave them on the theme's gray bg
-                override_scheme = function()
+                -- are built from it directly, so overriding only Normal would leave them on the theme's gray bg.
+                -- Non-selected tabs (inactive, and visible in another window) take the bufferline fill color
+                -- so that they blend into the empty area and only the selected tab stands out
+                override_scheme = function(scheme)
+                    local fill = scheme.editorGroupHeader.tabsBackground
                     return {
                         editor = { background = "#000000" },
-                        tab = { activeBackground = "#000000" },
+                        tab = {
+                            activeBackground = "#000000",
+                            inactiveBackground = fill,
+                            unfocusedActiveBackground = fill,
+                        },
                     }
                 end,
                 override = function(c)
