@@ -39,8 +39,8 @@ keybind = alt+space>w=close_surface
 
 
 # 水平分割
-keybind = ctrl+space>h=new_split:down
-keybind = alt+space>h=new_split:down
+keybind = ctrl+space>s=new_split:down
+keybind = alt+space>s=new_split:down
 
 
 # 垂直分割

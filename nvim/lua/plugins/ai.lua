@@ -61,6 +61,19 @@ return {
             vim.opt.completeopt = 'menu,menuone,noselect'
             local cmp = require('cmp')
 
+            --- Shift the current line's indent by one 'shiftwidth' regardless of cursor position.
+            --- <Tab> を素のまま流すとカーソル位置にタブ/空白が挿入されてしまうため，
+            --- 行頭インデントのみを変更する Vim 標準の <C-t>/<C-d> を常に使う．
+            --- @param key string '<C-t>' to indent, '<C-d>' to dedent
+            local function shift_indent(key)
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), 'n', false)
+                -- Markdown の番号付きリストはインデント変更で採番が変わるため，
+                -- feedkeys 処理後に autolist.nvim の再採番を走らせる
+                if vim.bo.filetype == 'markdown' then
+                    vim.schedule(function() vim.cmd('AutolistRecalculate') end)
+                end
+            end
+
             cmp.setup({
                 snippet = { expand = function(args) vim.fn['vsnip#anonymous'](args.body) end },
                 window = { completion = cmp.config.window.bordered(), documentation = cmp.config.window.bordered() },
@@ -70,17 +83,17 @@ return {
                     -- (これらを <Tab> に混在させると，インデント操作と AI/LSP の提案操作が
                     --  同じキーで衝突するため．候補選択は <C-n>/<C-p>，
                     --  vsnip のジャンプは <M-l>/<M-h> に割り当てる)
-                    ["<Tab>"] = cmp.mapping(function(fallback)
-                        -- Markdown はリスト・チェックボックスのインデント変更を autolist.nvim に委譲する
-                        -- (cmp がバッファローカルの <Tab> を InsertEnter 毎に再設定し、
-                        --  after/ftplugin/markdown.lua 側のマッピングを上書きしてしまうため)
-                        if vim.bo.filetype == 'markdown' then vim.cmd('AutolistTab')
-                        else fallback() end
-                    end, { 'i', 's' }),
-                    ["<S-Tab>"] = cmp.mapping(function(fallback)
-                        if vim.bo.filetype == 'markdown' then vim.cmd('AutolistShiftTab')
-                        else fallback() end
-                    end, { "i", "s" }),
+                    -- Insert モードでは補完メニュー表示中・行の途中・非リスト行などの状態に関わらず
+                    -- インデント調整のみを行う (AutolistTab は行末以外でタブ文字を挿入してしまうため使わない．
+                    -- cmp がバッファローカルの <Tab> を InsertEnter 毎に再設定するため Markdown もここで扱う)
+                    ["<Tab>"] = cmp.mapping({
+                        i = function() shift_indent('<C-t>') end,
+                        s = function(fallback) fallback() end,
+                    }),
+                    ["<S-Tab>"] = cmp.mapping({
+                        i = function() shift_indent('<C-d>') end,
+                        s = function(fallback) fallback() end,
+                    }),
                     ["<C-n>"] = cmp.mapping.select_next_item(),
                     ["<C-p>"] = cmp.mapping.select_prev_item(),
                     ['<C-s>'] = cmp.mapping.complete(),
