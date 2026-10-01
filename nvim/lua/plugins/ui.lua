@@ -25,6 +25,8 @@ return {
                         -- navic icons define only fg and inherit WinBar's bg, so keep it equal to Normal
                         WinBar = { bg = "#000000" },
                         WinBarNC = { bg = "#000000" },
+                        -- treesitter-context links to NormalFloat by default, whose gray bg stands out too much against the black code area
+                        TreesitterContext = { bg = "#262427" },
                     }
                 end,
             })
@@ -170,5 +172,15 @@ return {
             require('scrollbar').setup()
             require('scrollbar.handlers.gitsigns').setup()
         end,
+    },
+    -- Pins the enclosing function/class header at the top so the current scope stays visible in long blocks
+    {
+        'nvim-treesitter/nvim-treesitter-context',
+        event = { 'BufReadPost', 'BufNewFile' },
+        dependencies = { 'nvim-treesitter/nvim-treesitter' },
+        opts = {
+            -- Capped so deeply nested code cannot push the context window over most of the screen
+            max_lines = 3,
+        },
     },
 }
