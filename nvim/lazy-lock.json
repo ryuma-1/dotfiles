@@ -59,6 +59,7 @@
   "toggleterm.nvim": { "branch": "main", "commit": "9a88eae817ef395952e08650b3283726786fb5fb" },
   "translate.nvim": { "branch": "main", "commit": "1a841e56407ba02e919ed9af573dbe531404aebb" },
   "treesj": { "branch": "main", "commit": "9f349ba62c524f065d6f43254d731ddf8319b9bf" },
+  "trouble.nvim": { "branch": "main", "commit": "bd67efe408d4816e25e8491cc5ad4088e708a69a" },
   "vim-better-whitespace": { "branch": "master", "commit": "de99b55a6fe8c96a69f9376f16b1d5d627a56e81" },
   "vim-quickhl": { "branch": "master", "commit": "be1f44169c3fdee3beab629e83380515da03835e" },
   "vim-sandwich": { "branch": "master", "commit": "74cf93d58ccc567d8e2310a69860f1b93af19403" },
