@@ -22,6 +22,37 @@ return {
             require("copilot_cmp").setup()
         end,
     },
+    -- AI チャット / インライン編集 (Cursor 風)
+    -- 既に認証済みの Copilot を流用し，別途 API キーを管理せずに済むようにする
+    {
+        "avante-corp/avante.nvim",
+        -- Rust 製のバイナリが必要なため，ビルド済みのものを make で取得する
+        build = "make",
+        event = "VeryLazy",
+        -- 公式がタグ版の利用を非推奨としているため常に最新を追う
+        version = false,
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "MunifTanjim/nui.nvim",
+            { "ColinKennedy/mega.cmdparse", dependencies = { "ColinKennedy/mega.logging" } },
+            "nvim-telescope/telescope.nvim",
+            "hrsh7th/nvim-cmp",
+            "folke/snacks.nvim",
+            "nvim-tree/nvim-web-devicons",
+            "zbirenbaum/copilot.lua",
+            "MeanderingProgrammer/render-markdown.nvim",
+        },
+        keys = {
+            { "<leader>cc", "<cmd>AvanteChat<cr>", mode = "n", desc = "Avante: open chat" },
+            -- 選択範囲がある場合はその範囲を，無い場合は現在行を編集対象にする
+            { "<leader>ci", function() require("avante.api").edit() end, mode = { "n", "v" }, desc = "Avante: inline chat" },
+        },
+        opts = {
+            provider = "copilot",
+            selector = { provider = "telescope" },
+            input = { provider = "snacks" },
+        },
+    },
     -- スニペットエンジン
     {
         'hrsh7th/vim-vsnip',
