@@ -127,6 +127,13 @@ return {
                 -- Slanted tab edges, as shown in the bufferline.nvim README
                 separator_style = 'slant',
                 diagnostics = 'nvim_lsp',
+                -- Reveal the close icon only while hovering, so idle tabs stay uncluttered.
+                -- Requires 'mousemoveevent' (set in config/base.lua)
+                hover = {
+                    enabled = true,
+                    delay = 200,
+                    reveal = { 'close' },
+                },
             },
         },
     },

@@ -39,6 +39,8 @@ vim.opt.cursorline = true
 vim.opt.backspace = 'indent,eol,start'
 vim.opt.pumblend = 30
 vim.opt.mouse = 'a'
+-- bufferline の hover イベントはマウス移動の通知が必要なため有効化する
+vim.opt.mousemoveevent = true
 vim.opt.tabstop = 4               
 vim.opt.shiftwidth = 4            
 vim.opt.softtabstop = 4
