@@ -6,8 +6,8 @@ local edge_terminals = {}
 --- `wincmd` moves the window to the screen edge, and `dim`/`size` fix its width or height afterwards.
 --- Both are applied in on_open because toggleterm ignores `size` on Terminal:new, has no left/top direction,
 --- and splits the most recently opened terminal window when another one is already open.
---- `id` is a fixed high number and `hidden` is set so that `:ToggleTerm` (default target id 1),
---- <C-t>, <leader>yt and <leader>yy never pick up or rewrite these terminals.
+--- `id` is a fixed high number and `hidden` is set so that `:ToggleTerm` (default target id 1)
+--- and <C-t> never pick up or rewrite these terminals.
 local edge_terminal_defs = {
     float = { id = 101, direction = 'float' },
     left = { id = 102, direction = 'vertical', wincmd = 'H', dim = 'width', size = 50 },
@@ -220,8 +220,6 @@ return {
             { '<leader>tj', function() toggle_edge_terminal('bottom') end, mode = {'n', 'v'}, desc = 'Toggle terminal (bottom)' },
             { '<leader>tk', function() toggle_edge_terminal('top') end, mode = {'n', 'v'}, desc = 'Toggle terminal (top)' },
             { '<leader>tl', function() toggle_edge_terminal('right') end, mode = {'n', 'v'}, desc = 'Toggle terminal (right)' },
-            { '<leader>yt', '<CMD>ToggleTerm direction=horizontal size=10<CR>', mode = {'n', 'v'}, desc = 'ToggleTerm open horizontal' },
-            { '<leader>yy', '<CMD>ToggleTerm direction=vertical size=50<CR>', mode = {'n', 'v'}, desc = 'ToggleTerm open side' },
         },
         config = function()
             require('toggleterm').setup()
@@ -253,6 +251,20 @@ return {
             words = { enabled = true },
             styles = { scratch = { width = 200, height = 50 } }
         },
+        ---Sets up snacks, then paints the picker with the black code bg.
+        ---background_clear does not cover snacks, and monokai-pro applies its sideBar-colored picker groups
+        ---when `snacks` is first required, bypassing the user `override` (same as UfoFoldedBg above).
+        ---Only bg is replaced so the theme's fg (title and prompt colors) is kept.
+        config = function(_, opts)
+            require('snacks').setup(opts)
+            -- The body has no theme color and would otherwise link to the gray NormalFloat
+            vim.api.nvim_set_hl(0, 'SnacksPicker', { bg = '#000000' })
+            for _, group in ipairs({ 'SnacksPickerBorder', 'SnacksPickerTitle', 'SnacksPickerPrompt', 'SnacksPickerInputBorder' }) do
+                local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
+                hl.bg = '#000000'
+                vim.api.nvim_set_hl(0, group, hl)
+            end
+        end,
         keys = {
             { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
             { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
@@ -302,7 +314,11 @@ return {
             { "gP", "<Plug>(YankyGPutBefore)", mode = { "n", "x" } },
             { "=p", "<Plug>(YankyPutAfterFilter)" },
             { "=P", "<Plug>(YankyPutBeforeFilter)" },
+            -- Normal mode only, so these do not clash with the nvim-cmp insert-mode <C-n>/<C-p>
+            { "<C-p>", "<Plug>(YankyPreviousEntry)", desc = "Cycle to previous yank entry" },
+            { "<C-n>", "<Plug>(YankyNextEntry)", desc = "Cycle to next yank entry" },
             { "<leader>P", function() Snacks.picker.yanky() end, mode = { "n", "x" }, desc = "Open Yank History" },
+            { "<leader>y", function() Snacks.picker.yanky() end, mode = { "n", "x" }, desc = "Open Yank History" },
         },
     },
     -- ファジーファインダー (Telescope)
