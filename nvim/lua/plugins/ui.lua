@@ -13,10 +13,18 @@ return {
                     comment = { italic = true },
                     keyword = { italic = true },
                 },
+                -- Plugins listed here use editor.background instead of their own panel colors.
+                -- The defaults are kept and nvim-tree is added so the file tree shares the black code bg
+                background_clear = { "toggleterm", "telescope", "renamer", "notify", "nvim-tree" },
                 -- bufferline is themable, so monokai-pro's BufferLine*Selected groups (including devicons)
-                -- take precedence; they all derive from tab.activeBackground, so match it to the code bg here
+                -- take precedence; they all derive from tab.activeBackground, so match it to the code bg here.
+                -- editor.background is also overridden because plugin highlights (Telescope, FloatBorder, ...)
+                -- are built from it directly, so overriding only Normal would leave them on the theme's gray bg
                 override_scheme = function()
-                    return { tab = { activeBackground = "#000000" } }
+                    return {
+                        editor = { background = "#000000" },
+                        tab = { activeBackground = "#000000" },
+                    }
                 end,
                 override = function(c)
                     return {
@@ -163,6 +171,14 @@ return {
         opts = {
             -- Darker than the default (-40) so unfocused text fades further toward the black bg
             tint = -80,
+            ---Excludes floating windows from tint.
+            ---tint applies its own copy of every highlight to a window via nvim_win_set_hl_ns, which
+            ---bypasses the window's winhl, so floats like lazygit (NormalFloat -> LazyGitFloat) lost their bg.
+            ---@param winid integer
+            ---@return boolean
+            window_ignore_function = function(winid)
+                return vim.api.nvim_win_get_config(winid).relative ~= ''
+            end,
         },
     },
     -- Scrollbar that marks diagnostics and git changes, giving a whole-file overview like VSCode
