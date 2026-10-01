@@ -119,6 +119,9 @@ return {
         version = '*',
         event = 'VimEnter',
         dependencies = { 'nvim-tree/nvim-web-devicons' },
+        keys = {
+            { '<leader>wp', '<CMD>BufferLineTogglePin<CR>', desc = 'Toggle Pin Buffer' },
+        },
         opts = {
             options = {
                 -- Slanted tab edges, as shown in the bufferline.nvim README

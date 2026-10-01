@@ -317,7 +317,6 @@ return {
             -- Normal mode only, so these do not clash with the nvim-cmp insert-mode <C-n>/<C-p>
             { "<C-p>", "<Plug>(YankyPreviousEntry)", desc = "Cycle to previous yank entry" },
             { "<C-n>", "<Plug>(YankyNextEntry)", desc = "Cycle to next yank entry" },
-            { "<leader>P", function() Snacks.picker.yanky() end, mode = { "n", "x" }, desc = "Open Yank History" },
             { "<leader>y", function() Snacks.picker.yanky() end, mode = { "n", "x" }, desc = "Open Yank History" },
         },
     },
