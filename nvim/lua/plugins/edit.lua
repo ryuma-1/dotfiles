@@ -107,6 +107,14 @@ return {
         dependencies = { 'nvim-lua/plenary.nvim' },
         opts = {},
     },
+    -- Highlights multiple words at once, each in a different color
+    {
+        't9md/vim-quickhl',
+        keys = {
+            { '<leader>m', '<Plug>(quickhl-manual-this)', mode = { 'n', 'x' }, desc = 'Toggle quickhl highlight' },
+            { '<leader>M', '<Plug>(quickhl-manual-reset)', mode = { 'n', 'x' }, desc = 'Reset quickhl highlights' },
+        },
+    },
     -- スムーズスクロール
     {
         'karb94/neoscroll.nvim',
