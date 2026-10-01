@@ -14,8 +14,9 @@ return {
                     keyword = { italic = true },
                 },
                 -- Plugins listed here use editor.background instead of their own panel colors.
-                -- The defaults are kept and nvim-tree is added so the file tree shares the black code bg
-                background_clear = { "toggleterm", "telescope", "renamer", "notify", "nvim-tree" },
+                -- The defaults are kept and nvim-tree / which-key are added so they share the black code bg
+                -- (which-key otherwise uses the gray suggest-widget bg for its popup)
+                background_clear = { "toggleterm", "telescope", "renamer", "notify", "nvim-tree", "which-key" },
                 -- bufferline is themable, so monokai-pro's BufferLine*Selected groups (including devicons)
                 -- take precedence; they all derive from tab.activeBackground, so match it to the code bg here.
                 -- editor.background is also overridden because plugin highlights (Telescope, FloatBorder, ...)
@@ -249,5 +250,26 @@ return {
                 'help', 'qf', 'TelescopePrompt', 'lazygit', 'DiffviewFiles', 'Avante',
             }
         end,
+    },
+    -- Shows a popup of the available follow-up keys after a prefix key such as <leader> is pressed
+    {
+        'folke/which-key.nvim',
+        event = 'VeryLazy',
+        ---@type wk.Opts
+        opts = {
+            preset = 'modern',
+            -- Show the popup only after a pause, so it does not flash while typing a known sequence.
+            -- Applied to the built-in marks/registers popups too (their default is 0ms).
+            -- Kept below timeoutlen (1000ms) so the popup appears before an ambiguous mapping times out
+            delay = 500,
+        },
+        keys = {
+            {
+                '<leader>?',
+                ---Shows the buffer-local keymaps, which are otherwise mixed into the global popup.
+                function() require('which-key').show({ global = false }) end,
+                desc = 'Buffer Local Keymaps (which-key)',
+            },
+        },
     },
 }
