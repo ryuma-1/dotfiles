@@ -8,8 +8,6 @@ local lsp_keybindings = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'grn', '<cmd>Lspsaga rename<CR>', opts_lsp)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gca', '<cmd>Lspsaga code_action<CR>', opts_lsp)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gh', '<cmd>Lspsaga hover_doc<CR>', opts_lsp)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g]', '<cmd>Lspsaga diagnostic_jump_next<CR>', opts_lsp)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g[', '<cmd>Lspsaga diagnostic_jump_prev<CR>', opts_lsp)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gf', '', {
         noremap = true, silent = true, desc = "Format buffer",
         callback = function() vim.lsp.buf.format({ bufnr = bufnr }) end
@@ -266,6 +264,23 @@ return {
 
                     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>la', '<cmd>Lspsaga show_workspace_diagnostics<CR>', {
                         noremap = true, silent = true, desc = 'LSP Workspace Diagnostics',
+                    })
+                    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'ge', '<cmd>Lspsaga show_cursor_diagnostics<CR>', {
+                        noremap = true, silent = true, desc = 'LSP Cursor Diagnostics',
+                    })
+
+                    -- virtual_text is off, so pop up the diagnostic under the cursor instead.
+                    -- Cleared per buffer because LspAttach fires once for each attached client.
+                    local hover_group = vim.api.nvim_create_augroup('DiagnosticHoverFloat', { clear = false })
+                    vim.api.nvim_clear_autocmds({ group = hover_group, buffer = bufnr })
+                    vim.api.nvim_create_autocmd('CursorHold', {
+                        group = hover_group,
+                        buffer = bufnr,
+                        callback = function()
+                            if vim.g.show_diagnostics then
+                                vim.diagnostic.open_float({ scope = 'cursor', focus = false })
+                            end
+                        end,
                     })
 
                     vim.g.show_diagnostics = true
