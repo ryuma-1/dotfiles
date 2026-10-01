@@ -3,44 +3,14 @@ return {
     {
         "zbirenbaum/copilot.lua",
         event = 'InsertEnter',
-        dependencies = { "copilotlsp-nvim/copilot-lsp" }, -- Next Edit Suggestions 用
         config = function()
             require("copilot").setup({
-                -- Ctrl+Enter は端末では Enter と同一バイト列になり判別できないため，
-                -- 確実に判別できる Option+Enter (<M-CR>) を NES の確定キーとして使う (後述)．
-                -- 既定の panel.keymap.open も <M-CR> であり，将来 nes.keymap などに <M-CR> を割り当てた際に
-                -- copilot.lua のモード判定バグで "Duplicate keymap" と誤検知されないよう，予防として無効化しておく．
-                panel = { enabled = false, keymap = { open = false } },
+                -- パネル表示は使用しないため無効化する
+                panel = { enabled = false },
                 -- インライン提案 (ゴーストテキスト) は copilot-cmp 経由で nvim-cmp の
                 -- 補完メニューに統合するため無効化する (両方有効だと AI 提案が二重表示される)
                 suggestion = { enabled = false },
-                -- Next Edit Suggestions (VSCode: github.copilot.nextEditSuggestions.enabled)
-                -- nes.keymap 経由でキーマップを登録すると，copilot.lua 側のモード判定バグにより
-                -- 他の設定 (panel/suggestion) のキーマップと "Duplicate keymap" に誤検知される
-                -- おそれがあるため，ここでは登録せず，下記で Normal モード用に自前でキーマップする
-                nes = {
-                    enabled = true,
-                    -- タイピングのたびに自動発火させず，<M-n> による手動リクエストのみに絞る
-                    auto_trigger = false,
-                },
             })
-
-            -- Option+Enter で Next Edit Suggestion を確定 (VSCode: github.copilot.nextEditSuggestions.accept)
-            -- suggestion.enabled = false のため Insert モードの <M-CR> は copilot.lua 側に
-            -- 登録されず，この Normal モード限定のキーマップとは衝突しない
-            vim.keymap.set('n', '<M-CR>', function()
-                local nes_api = require('copilot.nes.api')
-                if nes_api.nes_apply_pending_nes() then
-                    nes_api.nes_walk_cursor_end_edit()
-                end
-            end, { silent = true, desc = 'Copilot: Accept Next Edit Suggestion' })
-
-            -- Option+n で Next Edit Suggestion を手動リクエストする (auto_trigger を無効化したため)
-            -- copilot.lua の nes_api には手動リクエスト用の関数が公開されていないため，
-            -- copilot-lsp の内部関数を直接呼び出す (内部API依存のリスクは実装計画の「リスク・確認事項」参照)
-            vim.keymap.set('i', '<M-n>', function()
-                require('copilot-lsp.nes').request_nes('copilot_ls')
-            end, { silent = true, desc = 'Copilot: Request Next Edit Suggestion (manual)' })
         end,
     },
     -- Copilot を nvim-cmp の補完ソースとして統合する (インライン提案の代替)
