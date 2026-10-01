@@ -1,3 +1,5 @@
+local colors = require('config.colors')
+
 return {
 -- カラースキーム (Monokai Pro)
     {
@@ -26,7 +28,10 @@ return {
                         WinBar = { bg = "#000000" },
                         WinBarNC = { bg = "#000000" },
                         -- treesitter-context links to NormalFloat by default, whose gray bg stands out too much against the black code area
-                        TreesitterContext = { bg = "#262427" },
+                        TreesitterContext = { bg = colors.overlay_bg },
+                        -- Folded lines share the treesitter-context bg so both "collapsed/pinned" areas look alike
+                        -- (UfoFoldedBg is reapplied in nvim-ufo's config, see edit.lua)
+                        Folded = { bg = colors.overlay_bg },
                     }
                 end,
             })

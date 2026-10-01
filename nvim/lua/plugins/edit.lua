@@ -129,6 +129,32 @@ return {
         -- デフォルトの <leader>s は分割系 prefix (<leader>sh/sv) と衝突するため無効化し，必要なキーだけ keys で定義する
         opts = { use_default_keymaps = false, max_join_length = 150 },
     },
+    -- Modern folding with treesitter/indent ranges and a preview of the folded lines
+    {
+        'kevinhwang91/nvim-ufo',
+        event = { 'BufReadPost', 'BufNewFile' },
+        dependencies = { 'kevinhwang91/promise-async' },
+        keys = {
+            -- zR/zM would change foldlevel and make ufo recompute every fold, so use ufo's versions instead
+            { 'zR', function() require('ufo').openAllFolds() end, desc = 'Open all folds (ufo)' },
+            { 'zM', function() require('ufo').closeAllFolds() end, desc = 'Close all folds (ufo)' },
+            { 'zK', function() require('ufo').peekFoldedLinesUnderCursor() end, desc = 'Peek folded lines (ufo)' },
+        },
+        opts = {
+            ---Use treesitter (with indent as fallback) rather than LSP,
+            ---so folding works without adding foldingRange to the shared LSP capabilities.
+            provider_selector = function()
+                return { 'treesitter', 'indent' }
+            end,
+        },
+        ---Sets up ufo, then paints the folded lines with the shared overlay bg.
+        ---monokai-pro applies its own UfoFoldedBg when `ufo` is first required, bypassing the user
+        ---`override`, so the bg has to be reapplied afterwards (same as nvim-navic's WinBar in ui.lua).
+        config = function(_, opts)
+            require('ufo').setup(opts)
+            vim.api.nvim_set_hl(0, 'UfoFoldedBg', { bg = require('config.colors').overlay_bg })
+        end,
+    },
     -- 高機能な文字ジャンプ (f, F, t, T)
     {
         'smoka7/hop.nvim',

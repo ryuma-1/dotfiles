@@ -10,7 +10,10 @@ vim.scriptencoding = 'utf8'
 -- 共通オプション
 vim.opt.termguicolors = true
 vim.opt.signcolumn = 'yes:1'
-vim.opt.foldenable = false
+-- nvim-ufo は折りたたみ有効が前提．foldlevel を高くしてファイルを開いた直後は全展開のままにする
+vim.opt.foldenable = true
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
 vim.opt.laststatus = 3
 vim.opt.directory = vim.fn.stdpath('data') .. '/swp'
 vim.opt.hidden = true
