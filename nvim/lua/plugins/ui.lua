@@ -192,14 +192,39 @@ return {
     {
         'petertriho/nvim-scrollbar',
         event = 'VeryLazy',
-        dependencies = { 'lewis6991/gitsigns.nvim' },
-        ---Sets up the scrollbar, then registers the gitsigns handler.
-        ---The handler is registered explicitly (not via `handlers.gitsigns`) as the README recommends,
-        ---so gitsigns hunks are guaranteed to be wired after gitsigns itself is loaded.
+        -- hlslens is a dependency so its own setup runs first; the search handler patches hlslens.config
+        -- directly, and a later hlslens setup would drop the scrollbar callback
+        dependencies = { 'lewis6991/gitsigns.nvim', 'kevinhwang91/nvim-hlslens' },
+        ---Sets up the scrollbar, then registers the gitsigns and search handlers.
+        ---The handlers are registered explicitly (not via `handlers.*`) as the README recommends,
+        ---so they are guaranteed to be wired after gitsigns and hlslens themselves are loaded.
         config = function()
-            require('scrollbar').setup()
+            require('scrollbar').setup({
+                marks = {
+                    -- Search marks take their fg from the Search group, but monokai-pro defines only a bg there,
+                    -- so they became black on the black code bg; Monokai Pro yellow is set explicitly instead
+                    Search = { color = '#FFD866' },
+                },
+            })
             require('scrollbar.handlers.gitsigns').setup()
+            require('scrollbar.handlers.search').setup()
         end,
+    },
+    -- Shows the index and total count of search matches as virtual text next to each match
+    {
+        'kevinhwang91/nvim-hlslens',
+        -- n/N/*/# start the lens explicitly, and `/` or `?` searches are picked up once the plugin is loaded
+        keys = {
+            -- n/N keep the previous `nzz`/`Nzz` behavior (formerly in config/keymaps.lua) so the match stays centered
+            { 'n', [[<Cmd>execute('normal! ' . v:count1 . 'nzz')<CR><Cmd>lua require('hlslens').start()<CR>]], desc = 'Next match (hlslens)' },
+            { 'N', [[<Cmd>execute('normal! ' . v:count1 . 'Nzz')<CR><Cmd>lua require('hlslens').start()<CR>]], desc = 'Prev match (hlslens)' },
+            { '*', [[*<Cmd>lua require('hlslens').start()<CR>]], desc = 'Search word forward (hlslens)' },
+            { '#', [[#<Cmd>lua require('hlslens').start()<CR>]], desc = 'Search word backward (hlslens)' },
+            { 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], desc = 'Search partial word forward (hlslens)' },
+            { 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], desc = 'Search partial word backward (hlslens)' },
+        },
+        event = 'CmdlineEnter',
+        opts = {},
     },
     -- Pins the enclosing function/class header at the top so the current scope stays visible in long blocks
     {

@@ -11,8 +11,6 @@ set_keymap('i', 'jk', '<ESC>', opts)
 set_keymap('n', '<ESC><ESC>', '<CMD>nohlsearch<CR>', opts)
 set_keymap('n', 'j', 'gj', opts)
 set_keymap('n', 'k', 'gk', opts)
-set_keymap('n', 'n', 'nzz', opts)
-set_keymap('n', 'N', 'Nzz', opts)
 set_keymap('n', 'zx', '<CMD>CenterCursorToggle<CR>zz', opts)
 
 -- Enter: 現在行の下に新規行を挿入してインサートモードへ (VSCode: insertLineAfter)
