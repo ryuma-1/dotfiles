@@ -43,6 +43,10 @@ return {
                         -- navic icons define only fg and inherit WinBar's bg, so keep it equal to Normal
                         WinBar = { bg = "#000000" },
                         WinBarNC = { bg = "#000000" },
+                        -- The theme paints floats with the gray suggest-widget bg, and Lspsaga (hover, code action,
+                        -- diagnostics), vim.diagnostic floats and avante's prompt input all link to NormalFloat;
+                        -- FloatBorder already uses editor.background, so only the body needs to match it
+                        NormalFloat = { bg = "#000000" },
                         -- treesitter-context links to NormalFloat by default, whose gray bg stands out too much against the black code area
                         TreesitterContext = { bg = colors.overlay_bg },
                         -- Folded lines share the treesitter-context bg so both "collapsed/pinned" areas look alike
