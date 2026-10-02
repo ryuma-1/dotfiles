@@ -6,7 +6,6 @@ local config = wezterm.config_builder()
 -- ========================================
 
 config.font = wezterm.font 'JetBrains Mono'
-config.font_size = 14
 
 config.colors = {
   background = '#111111',
@@ -38,17 +37,6 @@ config.colors = {
 }
 
 config.colors.split = '#444444'
-
--- ========================================
--- Leader
--- Ctrl+Space
--- ========================================
-
-config.leader = {
-  key = 'Space',
-  mods = 'CTRL',
-  timeout_milliseconds = 1000,
-}
 
 -- ========================================
 -- キーバインド
@@ -230,5 +218,18 @@ config.keys = {
     action = wezterm.action.ActivateTab(8),
   },
 }
+
+
+-- ----------------------------------------
+-- ローカル設定の読み込み
+-- ----------------------------------------
+
+local ok, local_config = pcall(require, 'local')
+
+if ok then
+  for key, value in pairs(local_config) do
+    config[key] = value
+  end
+end
 
 return config
