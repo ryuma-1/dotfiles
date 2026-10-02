@@ -44,8 +44,11 @@ return {
         },
         keys = {
             { "<leader>cc", "<cmd>AvanteChat<cr>", mode = "n", desc = "Avante: open chat" },
-            -- 選択範囲がある場合はその範囲を，無い場合は現在行を編集対象にする
-            { "<leader>ci", function() require("avante.api").edit() end, mode = { "n", "v" }, desc = "Avante: inline chat" },
+            -- フローティング入力で質問し，返答はバッファではなくサイドバーに表示する
+            -- (edit() は LLM の出力でバッファを直接書き換えるため，質問用途には使わない)
+            { "<leader>ci", function() require("avante.api").ask({ floating = true }) end, mode = { "n", "v" }, desc = "Avante: inline chat" },
+            -- 選択範囲がある場合はその範囲を，無い場合は現在行を AI に書き換えさせる
+            { "<leader>ce", function() require("avante.api").edit() end, mode = { "n", "v" }, desc = "Avante: inline edit" },
         },
         opts = {
             provider = "copilot",
