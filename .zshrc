@@ -18,6 +18,10 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# go
+export PATH=$PATH:/usr/local/go/bin
+export PATH="$PATH:$(go env GOPATH)/bin"
+
 # =============================================================================
 # 2. 履歴 (History) の設定
 # =============================================================================
