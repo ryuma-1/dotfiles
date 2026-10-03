@@ -11,8 +11,8 @@ vim.keymap.set('i', '<CR>', '<CR><cmd>AutolistNewBullet<CR>', { buffer = true })
 vim.keymap.set('n', 'o', 'o<cmd>AutolistNewBullet<CR>', { buffer = true })
 vim.keymap.set('n', 'O', 'O<cmd>AutolistNewBulletBefore<CR>', { buffer = true })
 -- <C-r> は Vim 標準の redo と衝突し Markdown で redo できなくなるため使わず，
--- 他の Markdown 専用キー (m 系) に揃えて mr に割り当てる．
-vim.keymap.set('n', 'mr', '<cmd>AutolistRecalculate<CR>', { buffer = true, silent = true, desc = 'Markdown: Recalculate List' })
+-- 他の Markdown 専用キー (<leader>m 系) に揃えて <leader>mr に割り当てる．
+vim.keymap.set('n', '<leader>mr', '<cmd>AutolistRecalculate<CR>', { buffer = true, silent = true, desc = 'Markdown: Recalculate List' })
 -- Tab / Shift-Tab での箇条書き（チェックボックス含む）インデント変更は，
 -- nvim-cmp が InsertEnter 毎に <Tab> を再設定してここでの定義を上書きしてしまうため，
 -- lua/plugins/ai.lua の cmp mapping 側 (<C-t>/<C-d> + AutolistRecalculate) で処理する．
@@ -20,6 +20,7 @@ vim.keymap.set('n', 'mr', '<cmd>AutolistRecalculate<CR>', { buffer = true, silen
 --  全ファイルタイプ共通でインデント調整のみを行うマッピングである)
 
 -- VSCode (Markdown All in One) の m 系キーバインドに合わせた装飾トグル
+-- (素の m 始まりは Vim 標準のマーク設定 (m{a-z}) を潰すため，<leader> を前置する)
 -- 現在の Visual 選択範囲を marker で囲む
 -- (終端側を先に編集して、開始位置がずれないようにする)
 local function wrap_visual_selection(marker)
@@ -69,18 +70,18 @@ local function toggle_checkbox()
 end
 
 for _, mode in ipairs({ 'n', 'x' }) do
-  vim.keymap.set(mode, 'mb', function() toggle_decoration('**') end,
+  vim.keymap.set(mode, '<leader>mb', function() toggle_decoration('**') end,
     { buffer = true, silent = true, desc = 'Markdown: Toggle Bold' })
-  vim.keymap.set(mode, 'mi', function() toggle_decoration('_') end,
+  vim.keymap.set(mode, '<leader>mi', function() toggle_decoration('_') end,
     { buffer = true, silent = true, desc = 'Markdown: Toggle Italic' })
-  vim.keymap.set(mode, 'ms', function() toggle_decoration('~~') end,
+  vim.keymap.set(mode, '<leader>ms', function() toggle_decoration('~~') end,
     { buffer = true, silent = true, desc = 'Markdown: Toggle Strikethrough' })
-  vim.keymap.set(mode, 'mm', function() toggle_decoration('$') end,
+  vim.keymap.set(mode, '<leader>mm', function() toggle_decoration('$') end,
     { buffer = true, silent = true, desc = 'Markdown: Toggle Math' })
-  vim.keymap.set(mode, 'mc', toggle_checkbox,
+  vim.keymap.set(mode, '<leader>mc', toggle_checkbox,
     { buffer = true, silent = true, desc = 'Markdown: Toggle Checkbox' })
-  vim.keymap.set(mode, 'mvv', '<CMD>MarkdownPreview<CR>',
-    { buffer = true, silent = true, desc = 'Markdown: Show Preview' })
-  vim.keymap.set(mode, 'mvk', '<CMD>MarkdownPreview<CR>',
-    { buffer = true, silent = true, desc = 'Markdown: Show Preview' })
 end
+
+-- markdown-preview.nvim is declared in lua/plugins/lsp.lua; only the buffer-local key lives here
+vim.keymap.set('n', '<leader>mp', '<cmd>MarkdownPreviewToggle<CR>',
+  { buffer = true, silent = true, desc = 'Markdown: Toggle Preview' })

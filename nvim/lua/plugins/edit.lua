@@ -111,8 +111,8 @@ return {
     {
         't9md/vim-quickhl',
         keys = {
-            { '<leader>m', '<Plug>(quickhl-manual-this)', mode = { 'n', 'x' }, desc = 'Toggle quickhl highlight' },
-            { '<leader>M', '<Plug>(quickhl-manual-reset)', mode = { 'n', 'x' }, desc = 'Reset quickhl highlights' },
+            { '<leader>h', '<Plug>(quickhl-manual-this)', mode = { 'n', 'x' }, desc = 'Toggle quickhl highlight' },
+            { '<leader>H', '<Plug>(quickhl-manual-reset)', mode = { 'n', 'x' }, desc = 'Reset quickhl highlights' },
         },
     },
     -- スムーズスクロール

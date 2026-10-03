@@ -405,14 +405,24 @@ return {
     {
         'MeanderingProgrammer/render-markdown.nvim',
         event = { 'BufReadPre', 'BufNewFile' },
-        opts = { file_types = { "markdown", "Avante" } },
+        opts = {
+            file_types = { "markdown", "Avante" },
+            overrides = {
+                buftype = {
+                    -- Lspsaga hover (gh) is a nofile markdown buffer whose content is mostly a code block,
+                    -- so the gray RenderMarkdownCode bg covered the black HoverNormal float almost entirely
+                    nofile = { code = { disable_background = true } },
+                },
+            },
+        },
         ft = { "markdown", "Avante" },
     },
     {
         'iamcco/markdown-preview.nvim',
-        cmd = { 'MarkdownPreview' },
+        cmd = { 'MarkdownPreview', 'MarkdownPreviewStop', 'MarkdownPreviewToggle' },
         ft = 'markdown',
-        build = "cd app && yarn install",
+        -- yarn is not installed globally, so run it through npx to avoid a build failure
+        build = "cd app && npx --yes yarn install",
         init = function() vim.g.mkdp_filetypes = { "markdown" } end,
     },
     {
