@@ -122,6 +122,45 @@ return {
             -- Breadcrumbs are shown by nvim-navic in the lualine winbar instead
             symbol_in_winbar = { enable = false },
         },
+        ---Sets up lspsaga and closes the code action preview together with its action list.
+        ---lspsaga closes the preview only from its own keys (`q`, `<CR>`, number shortcuts),
+        ---so leaving the list any other way (`:q`, `<leader>q`, window moves) orphans the
+        ---preview, which is unfocusable and therefore cannot be closed by hand.
+        ---@param opts table
+        config = function(_, opts)
+            require('lspsaga').setup(opts)
+
+            vim.api.nvim_create_autocmd('WinLeave', {
+                group = vim.api.nvim_create_augroup('lspsaga-codeaction-preview', {}),
+                callback = function()
+                    -- Avoid loading the module just to check; no list can exist before it is loaded
+                    local codeaction = package.loaded['lspsaga.codeaction']
+                    if not codeaction or vim.api.nvim_get_current_win() ~= codeaction.action_winid then
+                        return
+                    end
+                    -- Windows cannot be closed while WinLeave is still being processed
+                    vim.schedule(function() codeaction:close_action_window() end)
+                end,
+            })
+
+            -- Patch the metatable rather than the module table: the module table is lspsaga's
+            -- ctx, whose keys are all wiped by clean_ctx() after every applied action.
+            local action_list = getmetatable(require('lspsaga.codeaction'))
+            local action_callback = action_list.action_callback
+            ---Opens the action list, then restores linewise j/k inside it.
+            ---The global j/k -> gj/gk mapping lands on the second screen row of a wrapped item,
+            ---and lspsaga's CursorMoved handler snaps the cursor back to column 1 of the same
+            ---item, so the cursor could never leave a wrapped item.
+            ---@param self table
+            action_list.action_callback = function(self, ...)
+                action_callback(self, ...)
+                if self.action_bufnr and vim.api.nvim_buf_is_valid(self.action_bufnr) then
+                    for _, key in ipairs({ 'j', 'k' }) do
+                        vim.keymap.set('n', key, key, { buffer = self.action_bufnr, nowait = true })
+                    end
+                end
+            end
+        end,
     },
     -- 診断一覧 (Trouble)
     -- Mapped via lazy `keys` instead of LspAttach so the list also opens for
