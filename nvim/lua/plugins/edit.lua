@@ -226,7 +226,7 @@ return {
             vim.api.nvim_create_autocmd('TermOpen', {
                 pattern = { 'term://*' },
                 callback = function()
-                    vim.api.nvim_buf_set_keymap(0, 't', '<ESC>', [[<C-\><C-n>]], { noremap = true, silent = true })
+                    vim.keymap.set('t', '<ESC>', [[<C-\><C-n>]], { buffer = 0, silent = true, desc = 'Exit terminal mode' })
                 end
             })
         end
