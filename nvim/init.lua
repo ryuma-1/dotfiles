@@ -36,6 +36,7 @@ vim.cmd("filetype plugin indent on")
 
 require('config.base')
 require('config.keymaps')
+require('config.unity')
 
 -- ====================================================================
 -- 4. lazy.nvim によるプラグイン一括管理
