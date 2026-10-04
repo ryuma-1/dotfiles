@@ -5,7 +5,8 @@
 #
 # Unity starts external editors as a GUI app, so there is no terminal and the
 # working directory is "~". This wrapper opens a terminal at the Unity project
-# root and jumps to the requested line.
+# root and jumps to the requested line. If the nvim started by this wrapper is
+# still running, the file opens as a new buffer in it.
 
 # Unity launched from the GUI has a minimal PATH, so add the usual locations.
 PATH="/opt/homebrew/bin:/usr/local/bin:/Applications/WezTerm.app/Contents/MacOS:$PATH"
@@ -54,6 +55,30 @@ workdir=$(find_project_root "$file_dir") || workdir=$file_dir
 
 # Only pass +line when it is a plain number, to avoid running arbitrary commands.
 case $line in
-    ''|*[!0-9]*) exec wezterm start --cwd "$workdir" -- nvim -- "$file" ;;
-    *) exec wezterm start --cwd "$workdir" -- nvim "+$line" -- "$file" ;;
+    ''|*[!0-9]*) line= ;;
 esac
+
+# A fixed socket lets later files reach the nvim this wrapper started, so they
+# open as buffers (bufferline tabs) there instead of in a new window.
+socket_dir="$HOME/.cache/nvim"
+socket="$socket_dir/unity-nvim.sock"
+
+if [ -S "$socket" ] && nvim --server "$socket" --remote-expr 1 >/dev/null 2>&1; then
+    # The path is embedded in a Vimscript single-quoted string, where ' is written ''.
+    escaped=$(printf '%s' "$file" | sed "s/'/''/g")
+    cmd="edit${line:+ +$line} "
+    nvim --server "$socket" --remote-expr "execute('$cmd' . fnameescape('$escaped'))" >/dev/null \
+        || die "failed to open $file in the running nvim"
+    # The remote edit does not raise the window, so bring WezTerm to the front explicitly.
+    open -a WezTerm
+    exit 0
+fi
+
+# A socket file left by a crashed nvim would make --listen fail.
+[ -S "$socket" ] && rm -f "$socket"
+mkdir -p "$socket_dir" || die "failed to create $socket_dir"
+
+if [ -n "$line" ]; then
+    exec wezterm start --cwd "$workdir" -- nvim --listen "$socket" "+$line" -- "$file"
+fi
+exec wezterm start --cwd "$workdir" -- nvim --listen "$socket" -- "$file"
