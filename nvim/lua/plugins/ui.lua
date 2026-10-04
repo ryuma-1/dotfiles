@@ -286,4 +286,6 @@ return {
             },
         },
     },
+    -- その他特定用途
+    { 'eandrju/cellular-automaton.nvim', cmd = 'CellularAutomaton' },
 }
