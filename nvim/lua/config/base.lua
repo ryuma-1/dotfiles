@@ -1,8 +1,3 @@
--- WSL 判定
-local s_obj = vim.system({'sh', '-c', 'uname -r | grep -q microsoft'})
-local res = s_obj:wait(1000)
-IsWSL = (res.code == 0)
-
 -- エンコーディング設定
 vim.opt.encoding = 'utf8'
 vim.scriptencoding = 'utf8'
@@ -24,25 +19,25 @@ vim.opt.fileencodings = 'ucs-boms,utf-8,euc-jp,cp932'
 vim.opt.fileformats = 'unix,dos,mac'
 vim.opt.ambiwidth = 'single'
 vim.opt.history = 5000
-vim.opt.expandtab = true          
+vim.opt.expandtab = true
 vim.opt.autoindent = true
-vim.opt.smartindent = true         
+vim.opt.smartindent = true
 vim.opt.list = true
 vim.opt.listchars = { tab = '<->' }
 vim.opt.incsearch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.hlsearch = true
-vim.opt.number = true             
-vim.opt.relativenumber = true     
+vim.opt.number = true
+vim.opt.relativenumber = true
 vim.opt.cursorline = true
 vim.opt.backspace = 'indent,eol,start'
 vim.opt.pumblend = 30
 vim.opt.mouse = 'a'
 -- bufferline の hover イベントはマウス移動の通知が必要なため有効化する
 vim.opt.mousemoveevent = true
-vim.opt.tabstop = 4               
-vim.opt.shiftwidth = 4            
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
 vim.opt.splitbelow = true
 vim.opt.splitright = true

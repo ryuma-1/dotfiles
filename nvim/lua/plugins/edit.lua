@@ -334,7 +334,7 @@ return {
         config = function()
             require('telescope').setup({
                 defaults = {
-                    -- 💡 検索から除外したいファイル・フォルダをここに指定します
+                    -- 検索結果のノイズを減らすため，除外したいファイル・フォルダを指定する
                     file_ignore_patterns = {
                         "%.meta$",       -- Unityの.metaファイルを完全に除外
                         "%.asset$",      -- .assetファイルを除外（必要なら）

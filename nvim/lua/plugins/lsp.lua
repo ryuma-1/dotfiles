@@ -110,17 +110,17 @@ return {
         end,
     },
     -- LSP インストーラ (Mason)
-    { 
-        'mason-org/mason.nvim', 
-        lazy = false, 
-        opts = { 
+    {
+        'mason-org/mason.nvim',
+        lazy = false,
+        opts = {
             ui = { border = 'single' },
-            -- 💡 以下の registries の設定を追加すると roslyn が Mason で見つかるようになります
+            -- roslyn は公式 registry に無いため，Crashdummyy の registry を追加して Mason から見つけられるようにする
             registries = {
                 "github:mason-org/mason-registry",
                 "github:Crashdummyy/mason-registry",
             }
-        } 
+        }
     },
     {
         'mason-org/mason-lspconfig.nvim',
@@ -256,7 +256,7 @@ return {
             })
         end
     },
-    -- 💡 Roslyn 関連プラグインの統合
+    -- Roslyn 関連プラグイン
     {
         "khoido2003/roslyn-filewatch.nvim",
         lazy = true,
