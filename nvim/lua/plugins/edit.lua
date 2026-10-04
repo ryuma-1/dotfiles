@@ -251,19 +251,13 @@ return {
             words = { enabled = true },
             styles = { scratch = { width = 200, height = 50 } }
         },
-        ---Sets up snacks, then paints the picker with the black code bg.
+        ---Sets up snacks, then paints the picker with the black code bg only when the override is active (monokai-pro and enabled).
         ---background_clear does not cover snacks, and monokai-pro applies its sideBar-colored picker groups
         ---when `snacks` is first required, bypassing the user `override` (same as UfoFoldedBg above).
         ---Only bg is replaced so the theme's fg (title and prompt colors) is kept.
         config = function(_, opts)
             require('snacks').setup(opts)
-            -- The body has no theme color and would otherwise link to the gray NormalFloat
-            vim.api.nvim_set_hl(0, 'SnacksPicker', { bg = '#000000' })
-            for _, group in ipairs({ 'SnacksPickerBorder', 'SnacksPickerTitle', 'SnacksPickerPrompt', 'SnacksPickerInputBorder' }) do
-                local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
-                hl.bg = '#000000'
-                vim.api.nvim_set_hl(0, group, hl)
-            end
+            require('config.colors').apply_code_bg()
         end,
         keys = {
             { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },

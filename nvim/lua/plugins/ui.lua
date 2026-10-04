@@ -23,36 +23,45 @@ return {
                 -- are built from it directly, so overriding only Normal would leave them on the theme's gray bg.
                 -- Non-selected tabs (inactive, and visible in another window) take the bufferline fill color
                 -- so that they blend into the empty area and only the selected tab stands out
+                -- colors.enabled is checked instead of is_active() because vim.g.colors_name
+                -- still holds the previous colorscheme while monokai-pro is being loaded
                 override_scheme = function(scheme)
+                    if not colors.enabled then
+                        return {}
+                    end
                     local fill = scheme.editorGroupHeader.tabsBackground
                     return {
-                        editor = { background = "#000000" },
+                        editor = { background = colors.code_bg },
                         tab = {
-                            activeBackground = "#000000",
+                            activeBackground = colors.code_bg,
                             inactiveBackground = fill,
                             unfocusedActiveBackground = fill,
                         },
                     }
                 end,
                 override = function(c)
-                    return {
-                        Normal = { bg = "#000000" },
-                        -- Inactive windows use NormalNC, which otherwise keeps the theme's gray bg;
-                        -- tint.nvim already marks unfocused windows, so the bg stays identical to Normal
-                        NormalNC = { bg = "#000000" },
-                        -- navic icons define only fg and inherit WinBar's bg, so keep it equal to Normal
-                        WinBar = { bg = "#000000" },
-                        WinBarNC = { bg = "#000000" },
-                        -- The theme paints floats with the gray suggest-widget bg, and Lspsaga (hover, code action,
-                        -- diagnostics), vim.diagnostic floats and avante's prompt input all link to NormalFloat;
-                        -- FloatBorder already uses editor.background, so only the body needs to match it
-                        NormalFloat = { bg = "#000000" },
+                    local groups = {
                         -- treesitter-context links to NormalFloat by default, whose gray bg stands out too much against the black code area
                         TreesitterContext = { bg = colors.overlay_bg },
                         -- Folded lines share the treesitter-context bg so both "collapsed/pinned" areas look alike
                         -- (UfoFoldedBg is reapplied in nvim-ufo's config, see edit.lua)
                         Folded = { bg = colors.overlay_bg },
                     }
+                    if colors.enabled then
+                        local black = { bg = colors.code_bg }
+                        groups.Normal = black
+                        -- Inactive windows use NormalNC, which otherwise keeps the theme's gray bg;
+                        -- tint.nvim already marks unfocused windows, so the bg stays identical to Normal
+                        groups.NormalNC = black
+                        -- navic icons define only fg and inherit WinBar's bg, so keep it equal to Normal
+                        groups.WinBar = black
+                        groups.WinBarNC = black
+                        -- The theme paints floats with the gray suggest-widget bg, and Lspsaga (hover, code action,
+                        -- diagnostics), vim.diagnostic floats and avante's prompt input all link to NormalFloat;
+                        -- FloatBorder already uses editor.background, so only the body needs to match it
+                        groups.NormalFloat = black
+                    end
+                    return groups
                 end,
             })
 
@@ -80,19 +89,35 @@ return {
             local my_winbar = {
                 lualine_c = { { function() return navic.get_location() end, cond = navic.is_available } },
             }
-            ---Monokai Pro lualine theme whose middle sections share the editor background,
+            ---Builds the Monokai Pro lualine theme.
+            ---While the black bg is active the middle sections share the editor background,
             ---so the winbar (drawn with section c) blends into the code area.
-            local my_theme = vim.deepcopy(require('lualine.themes.monokai-pro'))
-            my_theme.normal.c.bg = '#000000'
-            my_theme.normal.x.bg = '#000000'
-            require('lualine').setup({
-                options = {
-                    theme = my_theme,
-                    component_separators = '',
-                    section_separators = { left = '', right = '' },
-                },
-                sections = my_sections,
-                winbar = my_winbar,
+            local function build_theme()
+                local theme = vim.deepcopy(require('lualine.themes.monokai-pro'))
+                if colors.is_active() then
+                    theme.normal.c.bg = colors.code_bg
+                    theme.normal.x.bg = colors.code_bg
+                end
+                return theme
+            end
+            ---(Re)applies the lualine config with a theme built for the current colorscheme and black bg state.
+            local function setup_lualine()
+                require('lualine').setup({
+                    options = {
+                        theme = build_theme(),
+                        component_separators = '',
+                        section_separators = { left = '', right = '' },
+                    },
+                    sections = my_sections,
+                    winbar = my_winbar,
+                })
+            end
+            setup_lualine()
+            -- The theme depends on the colorscheme and on :BlackBgToggle (which reloads the colorscheme),
+            -- so lualine is set up again whenever the colorscheme is loaded
+            vim.api.nvim_create_autocmd('ColorScheme', {
+                group = vim.api.nvim_create_augroup('LualineBlackBg', { clear = true }),
+                callback = setup_lualine,
             })
         end
     },
@@ -111,10 +136,7 @@ return {
         ---required, bypassing the user `override`, so the bg has to be reapplied afterwards.
         config = function(_, opts)
             require('nvim-navic').setup(opts)
-            for _, group in ipairs({ 'WinBar', 'WinBarNC' }) do
-                local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
-                vim.api.nvim_set_hl(0, group, vim.tbl_extend('force', hl, { bg = '#000000' }))
-            end
+            colors.apply_code_bg()
         end,
     },
     -- バッファライン
