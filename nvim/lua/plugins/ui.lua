@@ -40,14 +40,15 @@ return {
                     }
                 end,
                 override = function(c)
-                    local groups = {
-                        -- treesitter-context links to NormalFloat by default, whose gray bg stands out too much against the black code area
-                        TreesitterContext = { bg = colors.overlay_bg },
-                        -- Folded lines share the treesitter-context bg so both "collapsed/pinned" areas look alike
-                        -- (UfoFoldedBg is reapplied in nvim-ufo's config, see edit.lua)
-                        Folded = { bg = colors.overlay_bg },
-                    }
+                    local groups = {}
                     if colors.enabled then
+                        -- overlay_bg is tuned against the black code area, so it is only used together with it;
+                        -- with the black bg disabled these groups keep the theme's own colors
+                        -- treesitter-context links to NormalFloat by default, whose gray bg stands out too much against the black code area
+                        groups.TreesitterContext = { bg = colors.overlay_bg }
+                        -- Folded lines share the treesitter-context bg so both "collapsed/pinned" areas look alike
+                        -- (UfoFoldedBg is reapplied by colors.apply_code_bg(), see config/colors.lua)
+                        groups.Folded = { bg = colors.overlay_bg }
                         local black = { bg = colors.code_bg }
                         groups.Normal = black
                         -- Inactive windows use NormalNC, which otherwise keeps the theme's gray bg;

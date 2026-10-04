@@ -33,8 +33,8 @@ local function set_bg_keep_fg(group)
     vim.api.nvim_set_hl(0, group, hl)
 end
 
----Paints the code bg onto the groups that monokai-pro's `override` cannot reach.
----Plugins such as navic and snacks make monokai-pro apply its own highlights when they are first
+---Paints the code bg and the overlay bg onto the groups that monokai-pro's `override` cannot reach.
+---Plugins such as navic, ufo and snacks make monokai-pro apply its own highlights when they are first
 ---required, bypassing `override`, so their configs call this again after `require`.
 ---Does nothing unless is_active() holds.
 function M.apply_code_bg()
@@ -50,6 +50,10 @@ function M.apply_code_bg()
     for _, group in ipairs({ 'SnacksPickerBorder', 'SnacksPickerTitle', 'SnacksPickerPrompt', 'SnacksPickerInputBorder' }) do
         set_bg_keep_fg(group)
     end
+    -- Folded lines drawn by ufo share the Folded bg set in monokai-pro's `override`.
+    -- Reapplied on every colorscheme load because ufo's config only runs once,
+    -- which used to leave the theme's black UfoFoldedBg after switching back to monokai-pro
+    vim.api.nvim_set_hl(0, 'UfoFoldedBg', { bg = M.overlay_bg })
 end
 
 -- Plugin highlights are rebuilt on every colorscheme load, so the bg is reapplied each time

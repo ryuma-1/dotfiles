@@ -155,12 +155,12 @@ return {
                 return { 'treesitter', 'indent' }
             end,
         },
-        ---Sets up ufo, then paints the folded lines with the shared overlay bg.
+        ---Sets up ufo, then paints the folded lines with the shared overlay bg only when the override is active (monokai-pro and enabled).
         ---monokai-pro applies its own UfoFoldedBg when `ufo` is first required, bypassing the user
         ---`override`, so the bg has to be reapplied afterwards (same as nvim-navic's WinBar in ui.lua).
         config = function(_, opts)
             require('ufo').setup(opts)
-            vim.api.nvim_set_hl(0, 'UfoFoldedBg', { bg = require('config.colors').overlay_bg })
+            require('config.colors').apply_code_bg()
         end,
     },
     -- 高機能な文字ジャンプ (f, F, t, T)
