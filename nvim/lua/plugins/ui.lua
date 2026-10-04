@@ -69,6 +69,41 @@ return {
             vim.cmd("colorscheme monokai-pro")
         end
     },
+    -- Colorscheme (Tokyo Night), loaded on demand so that monokai-pro stays the initial colorscheme
+    {
+        'folke/tokyonight.nvim',
+        lazy = true,
+        priority = 1000,
+        opts = {
+            ---Replaces the dark backgrounds with the shared black code bg.
+            ---colors.enabled is checked instead of is_active() because vim.g.colors_name still holds
+            ---the previous colorscheme while tokyonight is being loaded. The light variant (tokyonight-day)
+            ---is excluded through 'background', which tokyonight sets from the variant before calling this.
+            ---Everything derived from these keys (Normal, floats, sidebars, statusline) follows automatically.
+            ---@param c table tokyonight palette
+            on_colors = function(c)
+                if not colors.enabled or vim.o.background ~= 'dark' then
+                    return
+                end
+                c.bg = colors.code_bg
+                c.bg_dark = colors.code_bg
+                c.bg_float = colors.code_bg
+                c.bg_sidebar = colors.code_bg
+                c.bg_popup = colors.code_bg
+                c.bg_statusline = colors.code_bg
+            end,
+            ---Gives folded lines and the pinned treesitter-context the overlay bg, as monokai-pro does.
+            ---The same guard as on_colors applies, so the theme keeps its own colors in tokyonight-day and while disabled.
+            ---@param hl table highlight groups of the theme
+            on_highlights = function(hl)
+                if not colors.enabled or vim.o.background ~= 'dark' then
+                    return
+                end
+                hl.Folded = vim.tbl_extend('force', hl.Folded or {}, { bg = colors.overlay_bg })
+                hl.TreesitterContext = { bg = colors.overlay_bg }
+            end,
+        },
+    },
     -- ステータスライン
     {
         'nvim-lualine/lualine.nvim',
@@ -90,10 +125,16 @@ return {
             local my_winbar = {
                 lualine_c = { { function() return navic.get_location() end, cond = navic.is_available } },
             }
-            ---Builds the Monokai Pro lualine theme.
-            ---While the black bg is active the middle sections share the editor background,
-            ---so the winbar (drawn with section c) blends into the code area.
+            ---Builds the lualine theme for the current colorscheme.
+            ---monokai-pro keeps its explicit theme (with the middle sections sharing the editor background
+            ---while the black bg is active, so the winbar drawn with section c blends into the code area).
+            ---Other colorschemes use 'auto', which loads the theme bundled with the colorscheme
+            ---(tokyonight ships one per variant and already reads its black palette) or derives one from highlights.
+            ---@return table|string
             local function build_theme()
+                if vim.g.colors_name ~= 'monokai-pro' then
+                    return 'auto'
+                end
                 local theme = vim.deepcopy(require('lualine.themes.monokai-pro'))
                 if colors.is_active() then
                     theme.normal.c.bg = colors.code_bg
