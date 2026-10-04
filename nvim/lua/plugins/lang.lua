@@ -1,9 +1,8 @@
 return {
     -- 言語・環境固有プラグイン
-    { 'mrcjkb/rustaceanvim', ft = {'rust'}, lazy = false },
+    { 'mrcjkb/rustaceanvim', lazy = false },
     {
         'nvim-flutter/flutter-tools.nvim',
-        event = {'BufReadPre', 'BufNewFile'},
         ft = {'dart'},
         dependencies = { 'nvim-lua/plenary.nvim', 'stevearc/dressing.nvim' },
         opts = {},
@@ -11,7 +10,7 @@ return {
     -- Markdown 拡張
     {
         'MeanderingProgrammer/render-markdown.nvim',
-        event = { 'BufReadPre', 'BufNewFile' },
+        ft = { "markdown", "Avante" },
         opts = {
             file_types = { "markdown", "Avante" },
             overrides = {
@@ -22,7 +21,6 @@ return {
                 },
             },
         },
-        ft = { "markdown", "Avante" },
     },
     {
         'iamcco/markdown-preview.nvim',
@@ -40,10 +38,11 @@ return {
     -- LaTeX 拡張 (VimTex)
     {
         'lervag/vimtex',
-        ft = 'tex',
-        event = 'VeryLazy',
-        config = function()
-            if IsWSL then vim.g.vimtex_view_method = 'wsl-open' else vim.g.vimtex_view_method = 'zathura' end
+        -- vimtex は自前で遅延読み込みを行うため，lazy.nvim 側では遅延させない
+        lazy = false,
+        -- vim.g は読み込み前に設定する必要があるため，config ではなく init を使う
+        init = function()
+            vim.g.vimtex_view_method = vim.fn.has('wsl') == 1 and 'wsl-open' or 'zathura'
             vim.g.vimtex_compiler_method = 'generic'
             vim.g.vimtex_compiler_generic = { command = 'make all' }
             vim.g.vimtex_syntax_enabled = 0
@@ -52,7 +51,6 @@ return {
     -- その他特定用途
     {
         "vinnymeller/swagger-preview.nvim",
-        file_types = { "yaml" },
         cmd = { "SwaggerPreview", "SwaggerPreviewStop", "SwaggerPreviewToggle" },
         build = "npm i",
         opts = {},

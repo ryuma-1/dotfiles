@@ -3,7 +3,7 @@ local colors = require('config.colors')
 return {
 -- カラースキーム (Monokai Pro)
     {
-        "loctvl842/monokai-pro.nvim", -- 💡 「loctvl842」に修正しました
+        "loctvl842/monokai-pro.nvim",
         lazy = false,
         priority = 1000,
         config = function()
