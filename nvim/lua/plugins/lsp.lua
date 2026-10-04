@@ -202,6 +202,18 @@ return {
                 print(string.format("Inlay Hint: %s", vim.lsp.inlay_hint.is_enabled()))
             end, {})
 
+            ---Initial state of the diagnostic float and format-on-save toggles, plus the
+            ---command that flips the latter.
+            ---LspAttach fires for every client on every buffer, so initializing these inside
+            ---it would reset a user's toggle to true whenever another buffer attaches a server.
+            ---They are global, so they are set up once here at startup instead.
+            vim.g.show_diagnostics = true
+            vim.g.autoformat = true
+            vim.api.nvim_create_user_command('AutoFormatToggle', function()
+                vim.g.autoformat = not vim.g.autoformat
+                print(string.format("Auto Format: %s", vim.g.autoformat))
+            end, {})
+
             vim.api.nvim_create_autocmd('LspAttach', {
                 group = vim.api.nvim_create_augroup('LspAttachSettings', {}),
                 callback = function(args)
@@ -233,7 +245,6 @@ return {
                         end,
                     })
 
-                    vim.g.show_diagnostics = true
                     vim.keymap.set('n', '<leader>ul', function()
                         vim.g.show_diagnostics = not vim.g.show_diagnostics
                         print(string.format("Show Diagnostic: %s", vim.g.show_diagnostics))
@@ -250,12 +261,6 @@ return {
                             end,
                         })
                     end
-
-                    vim.g.autoformat = true
-                    vim.api.nvim_create_user_command('AutoFormatToggle', function()
-                        vim.g.autoformat = not vim.g.autoformat
-                        print(string.format("Auto Format: %s", vim.g.autoformat))
-                    end, {})
                 end,
             })
         end
