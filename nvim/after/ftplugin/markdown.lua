@@ -15,7 +15,7 @@ vim.keymap.set('n', 'O', 'O<cmd>AutolistNewBulletBefore<CR>', { buffer = true })
 vim.keymap.set('n', '<leader>mr', '<cmd>AutolistRecalculate<CR>', { buffer = true, silent = true, desc = 'Markdown: Recalculate List' })
 -- Tab / Shift-Tab での箇条書き（チェックボックス含む）インデント変更は，
 -- nvim-cmp が InsertEnter 毎に <Tab> を再設定してここでの定義を上書きしてしまうため，
--- lua/plugins/ai.lua の cmp mapping 側 (<C-t>/<C-d> + AutolistRecalculate) で処理する．
+-- lua/plugins/completion.lua の cmp mapping 側 (<C-t>/<C-d> + AutolistRecalculate) で処理する．
 -- (cmp 側の <Tab>/<S-Tab> は補完候補の選択には使わず，Insert モードでは
 --  全ファイルタイプ共通でインデント調整のみを行うマッピングである)
 
@@ -82,6 +82,6 @@ for _, mode in ipairs({ 'n', 'x' }) do
     { buffer = true, silent = true, desc = 'Markdown: Toggle Checkbox' })
 end
 
--- markdown-preview.nvim is declared in lua/plugins/lsp.lua; only the buffer-local key lives here
+-- markdown-preview.nvim is declared in lua/plugins/lang.lua; only the buffer-local key lives here
 vim.keymap.set('n', '<leader>mp', '<cmd>MarkdownPreviewToggle<CR>',
   { buffer = true, silent = true, desc = 'Markdown: Toggle Preview' })
