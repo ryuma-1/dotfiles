@@ -1,17 +1,24 @@
 -- ====================================================================
 -- LSP共通キーマップ定義
 -- ====================================================================
-local lsp_keybindings = function(client, bufnr)
-    local opts_lsp = { noremap = true, silent = true }
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>Lspsaga goto_definition<CR>', opts_lsp)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>Lspsaga finder<CR>', opts_lsp)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'grn', '<cmd>Lspsaga rename<CR>', opts_lsp)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gca', '<cmd>Lspsaga code_action<CR>', opts_lsp)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gh', '<cmd>Lspsaga hover_doc<CR>', opts_lsp)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gf', '', {
-        noremap = true, silent = true, desc = "Format buffer",
-        callback = function() vim.lsp.buf.format({ bufnr = bufnr }) end
-    })
+---Set the buffer-local LSP keymaps.
+---Takes only bufnr because the client is not needed to define the mappings.
+---@param bufnr integer
+local lsp_keybindings = function(bufnr)
+    ---Set a normal-mode buffer-local keymap.
+    ---Exists to avoid repeating the shared buffer/silent options across the mappings below.
+    ---@param lhs string
+    ---@param rhs string|function
+    ---@param desc string
+    local function map(lhs, rhs, desc)
+        vim.keymap.set('n', lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
+    end
+    map('gd', '<cmd>Lspsaga goto_definition<CR>', 'LSP Go to Definition')
+    map('gr', '<cmd>Lspsaga finder<CR>', 'LSP Finder')
+    map('grn', '<cmd>Lspsaga rename<CR>', 'LSP Rename')
+    map('gca', '<cmd>Lspsaga code_action<CR>', 'LSP Code Action')
+    map('gh', '<cmd>Lspsaga hover_doc<CR>', 'LSP Hover Doc')
+    map('gf', function() vim.lsp.buf.format({ bufnr = bufnr }) end, 'Format buffer')
 end
 
 return {
@@ -296,16 +303,16 @@ return {
                 callback = function(args)
                     local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
                     local bufnr = args.buf
-                    lsp_keybindings(client, bufnr)
+                    lsp_keybindings(bufnr)
 
                     vim.diagnostic.config({ virtual_text = false })
 
 
-                    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>la', '<cmd>Lspsaga show_workspace_diagnostics<CR>', {
-                        noremap = true, silent = true, desc = 'LSP Workspace Diagnostics',
+                    vim.keymap.set('n', '<leader>la', '<cmd>Lspsaga show_workspace_diagnostics<CR>', {
+                        buffer = bufnr, silent = true, desc = 'LSP Workspace Diagnostics',
                     })
-                    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'ge', '<cmd>Lspsaga show_cursor_diagnostics<CR>', {
-                        noremap = true, silent = true, desc = 'LSP Cursor Diagnostics',
+                    vim.keymap.set('n', 'ge', '<cmd>Lspsaga show_cursor_diagnostics<CR>', {
+                        buffer = bufnr, silent = true, desc = 'LSP Cursor Diagnostics',
                     })
 
                     -- virtual_text is off, so pop up the diagnostic under the cursor instead.
@@ -323,13 +330,10 @@ return {
                     })
 
                     vim.g.show_diagnostics = true
-                    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ul', '', {
-                        noremap = true, silent = true, desc = 'Change Diagnostic View',
-                        callback = function()
-                            vim.g.show_diagnostics = not vim.g.show_diagnostics
-                            print(string.format("Show Diagnostic: %s", vim.g.show_diagnostics))
-                        end
-                    })
+                    vim.keymap.set('n', '<leader>ul', function()
+                        vim.g.show_diagnostics = not vim.g.show_diagnostics
+                        print(string.format("Show Diagnostic: %s", vim.g.show_diagnostics))
+                    end, { buffer = bufnr, silent = true, desc = 'Change Diagnostic View' })
 
                     if not client:supports_method('textDocument/willSaveWaitUntil') and client:supports_method('textDocument/formatting') then
                         vim.api.nvim_create_autocmd('BufWritePre', {
