@@ -1,0 +1,59 @@
+#!/bin/sh
+# Launch nvim in WezTerm for a file opened from the Unity Console.
+#
+# Usage: unity-nvim <file> [line] [column]
+#
+# Unity starts external editors as a GUI app, so there is no terminal and the
+# working directory is "~". This wrapper opens a terminal at the Unity project
+# root and jumps to the requested line.
+
+# Unity launched from the GUI has a minimal PATH, so add the usual locations.
+PATH="/opt/homebrew/bin:/usr/local/bin:/Applications/WezTerm.app/Contents/MacOS:$PATH"
+export PATH
+
+# Print an error message to stderr and exit non-zero.
+die() {
+    printf 'unity-nvim: %s\n' "$1" >&2
+    exit 1
+}
+
+# Print the nearest ancestor directory of $1 containing an "Assets" directory.
+# Prints nothing if there is none, so the caller can fall back.
+find_project_root() {
+    dir=$1
+    while [ -n "$dir" ] && [ "$dir" != "/" ]; do
+        if [ -d "$dir/Assets" ]; then
+            printf '%s\n' "$dir"
+            return 0
+        fi
+        dir=$(dirname "$dir")
+    done
+    return 1
+}
+
+file=$1
+line=$2
+# The column is accepted only so Unity's argument template does not break.
+# shellcheck disable=SC2034
+column=$3
+
+# An empty file would make nvim open "~" via nvim-tree, which hides the problem.
+[ -n "$file" ] || die "missing file argument"
+
+command -v wezterm >/dev/null 2>&1 || die "wezterm not found in PATH"
+command -v nvim >/dev/null 2>&1 || die "nvim not found in PATH"
+
+# Unity may pass a relative path, but the cwd of this process is not the project.
+case $file in
+    /*) ;;
+    *) file="$PWD/$file" ;;
+esac
+
+file_dir=$(dirname "$file")
+workdir=$(find_project_root "$file_dir") || workdir=$file_dir
+
+# Only pass +line when it is a plain number, to avoid running arbitrary commands.
+case $line in
+    ''|*[!0-9]*) exec wezterm start --cwd "$workdir" -- nvim -- "$file" ;;
+    *) exec wezterm start --cwd "$workdir" -- nvim "+$line" -- "$file" ;;
+esac
