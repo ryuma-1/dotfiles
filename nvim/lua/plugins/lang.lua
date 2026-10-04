@@ -49,6 +49,7 @@ return {
             vim.g.vimtex_syntax_enabled = 0
         end
     },
+    -- その他特定用途
     {
         "vinnymeller/swagger-preview.nvim",
         file_types = { "yaml" },

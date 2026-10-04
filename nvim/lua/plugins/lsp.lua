@@ -291,6 +291,7 @@ return {
     },
     -- 進捗表示
     { 'j-hui/fidget.nvim', lazy = false, opts = {} },
+    -- Lua 開発支援 (lazydev)
     {
         "folke/lazydev.nvim",
         ft = "lua",
