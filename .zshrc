@@ -103,6 +103,11 @@ zstyle ':completion:*' completer _expand _complete _match _prefix _approximate _
 
 # --- pure プロンプト ---
 # vcs_info や独自 PROMPT は pure に置き換え済みのため削除
+# vi モードごとにプロンプト記号を切り替える (prompt pure の初期化時に読まれるため先に定義)
+# insert モード
+PURE_PROMPT_SYMBOL='→'
+# normal / visual モード
+PURE_PROMPT_VICMD_SYMBOL='N'
 autoload -U promptinit
 promptinit
 prompt pure
