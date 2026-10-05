@@ -125,6 +125,19 @@ return {
             local my_winbar = {
                 lualine_c = { { function() return navic.get_location() end, cond = navic.is_available } },
             }
+            ---Winbar of unfocused windows showing only the file name.
+            ---The focused window already shows its file in the statusline, so the name is needed only
+            ---where the statusline cannot tell which file a split is displaying.
+            local my_inactive_winbar = {
+                lualine_c = {
+                    {
+                        'filename',
+                        -- Limited to file buffers so panels like NvimTree or terminals do not show
+                        -- their internal buffer names (e.g. "NvimTree_1 [-]")
+                        cond = function() return vim.bo.buftype == '' end,
+                    },
+                },
+            }
             ---Builds the lualine theme for the current colorscheme.
             ---monokai-pro keeps its explicit theme (with the middle sections sharing the editor background
             ---while the black bg is active, so the winbar drawn with section c blends into the code area).
@@ -152,6 +165,7 @@ return {
                     },
                     sections = my_sections,
                     winbar = my_winbar,
+                    inactive_winbar = my_inactive_winbar,
                 })
             end
             setup_lualine()
