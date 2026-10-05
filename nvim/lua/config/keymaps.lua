@@ -62,3 +62,7 @@ vim.keymap.set('n', '<leader>sv', ':vsplit<CR>', { silent = true })
 vim.keymap.set('n', '<leader>q', '<C-w>q', { silent = true })
 -- <leader>x: プラグイン管理UI (VSCode: view.extensions)
 vim.keymap.set('n', '<leader>x', ':Lazy<CR>', { silent = true })
+
+-- LSP リネームは lspsaga の gn に割り当てたため，Neovim 標準の grn は不要になる
+-- 残すと Lspsaga finder の gr が後続キー待ち (timeoutlen) で遅延する原因にもなるため削除する
+vim.keymap.del('n', 'grn')

@@ -213,6 +213,14 @@
       }
     ]
   },
+  "extraKnownMarketplaces": {
+    "unity-agent-plugin": {
+      "source": {
+        "source": "github",
+        "repo": "Unity-Technologies/unity-agent-plugin"
+      }
+    }
+  },
   "tui": "fullscreen",
   "theme": "auto",
   "editorMode": "vim",
@@ -246,5 +254,8 @@
       "**Org-specific CLIs**: None configured",
       "**Routine under this repo's path**: routine edits, tests, and git operations scoped to /Users/ryuma/Unity_Projects/RPGProject are the primary trusted working area"
     ]
+  },
+  "enabledPlugins": {
+    "unity@unity-agent-plugin": true
   }
 }
