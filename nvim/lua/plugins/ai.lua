@@ -54,6 +54,10 @@ return {
             provider = "copilot",
             selector = { provider = "telescope" },
             input = { provider = "snacks" },
+            -- ビジュアル選択時のヒントは既定キー (<leader>aa 等) を表示し，独自キーマップと食い違うため無効化する
+            selection = { hint_display = "none" },
+            -- 既定の <leader>a* キーマップは keys で定義した独自キーと重複するため登録させない
+            behaviour = { auto_set_keymaps = false },
         },
     },
 }
