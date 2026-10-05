@@ -51,6 +51,24 @@ local function toggle_edge_terminal(name)
     edge_terminals[name]:toggle()
 end
 
+--- Delete listed buffers through nvim-bufdel while keeping the ones pinned in bufferline.
+--- nvim-bufdel's BufDelAll/BufDelOthers know nothing about bufferline pins, so buffers are
+--- filtered here and passed one by one to keep its window-preserving deletion.
+---@param keep_current boolean true to also keep the current buffer (like BufDelOthers)
+local function delete_unpinned_buffers(keep_current)
+    -- bufferline is loaded on VimEnter, but fall back to "nothing pinned" if it is unavailable
+    local ok, groups = pcall(require, 'bufferline.groups')
+    local current = vim.api.nvim_get_current_buf()
+    local bufdel = require('bufdel')
+    for _, bufinfo in ipairs(vim.fn.getbufinfo({ buflisted = 1 })) do
+        local buf = bufinfo.bufnr
+        local pinned = ok and groups._is_pinned({ id = buf })
+        if not pinned and not (keep_current and buf == current) then
+            bufdel.delete_buffer_expr(buf, false)
+        end
+    end
+end
+
 return {
     -- 囲い文字操作
     { 'machakann/vim-sandwich', event = 'VeryLazy' },
@@ -201,8 +219,10 @@ return {
         'ojroques/nvim-bufdel',
         keys = {
             { "<leader>ww", "<cmd>BufDel<CR>", desc = "Close Current Buffer" },
-            { "<leader>wa", "<cmd>BufDelAll<CR>", desc = "Close All Buffers" },
-            { "<leader>wo", "<cmd>BufDelOthers<CR>", desc = "Close Other Buffers" },
+            { "<leader>wa", function() delete_unpinned_buffers(false) end, desc = "Close All Unpinned Buffers" },
+            { "<leader>wo", function() delete_unpinned_buffers(true) end, desc = "Close Other Unpinned Buffers" },
+            { "<leader>wA", "<cmd>BufDelAll<CR>", desc = "Close All Buffers (including pinned)" },
+            { "<leader>wO", "<cmd>BufDelOthers<CR>", desc = "Close Other Buffers (including pinned)" },
         },
         opts = { next = 'tabs', quit = false },
     },
