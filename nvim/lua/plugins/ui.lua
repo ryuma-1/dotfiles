@@ -69,10 +69,11 @@ return {
             vim.cmd("colorscheme monokai-pro")
         end
     },
-    -- Colorscheme (Tokyo Night), loaded on demand so that monokai-pro stays the initial colorscheme
+    -- Colorscheme (Tokyo Night), loaded at startup so that its variants appear in :colorscheme completion.
+    -- setup() only stores the options without applying the theme, so monokai-pro stays the initial colorscheme
     {
         'folke/tokyonight.nvim',
-        lazy = true,
+        lazy = false,
         priority = 1000,
         opts = {
             ---Replaces the dark backgrounds with the shared black code bg.
