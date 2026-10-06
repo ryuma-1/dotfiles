@@ -153,6 +153,17 @@ config.keys = {
     action = wezterm.action.SpawnTab 'CurrentPaneDomain',
   },
 
+  -- ----------------------------------------
+  -- WezTerm を終了
+  -- Ctrl+Space + e
+  -- ----------------------------------------
+
+  {
+    key = 'e',
+    mods = 'LEADER',
+    action = wezterm.action.QuitApplication,
+  },
+
   -- ========================================
   -- Alt + 0〜9
   -- タブを直接選択
