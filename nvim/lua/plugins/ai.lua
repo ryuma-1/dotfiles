@@ -10,6 +10,9 @@ return {
                 -- インライン提案 (ゴーストテキスト) は copilot-cmp 経由で nvim-cmp の
                 -- 補完メニューに統合するため無効化する (両方有効だと AI 提案が二重表示される)
                 suggestion = { enabled = false },
+                -- copilot.lua は既定で Markdown を無効にしているが，
+                -- ドキュメント執筆時にも補完を使いたいため明示的に有効化する
+                filetypes = { markdown = true },
             })
         end,
     },
