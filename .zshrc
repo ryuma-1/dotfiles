@@ -43,6 +43,11 @@ ZVM_READKEY_ENGINE=$ZVM_READKEY_ENGINE_ZLE
 # 全モード共通で jk を脱出キーに設定
 ZVM_VI_ESCAPE_BINDKEY=jk
 
+# オペレータ待機モードの脱出キーは vicmd キーマップに束縛されるため，
+# jk のままだとノーマルモードの j が jk の前置キーとなり KEYTIMEOUT 分の遅延が発生する．
+# ノーマルモードの j を即時反応させるため ESC のみにする．
+ZVM_VI_OPPEND_ESCAPE_BINDKEY='^['
+
 # =============================================================================
 # 4. antidote によるプラグイン管理
 # =============================================================================
@@ -103,6 +108,11 @@ zstyle ':completion:*' completer _expand _complete _match _prefix _approximate _
 
 # --- pure プロンプト ---
 # vcs_info や独自 PROMPT は pure に置き換え済みのため削除
+# vi モードごとにプロンプト記号を切り替える (prompt pure の初期化時に読まれるため先に定義)
+# insert モード
+PURE_PROMPT_SYMBOL='→'
+# normal / visual モード
+PURE_PROMPT_VICMD_SYMBOL='N'
 autoload -U promptinit
 promptinit
 prompt pure

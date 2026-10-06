@@ -78,7 +78,23 @@ fi
 [ -S "$socket" ] && rm -f "$socket"
 mkdir -p "$socket_dir" || die "failed to create $socket_dir"
 
+set -- nvim --listen "$socket"
 if [ -n "$line" ]; then
-    exec wezterm start --cwd "$workdir" -- nvim --listen "$socket" "+$line" -- "$file"
+    set -- "$@" "+$line"
 fi
-exec wezterm start --cwd "$workdir" -- nvim --listen "$socket" -- "$file"
+set -- "$@" -- "$file"
+
+# Prefer a new tab in an already running WezTerm GUI over a new window.
+# --no-auto-start keeps wezterm cli from launching a headless mux server when
+# no GUI is running, so that case falls through to "wezterm start".
+if wezterm cli --no-auto-start list >/dev/null 2>&1; then
+    # The tab is spawned by the GUI process, which does not inherit this PATH,
+    # so pass it explicitly to keep the same environment as "wezterm start".
+    wezterm cli --no-auto-start spawn --cwd "$workdir" -- /usr/bin/env PATH="$PATH" "$@" >/dev/null \
+        || die "failed to spawn a tab in the running WezTerm"
+    # Spawning a tab does not raise the window, so bring WezTerm to the front explicitly.
+    open -a WezTerm
+    exit 0
+fi
+
+exec wezterm start --cwd "$workdir" -- "$@"
