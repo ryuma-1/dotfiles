@@ -204,8 +204,38 @@ return {
             -- head は元の行数に合わせて切るだけなので，元が1行の長文だとフロートが画面からはみ出す．
             -- window を後段に足してウィンドウ幅で折り返させる
             default = { parse_after = 'head,window' },
+            -- 共有の翻訳 API (Google Apps Script) は数回に1回 10〜20 秒詰まり，curl はタイムアウト無しだと
+            -- 返事が無いまま待ち続けることがある．打ち切って "Translate failed" を出させ，再実行できるようにする
+            preset = { command = { google = { args = { '--max-time', '30' } } } },
         },
-        keys = { { '<leader>r', ':Translate ja -output=floating<CR>', mode = { 'n', 'v' }, desc = 'Translate', silent = true } },
+        keys = {
+            {
+                '<leader>r',
+                function()
+                    -- 空行は API が空文字を返し，幅0のフロートを開こうとして nvim_open_win がエラーになるため事前に弾く
+                    if vim.api.nvim_get_current_line():match('^%s*$') then
+                        vim.notify('Translate: current line is blank', vim.log.levels.INFO)
+                        return
+                    end
+                    -- API の応答待ちが長いと押せていないように見えるため，受け付けたことを先に表示する
+                    vim.notify('Translating...', vim.log.levels.INFO)
+                    vim.cmd('Translate ja -output=floating')
+                end,
+                mode = 'n',
+                desc = 'Translate',
+            },
+            {
+                '<leader>r',
+                function()
+                    -- 先にビジュアルモードを抜けて '< '> を確定させ，範囲付きで呼ぶことで選択範囲を翻訳させる
+                    vim.cmd('normal! \27')
+                    vim.notify('Translating...', vim.log.levels.INFO)
+                    vim.cmd("'<,'>Translate ja -output=floating")
+                end,
+                mode = 'v',
+                desc = 'Translate',
+            },
+        },
     },
     -- ファイラ (NvimTree)
     {
