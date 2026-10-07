@@ -134,8 +134,8 @@ return {
         dependencies = { 'mason-org/mason.nvim', 'neovim/nvim-lspconfig' },
         lazy = false,
         opts = {
-            -- Install these automatically so a fresh environment gets TS/JS, Go, Ruby and Python support
-            ensure_installed = { "ts_ls", "gopls", "ruby_lsp", "pyright" },
+            -- Install these automatically so a fresh environment gets TS/JS, Go, Ruby, Python and Shell support
+            ensure_installed = { "ts_ls", "gopls", "ruby_lsp", "pyright", "bashls" },
             automatic_enable = { exclude = { "rust_analyzer" } },
         },
     },
