@@ -200,7 +200,11 @@ return {
     -- 翻訳ツール
     {
         'uga-rosa/translate.nvim',
-        opts = {},
+        opts = {
+            -- head は元の行数に合わせて切るだけなので，元が1行の長文だとフロートが画面からはみ出す．
+            -- window を後段に足してウィンドウ幅で折り返させる
+            default = { parse_after = 'head,window' },
+        },
         keys = { { '<leader>r', ':Translate ja -output=floating<CR>', mode = { 'n', 'v' }, desc = 'Translate', silent = true } },
     },
     -- ファイラ (NvimTree)
