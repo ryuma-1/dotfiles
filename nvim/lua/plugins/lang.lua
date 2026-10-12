@@ -13,6 +13,12 @@ return {
         ft = { "markdown", "Avante" },
         opts = {
             file_types = { "markdown", "Avante" },
+            bullet = {
+                -- 既定では "1." の項目を treesitter 上の兄弟順で再採番するため，
+                -- 空行で区切ったリストが連番扱いされ Insert モード (生テキスト) と番号がずれる．
+                -- 採番は autolist.nvim に任せ，表示はテキストの番号をそのまま使う．
+                ordered_icons = function(ctx) return vim.trim(ctx.value) end,
+            },
             overrides = {
                 buftype = {
                     -- Lspsaga hover (gh) is a nofile markdown buffer whose content is mostly a code block,
