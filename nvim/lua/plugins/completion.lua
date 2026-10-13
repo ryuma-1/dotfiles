@@ -102,6 +102,10 @@ return {
                     end,
                 },
             })
+            -- ;; で LSP と AI (Copilot) の候補だけを手動表示する
+            vim.keymap.set('i', ';;', function()
+                cmp.complete({ config = { sources = { { name = 'nvim_lsp' }, { name = 'copilot' } } } })
+            end, { desc = 'Complete with LSP and Copilot' })
             cmp.setup.cmdline('/', { mapping = cmp.mapping.preset.cmdline(), sources = { { name = 'buffer' } } })
             cmp.setup.cmdline(':', { mapping = cmp.mapping.preset.cmdline(), sources = cmp.config.sources({ { name = 'path' }, { name = 'cmdline' } }) })
         end
