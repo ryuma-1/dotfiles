@@ -169,19 +169,26 @@ else
   alias xp='xclip -selection clipboard -o'
 fi
 
-# 特定のプロジェクトディレクトリへのショートカット
+# 特定のプロジェクトディレクトリへのショートカットのエイリアス
 alias cdm='cd ~/gitlab/ikeda-r/mydocuments/meeting'
 
-# 一時的なメモを作成するためのエイリアス
+# 一時的なメモをグローバル上で作成するためのエイリアス
 alias m='nvim ~/Documents/tmp.md'
 
-# md-cosense-bridge の起動エイリアス
-mts () {
-  local md_path=$(realpath "$1")
-  cd ~/git/md-cosense-bridge || return 1
-  npm start -- import nompedia test "$md_path"
-  cat input.txt | xc
-  cd - > /dev/null
+# 一時的なメモをプロジェクトのローカル上で起動するためのエイリアス
+mp() {
+    local dir="$PWD"
+
+    while [[ "$dir" != "/" ]]; do
+        if [[ -d "$dir/Local" ]]; then
+            nvim "$dir/Local/tmp.md"
+            return
+        fi
+
+        dir="$(dirname "$dir")"
+    done
+
+    echo "Local フォルダが見つかりませんでした。"
 }
 
 # プロジェクトの個人タスクを開くためのエイリアス
@@ -190,8 +197,6 @@ task() {
 
     while [[ "$dir" != "/" ]]; do
         if [[ -d "$dir/Local" ]]; then
-            mkdir -p "$dir/Local"
-            touch "$dir/Local/task.md"
             nvim "$dir/Local/task.md"
             return
         fi
@@ -200,6 +205,15 @@ task() {
     done
 
     echo "Local フォルダが見つかりませんでした。"
+}
+
+# md-cosense-bridge の起動エイリアス
+mts () {
+  local md_path=$(realpath "$1")
+  cd ~/git/md-cosense-bridge || return 1
+  npm start -- import nompedia test "$md_path"
+  cat input.txt | xc
+  cd - > /dev/null
 }
 
 # bun completions
