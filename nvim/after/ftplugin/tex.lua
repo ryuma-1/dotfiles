@@ -1,5 +1,6 @@
 -- TeX は文章編集向けのローカル設定
 vim.opt_local.spell = true
+vim.opt_local.spelllang = { 'en', 'cjk' } -- 日本語をスペルミス扱いしない
 vim.opt_local.textwidth = 80
 vim.opt_local.wrap = true
 vim.opt_local.linebreak = true
