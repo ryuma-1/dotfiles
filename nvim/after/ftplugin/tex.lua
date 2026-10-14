@@ -2,7 +2,8 @@
 vim.opt_local.spell = true
 vim.opt_local.spelllang = { 'en', 'cjk' } -- 日本語をスペルミス扱いしない
 vim.opt_local.wrap = true
-vim.opt_local.linebreak = true
+-- linebreak は breakat(ASCII 記号のみ)でしか折り返さず，日本語の途中で折り返せなくなるため無効
+vim.opt_local.linebreak = false
 
 -- \item 行で改行すると次行にも \item を継続し，空の \item で改行したら \item を消す
 -- (cmp の <CR> はこのバッファローカルマッピングを fallback として呼ぶ)
