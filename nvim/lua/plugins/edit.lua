@@ -123,7 +123,10 @@ return {
         'folke/todo-comments.nvim',
         event = { 'BufReadPre', 'BufNewFile' },
         dependencies = { 'nvim-lua/plenary.nvim' },
-        opts = {},
+        opts = {
+            -- 既定のキーワードに TASK/task を追加(既定分は deep merge で残る)
+            keywords = { TASK = { icon = ' ', color = 'hint', alt = { 'task' } } },
+        },
     },
     -- Highlights multiple words at once, each in a different color
     {
