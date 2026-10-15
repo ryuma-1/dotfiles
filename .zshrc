@@ -175,6 +175,8 @@ zstyle ':completion:*' menu true select
 if [[ "$OSTYPE" == darwin* ]]; then
   zstyle ':completion:*' list-colors "${(s.:.)LSCOLORS}"
 else
+  # LS_COLORS は自動では設定されないので dircolors で生成する (空だと補完の色分けが効かない)
+  [[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
   zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 fi
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
