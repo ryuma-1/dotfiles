@@ -52,6 +52,8 @@ return {
             vim.g.vimtex_compiler_method = 'generic'
             vim.g.vimtex_compiler_generic = { command = 'make all' }
             vim.g.vimtex_syntax_enabled = 0
+            -- warning のみのときは quickfix を自動で開かない (error 時は開く)
+            vim.g.vimtex_quickfix_open_on_warning = 0
         end
     },
     -- その他特定用途
