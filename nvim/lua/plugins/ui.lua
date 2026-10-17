@@ -65,12 +65,11 @@ return {
                     return groups
                 end,
             })
-
-            vim.cmd("colorscheme monokai-pro")
+            -- The colorscheme is applied by init.lua (the last one used, or monokai-pro), not here
         end
     },
     -- Colorscheme (Tokyo Night), loaded at startup so that its variants appear in :colorscheme completion.
-    -- setup() only stores the options without applying the theme, so monokai-pro stays the initial colorscheme
+    -- setup() only stores the options without applying the theme, so the one applied by init.lua stays the initial colorscheme
     {
         'folke/tokyonight.nvim',
         lazy = false,
@@ -104,6 +103,20 @@ return {
                 hl.TreesitterContext = { bg = colors.overlay_bg }
             end,
         },
+    },
+    -- Colorscheme (Iceberg), loaded at startup so that it appears in :colorscheme completion
+    {
+        'cocopon/iceberg.vim',
+        lazy = false,
+        priority = 1000,
+    },
+    -- Colorscheme (GitHub), loaded at startup so that its variants (github_dark, github_light, ...)
+    -- appear in :colorscheme completion
+    {
+        'projekt0n/github-nvim-theme',
+        name = 'github-theme',
+        lazy = false,
+        priority = 1000,
     },
     -- ステータスライン
     {

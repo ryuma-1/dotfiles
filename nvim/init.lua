@@ -51,3 +51,28 @@ local lazy_opt = {
 }
 
 require("lazy").setup("plugins", lazy_opt)
+
+-- ====================================================================
+-- 5. カラースキームの適用（前回のものを復元）と保存
+-- ====================================================================
+-- 前回のカラースキームを直接適用し，保存がなければ monokai-pro にする．
+-- monokai-pro は一度適用すると，後から読み込まれたプラグイン（bufferline など）に
+-- 他のテーマへ切り替えた後でも自分の色を当てるため，前回のテーマの前に適用してはいけない．
+-- 'background' も保存するのは，iceberg のように同じ名前でライト版とダーク版を切り替えるテーマがあるため
+local colorscheme_file = vim.fn.stdpath("state") .. "/colorscheme"
+local saved = vim.uv.fs_stat(colorscheme_file) and vim.fn.readfile(colorscheme_file) or {}
+local name, background = saved[1], saved[2]
+if background == "dark" or background == "light" then
+  vim.o.background = background
+end
+-- 保存がない，またはアンインストールしたテーマが保存されていた場合は monokai-pro にする
+if not (name and pcall(vim.cmd.colorscheme, name)) then
+  vim.o.background = "dark"
+  vim.cmd.colorscheme("monokai-pro")
+end
+vim.api.nvim_create_autocmd("ColorScheme", {
+  group = vim.api.nvim_create_augroup("SaveColorScheme", { clear = true }),
+  callback = function()
+    vim.fn.writefile({ vim.g.colors_name, vim.o.background }, colorscheme_file)
+  end,
+})
