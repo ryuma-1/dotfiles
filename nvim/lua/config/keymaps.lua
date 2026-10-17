@@ -59,7 +59,19 @@ vim.keymap.set('n', '<C-A-l>', '<C-w>L', { silent = true })
 -- <leader>s を分割系の prefix にまとめ，treesj の <leader>st と共存させる
 vim.keymap.set('n', '<leader>sh', ':split<CR>', { silent = true })
 vim.keymap.set('n', '<leader>sv', ':vsplit<CR>', { silent = true })
-vim.keymap.set('n', '<leader>q', '<C-w>q', { silent = true })
+-- <leader>q を終了系の prefix にまとめ，<leader>qo (他ウィンドウを閉じる) と共存させる
+vim.keymap.set('n', '<leader>qq', '<C-w>q', { silent = true })
+vim.keymap.set('n', '<leader>qa', '<CMD>qa<CR>', { silent = true })
+-- :only は avante のサイドバーを閉じた際に連鎖して閉じられる入力欄で E445 となり，
+-- 以降のウィンドウ (Trouble 等) が残るため，1 つずつ閉じて既に閉じられたものは飛ばす
+vim.keymap.set('n', '<leader>qo', function()
+    local current = vim.api.nvim_get_current_win()
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        if win ~= current and vim.api.nvim_win_is_valid(win) then
+            vim.api.nvim_win_close(win, false)
+        end
+    end
+end, { silent = true })
 -- <leader>x: プラグイン管理UI (VSCode: view.extensions)
 vim.keymap.set('n', '<leader>x', ':Lazy<CR>', { silent = true })
 

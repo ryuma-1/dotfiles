@@ -35,7 +35,7 @@ return {
         },
         ---Sets up lspsaga and closes the code action preview together with its action list.
         ---lspsaga closes the preview only from its own keys (`q`, `<CR>`, number shortcuts),
-        ---so leaving the list any other way (`:q`, `<leader>q`, window moves) orphans the
+        ---so leaving the list any other way (`:q`, `<leader>qq`, window moves) orphans the
         ---preview, which is unfocusable and therefore cannot be closed by hand.
         ---@param opts table
         config = function(_, opts)
