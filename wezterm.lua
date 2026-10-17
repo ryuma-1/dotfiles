@@ -252,6 +252,29 @@ config.keys = {
   },
 }
 
+-- ========================================
+-- コピーモード
+-- u/d で半ページ上下 (1 行ずつ刻んで滑らかに見せる)
+-- ========================================
+
+local function smooth_half_page(direction)
+  return wezterm.action_callback(function(window, pane)
+    local rows = pane:get_dimensions().viewport_rows
+    -- 1 行分の移動量 (1.5 にしているのは浮動小数の切り捨てで 0 行になるのを避けるため)
+    local step = direction * 1.5 / rows
+    for i = 1, math.floor(rows / 2) do
+      wezterm.time.call_after(i * 0.008, function()
+        window:perform_action(wezterm.action.CopyMode { MoveByPage = step }, pane)
+      end)
+    end
+  end)
+end
+
+local copy_mode = wezterm.gui.default_key_tables().copy_mode
+table.insert(copy_mode, { key = 'u', mods = 'NONE', action = smooth_half_page(-1) })
+table.insert(copy_mode, { key = 'd', mods = 'NONE', action = smooth_half_page(1) })
+config.key_tables = { copy_mode = copy_mode }
+
 
 -- ----------------------------------------
 -- ローカル設定の読み込み
