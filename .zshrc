@@ -171,14 +171,17 @@ setopt list_packed        # 補完候補の一覧を詰めて表示し、画面�
 # --- zstyle を使った詳細な補完設定 ---
 # (zstyle は設定値を登録するだけなので compinit より前に書いても問題ない)
 zstyle ':completion:*' menu true select
-# macOS(BSD形式:LSCOLORS) と Linux(GNU形式:LS_COLORS) で変数が異なるため分岐
-if [[ "$OSTYPE" == darwin* ]]; then
-  zstyle ':completion:*' list-colors "${(s.:.)LSCOLORS}"
-else
-  # LS_COLORS は自動では設定されないので dircolors で生成する (空だと補完の色分けが効かない)
-  [[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
-  zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+# list-colors は GNU 形式 (LS_COLORS) しか解釈しない (BSD 形式の LSCOLORS は不可)
+# LS_COLORS は自動では設定されないので、Linux は dircolors で生成し、
+# dircolors の無い macOS は BSD ls のデフォルト配色 (exfxcxdxbxegedabagacad) 相当を直接指定する
+if [[ -z "$LS_COLORS" ]]; then
+  if (( $+commands[dircolors] )); then
+    eval "$(dircolors -b)"
+  else
+    export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43'
+  fi
 fi
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' ignore-parents parent pwd ..
 zstyle ':completion:*:sudo:*' command-path $PATH
