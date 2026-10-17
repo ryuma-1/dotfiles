@@ -87,34 +87,6 @@ return {
             -- Move the cursor into the list on open so it can be navigated right away
             focus = true,
         },
-        ---Sets up Trouble and lets tint dim the list like other unfocused windows.
-        ---@param opts table
-        config = function(_, opts)
-            require('trouble').setup(opts)
-
-            ---Copies the Trouble* highlight groups into tint's namespaces.
-            ---tint snapshots highlights only at startup, and Trouble defines its groups
-            ---later (on load, and per source on first open), so tint must be refreshed.
-            ---Trouble also defines them as `default = true` links, which tint copies as is,
-            ---and a default link is ignored in a namespace once the group exists globally,
-            ---so the flag is dropped first; the links themselves are kept unchanged.
-            local function tint_trouble_highlights()
-                for name, def in pairs(vim.api.nvim_get_hl(0, {})) do
-                    if def.default and name:find('^Trouble') then
-                        def.default = nil
-                        vim.api.nvim_set_hl(0, name, def)
-                    end
-                end
-                require('tint').refresh()
-            end
-
-            tint_trouble_highlights()
-            vim.api.nvim_create_autocmd('FileType', {
-                group = vim.api.nvim_create_augroup('TroubleTint', {}),
-                pattern = 'trouble',
-                callback = tint_trouble_highlights,
-            })
-        end,
     },
     -- LSP インストーラ (Mason)
     {

@@ -285,13 +285,15 @@ return {
         opts = {
             -- Darker than the default (-40) so unfocused text fades further toward the black bg
             tint = -80,
-            ---Excludes floating windows from tint.
+            ---Limits tint to code editor windows by excluding floats and special buffers.
             ---tint applies its own copy of every highlight to a window via nvim_win_set_hl_ns, which
             ---bypasses the window's winhl, so floats like lazygit (NormalFloat -> LazyGitFloat) lost their bg.
+            ---Special buffers (file tree, help, terminal, quickfix, Trouble) have a non-empty buftype.
             ---@param winid integer
             ---@return boolean
             window_ignore_function = function(winid)
                 return vim.api.nvim_win_get_config(winid).relative ~= ''
+                    or vim.bo[vim.api.nvim_win_get_buf(winid)].buftype ~= ''
             end,
         },
     },
