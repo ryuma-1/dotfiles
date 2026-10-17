@@ -71,8 +71,14 @@ return {
                         i = function() shift_indent('<C-d>') end,
                         s = function(fallback) fallback() end,
                     }),
-                    ["<C-n>"] = cmp.mapping.select_next_item(),
-                    ["<C-p>"] = cmp.mapping.select_prev_item(),
+                    -- メニュー非表示時に Vim 標準のキーワード補完へ fallback すると
+                    -- cmp とは別の候補が出るため，cmp を開く
+                    ["<C-n>"] = cmp.mapping(function()
+                        if cmp.visible() then cmp.select_next_item() else cmp.complete() end
+                    end, { 'i' }),
+                    ["<C-p>"] = cmp.mapping(function()
+                        if cmp.visible() then cmp.select_prev_item() else cmp.complete() end
+                    end, { 'i' }),
                     ['<C-s>'] = cmp.mapping.complete(),
                     ['<C-c>'] = cmp.mapping.abort(),
                     ["<CR>"] = cmp.mapping({

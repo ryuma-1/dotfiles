@@ -2,25 +2,68 @@
 # 1. 環境変数・PATHの設定
 # =============================================================================
 
+# PATH の重複を自動で取り除く (遅延初期化で同じパスが再追加されても増えないようにする)
+typeset -U path PATH
+
 # 基本のPATH設定
 export PATH="$HOME/.local/bin:$PATH"
 
-# rbenv の設定
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+# --- rbenv (遅延初期化) ---
+# shims を PATH に直接入れておけば ruby / gem / bundle などは init なしで動く．
+# `rbenv init -` は rbenv コマンド自体 (rbenv shell など) を初めて使うときに実行する．
+export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
+export RBENV_SHELL=zsh
+function rbenv() {
+  unfunction rbenv
+  eval "$(command rbenv init - --no-rehash zsh)"
+  rbenv "$@"
+}
 
-# NVM (Node Version Manager) の設定
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # nvm 本体を読み込む
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # nvm の補完機能を読み込む
+# --- NVM (遅延初期化) ---
+# nvm.sh の読み込みは重いため起動時には行わず，default の node だけを PATH に追加する．
+# (node / npm / npx は Neovim などシェル関数を経由しないツールからもそのまま使える)
+# nvm コマンド自体は初めて使うときに nvm.sh を読み込む．
+export NVM_DIR="${XDG_CONFIG_HOME:+${XDG_CONFIG_HOME}/nvm}"
+export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+
+function _nvm_default_bin() {
+  local alias_name=""
+  local -a candidates
+  [[ -r "$NVM_DIR/alias/default" ]] && alias_name="$(<"$NVM_DIR/alias/default")"
+  alias_name="${alias_name#v}"
+
+  # system の node を使う設定なら何もしない
+  [[ "$alias_name" == system ]] && return
+
+  # 22 や 22.1 のようなバージョン指定なら，該当するインストール済みの最新版を選ぶ
+  if [[ "$alias_name" == [0-9]* ]]; then
+    candidates=("$NVM_DIR"/versions/node/v${alias_name}(|.*)(N/nOn))
+  fi
+  # lts/* や node など名前付きのエイリアスは，インストール済みの最新版で代用する
+  (( ${#candidates} )) || candidates=("$NVM_DIR"/versions/node/v*(N/nOn))
+
+  (( ${#candidates} )) && print -r -- "${candidates[1]}/bin"
+}
+_nvm_bin="$(_nvm_default_bin)"
+[[ -n "$_nvm_bin" ]] && export PATH="$_nvm_bin:$PATH"
+unset _nvm_bin
+unfunction _nvm_default_bin
+
+function nvm() {
+  unfunction nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # nvm 本体を読み込む
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # nvm の補完機能を読み込む
+  nvm "$@"
+}
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # go
-export PATH=$PATH:/usr/local/go/bin
-export PATH="$PATH:$(go env GOPATH)/bin"
+# `go env GOPATH` は起動のたびに go バイナリを実行するため，既定値 ($HOME/go) を直接使う
+export PATH="$PATH:/usr/local/go/bin"
+export PATH="$PATH:${GOPATH:-$HOME/go}/bin"
 
 # =============================================================================
 # 2. 履歴 (History) の設定
@@ -56,13 +99,22 @@ ZVM_SYSTEM_CLIPBOARD_ENABLED=true
 # 4. antidote によるプラグイン管理
 # =============================================================================
 # antidote 本体の読み込み (Homebrew / git clone どちらでも動くようにパスを探索)
-if [[ -f "${ZDOTDIR:-$HOME}/.antidote/antidote.zsh" ]]; then
-  # git clone でインストールした場合
-  source "${ZDOTDIR:-$HOME}/.antidote/antidote.zsh"
-elif [[ -f "$(brew --prefix 2>/dev/null)/opt/antidote/share/antidote/antidote.zsh" ]]; then
-  # macOS Homebrew でインストールした場合
-  source "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh"
+# `brew --prefix` は外部コマンドの実行になるため，既知のパスを順に確認する
+for _antidote_path in \
+  "${ZDOTDIR:-$HOME}/.antidote/antidote.zsh" \
+  "${HOMEBREW_PREFIX:-/opt/homebrew}/opt/antidote/share/antidote/antidote.zsh" \
+  "/usr/local/opt/antidote/share/antidote/antidote.zsh" \
+  "/home/linuxbrew/.linuxbrew/opt/antidote/share/antidote/antidote.zsh"
+do
+  [[ -f "$_antidote_path" ]] && break
+  _antidote_path=""
+done
+
+if [[ -n "$_antidote_path" ]]; then
+  source "$_antidote_path"
+  unset _antidote_path
 else
+  unset _antidote_path
   echo "antidote が見つかりません。'brew install antidote' を実行してください。" >&2
   return
 fi
@@ -78,9 +130,33 @@ source "$zsh_plugins"
 # =============================================================================
 # 5. 補完機能 (Completion) の設定
 # =============================================================================
-# zsh-completions が上記で fpath に追加済みなのでここで compinit を実行
+# compinit は起動時には実行せず，最初に Tab が押されたときに実行する (遅延初期化)．
+# zsh-completions が上記で fpath に追加済みなので，そのまま compinit で認識される．
 autoload -Uz compinit
-compinit
+
+function _lazy_compinit() {
+  # .zcompdump が 24 時間以上古ければフルチェック，そうでなければキャッシュを使う．
+  # -i: 安全でないディレクトリがあっても確認プロンプトを出さずに無視する
+  #     (ZLE ウィジェット内では y/n の入力待ちができないため)
+  if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+    compinit -i
+  else
+    compinit -C
+  fi
+
+  # bun の補完 (内部で compdef を使うため compinit の後に読み込む)
+  [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+  # 以降の Tab は通常の補完ウィジェットに戻す
+  bindkey -M viins '^I' expand-or-complete
+  bindkey -M emacs '^I' expand-or-complete
+
+  # 今回押された Tab の分の補完を実行する
+  zle expand-or-complete
+}
+zle -N _lazy_compinit
+bindkey -M viins '^I' _lazy_compinit
+bindkey -M emacs '^I' _lazy_compinit
 
 # --- 補完の基本動作 (setopt) ---
 setopt auto_param_slash   # ディレクトリ名の補完で末尾に / を自動的に付加する
@@ -93,11 +169,14 @@ setopt always_last_prompt # カーソル位置は保持したままファイル�
 setopt list_packed        # 補完候補の一覧を詰めて表示し、画面を節約する
 
 # --- zstyle を使った詳細な補完設定 ---
+# (zstyle は設定値を登録するだけなので compinit より前に書いても問題ない)
 zstyle ':completion:*' menu true select
 # macOS(BSD形式:LSCOLORS) と Linux(GNU形式:LS_COLORS) で変数が異なるため分岐
 if [[ "$OSTYPE" == darwin* ]]; then
   zstyle ':completion:*' list-colors "${(s.:.)LSCOLORS}"
 else
+  # LS_COLORS は自動では設定されないので dircolors で生成する (空だと補完の色分けが効かない)
+  [[ -z "$LS_COLORS" ]] && (( $+commands[dircolors] )) && eval "$(dircolors -b)"
   zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 fi
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -142,6 +221,12 @@ bindkey "$terminfo[kcud1]" history-substring-search-down
 function zvm_after_init() {
   bindkey -M vicmd 'k' history-substring-search-up
   bindkey -M vicmd 'j' history-substring-search-down
+
+  # zsh-vi-mode が viins を再構築して Tab の割り当てが戻されるため，ここで再設定する．
+  # ただし既に compinit 済み (= _lazy_compinit が実行済み) なら通常の補完のままにする．
+  if (( ! $+functions[compdef] )); then
+    bindkey -M viins '^I' _lazy_compinit
+  fi
 }
 
 # p/P をシステムクリップボードからの貼り付けに差し替える
@@ -216,11 +301,7 @@ mts () {
   cd - > /dev/null
 }
 
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-
-# Unity CLI
-. "/Users/ryuma/.unity/env"
+# bun completions は compdef を使うため _lazy_compinit 内で読み込む (5. 補完機能 を参照)
 
 if [[ -f ~/.zshrc.local ]]; then
     source ~/.zshrc.local
