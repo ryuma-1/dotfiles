@@ -272,9 +272,14 @@ return {
     -- Whitespace強調
     {
         'ntpeters/vim-better-whitespace',
-        event = 'VeryLazy',
+        -- 保存時の削除はバッファごとに BufWinEnter などで登録されるため，VeryLazy だと起動時に開いたファイルで効かない
+        event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             vim.g.better_whitespace_filetypes_blacklist = { 'toggleterm', 'diff', 'qf', 'help', 'snacks_dashboard' }
+            -- 保存時に行末の空白と末尾の余分な空行を確認なしで削除する
+            vim.g.strip_whitespace_on_save = 1
+            vim.g.strip_whitelines_at_eof = 1
+            vim.g.strip_whitespace_confirm = 0
             vim.api.nvim_set_hl(0, 'ExtraWhitespace', { bg = '#CF572D' })
         end
     },
