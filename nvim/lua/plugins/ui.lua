@@ -21,7 +21,8 @@ return {
                 -- take precedence; they all derive from tab.activeBackground, so match it to the code bg here.
                 -- editor.background is also overridden because plugin highlights (Telescope, FloatBorder, ...)
                 -- are built from it directly, so overriding only Normal would leave them on the theme's gray bg.
-                -- Non-selected tabs (inactive, and visible in another window) take the bufferline fill color
+                -- Non-selected tabs (inactive, and visible in another window) and the bufferline fill
+                -- (editorGroupHeader.tabsBackground) share colors.tab_bg, the gray the other dark themes use,
                 -- so that they blend into the empty area and only the selected tab stands out
                 -- colors.enabled is checked instead of is_active() because vim.g.colors_name
                 -- still holds the previous colorscheme while monokai-pro is being loaded
@@ -29,13 +30,13 @@ return {
                     if not colors.enabled then
                         return {}
                     end
-                    local fill = scheme.editorGroupHeader.tabsBackground
                     return {
                         editor = { background = colors.code_bg },
+                        editorGroupHeader = { tabsBackground = colors.tab_bg },
                         tab = {
                             activeBackground = colors.code_bg,
-                            inactiveBackground = fill,
-                            unfocusedActiveBackground = fill,
+                            inactiveBackground = colors.tab_bg,
+                            unfocusedActiveBackground = colors.tab_bg,
                         },
                     }
                 end,
@@ -231,6 +232,35 @@ return {
                     reveal = { 'close' },
                 },
             },
+            ---Bufferline derives its tab colors by darkening Normal's bg, which is pure black under the themes
+            ---given the black code bg, so every tab ended up as black as the selected one.
+            ---Non-selected tabs and the fill are moved onto colors.tab_bg so the selected tab stands out.
+            ---monokai-pro sets these groups itself, which bufferline does not override, so it gets the gray
+            ---through its override_scheme instead.
+            ---Called again on every colorscheme load, so themes without the black bg keep bufferline's own colors.
+            ---@param defaults table
+            highlights = function(defaults)
+                local colors = require('config.colors')
+                if not colors.is_active() then
+                    return {}
+                end
+                local gray = colors.tab_bg
+                local overrides = {}
+                for name, hl in pairs(defaults.highlights) do
+                    local new = {}
+                    if not name:match('selected') and hl.bg and hl.bg:lower() == colors.code_bg then
+                        new.bg = gray
+                    end
+                    -- The slanted edges are drawn with the separator fg, which must match the fill
+                    if name:match('separator') and hl.fg and hl.fg:lower() == colors.code_bg then
+                        new.fg = gray
+                    end
+                    if next(new) then
+                        overrides[name] = new
+                    end
+                end
+                return overrides
+            end,
         },
     },
     -- カラーコード着色

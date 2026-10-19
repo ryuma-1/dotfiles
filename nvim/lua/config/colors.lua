@@ -10,6 +10,10 @@ M.overlay_bg = '#262427'
 ---Defined once here so every plugin spec paints the same black.
 M.code_bg = '#000000'
 
+---Bg of the bufferline tabs other than the selected one, and of the empty area beside them.
+---A fixed gray because some themes' own TabLine bg (tokyonight, iceberg) is black or nearly so.
+M.tab_bg = '#1c1c1f'
+
 ---Whether the black code bg is wanted at all, flipped by :BlackBgToggle.
 ---Kept separate from the colorscheme check so the choice survives colorscheme changes.
 M.enabled = true
