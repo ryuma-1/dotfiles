@@ -85,3 +85,48 @@ end
 -- markdown-preview.nvim is declared in lua/plugins/lang.lua; only the buffer-local key lives here
 vim.keymap.set('n', '<leader>mp', '<cmd>MarkdownPreviewToggle<CR>',
   { buffer = true, silent = true, desc = 'Markdown: Toggle Preview' })
+
+-- リンク [text](target) を Ctrl+クリックで開く (VSCode 風)
+-- Neovim 既定の <C-LeftMouse> はタグジャンプ，gx はローカルファイルも外部アプリで開いてしまうため自前で定義する．
+-- URL は vim.ui.open でブラウザへ，ローカルファイルは md ファイルからの相対パスで解決して Neovim で開く
+local function link_target_under_cursor()
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.fn.col('.')
+  local init = 1
+  while true do
+    local s, e, target = line:find('%b[]%((.-)%)', init)
+    if not s then
+      return nil
+    end
+    if col >= s and col <= e then
+      -- <path with spaces> / path "title" を考慮してパス部分だけ取り出す
+      return target:match('^<(.-)>') or target:match('^(%S+)') or ''
+    end
+    init = e + 1
+  end
+end
+
+vim.keymap.set('n', '<C-LeftMouse>', function()
+  -- まずクリック位置へカーソルを移動させる
+  vim.api.nvim_feedkeys(vim.keycode('<LeftMouse>'), 'nx', false)
+  local path = link_target_under_cursor()
+  if not path or path == '' then
+    return
+  end
+  if path:match('^%a[%w+.-]*:') then
+    vim.ui.open(path)
+    return
+  end
+  path = vim.fn.expand(vim.uri_decode((path:gsub('#.*$', ''))))
+  if path == '' then
+    return
+  end
+  if path:sub(1, 1) ~= '/' then
+    path = vim.fs.joinpath(vim.fn.expand('%:p:h'), path)
+  end
+  if vim.uv.fs_stat(path) then
+    vim.cmd.edit(vim.fn.fnameescape(vim.fs.normalize(path)))
+  else
+    vim.notify('File not found: ' .. path, vim.log.levels.WARN)
+  end
+end, { buffer = true, desc = 'Markdown: Open Link (Ctrl+Click)' })

@@ -118,6 +118,10 @@ return {
         name = 'github-theme',
         lazy = false,
         priority = 1000,
+        opts = {
+            -- Markdown link text links to Special, which the theme paints with the plain fg (white)
+            groups = { all = { ['@markup.link.label'] = { fg = 'palette.blue' } } },
+        },
     },
     -- ステータスライン
     {
