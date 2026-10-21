@@ -13,6 +13,17 @@ return {
     {
         'lewis6991/gitsigns.nvim',
         event = 'VeryLazy',
+        keys = {
+            { '<leader>gh', '<cmd>Gitsigns preview_hunk<cr>', desc = 'Preview hunk' },
+            { '<leader>gi', '<cmd>Gitsigns preview_hunk_inline<cr>', desc = 'Preview hunk inline' },
+            { '<leader>gb', '<cmd>Gitsigns blame_line<cr>', desc = 'Blame line' },
+            { '<leader>ga', '<cmd>Gitsigns blame<cr>', desc = 'Blame buffer' },
+            { '<leader>gn', '<cmd>Gitsigns nav_hunk next<cr>', desc = 'Next hunk' },
+            { '<leader>gp', '<cmd>Gitsigns nav_hunk prev<cr>', desc = 'Prev hunk' },
+            -- ':' で呼ぶことでビジュアルモードの選択範囲が渡される
+            { '<leader>gs', ':Gitsigns stage_hunk<cr>', mode = { 'n', 'x' }, silent = true, desc = 'Stage hunk' },
+            { '<leader>gr', ':Gitsigns reset_hunk<cr>', mode = { 'n', 'x' }, silent = true, desc = 'Reset hunk' },
+        },
         opts = {
             signcolumn = true,
             numhl = false,
@@ -27,6 +38,6 @@ return {
     {
         "kdheepak/lazygit.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
-        keys = { { "<leader>g", "<cmd>LazyGit<cr>", desc = "LazyGit" } },
+        keys = { { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" } },
     }
 }
