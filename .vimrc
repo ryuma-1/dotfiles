@@ -35,7 +35,7 @@ set incsearch
 call plug#begin('~/.vim/plugged')
 
 " カラースキーム
-Plug 'phanviet/vim-monokai-pro'
+Plug 'vv9k/vim-github-dark'
 
 " 滑らかなスクロール
 Plug 'terryma/vim-smooth-scroll'
@@ -81,7 +81,7 @@ endif
 set background=dark
 
 " カラーテーマを Monokai Pro に指定
-colorscheme monokai_pro
+colorscheme ghdark
 
 " Monokai Proを読み込んだ後に、背景色を真っ黒に上書きする設定
 highlight Normal guibg=#000000 ctermbg=black
