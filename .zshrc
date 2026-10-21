@@ -213,7 +213,7 @@ prompt pure
 zstyle ':prompt:pure:git:dirty' detailed yes
 
 # ▼▼▼ ここから追加：pure の配色カスタマイズ ▼▼▼
-zstyle ':prompt:pure:path' color '#00FFFF' # パスを明るいシアンに
+# zstyle ':prompt:pure:path' color '#00FFFF' # パスを明るいシアンに
 zstyle ':prompt:pure:prompt:success' color '#ad9eff'  # 成功時
 # ▲▲▲ ここまで追加 ▲▲▲
 

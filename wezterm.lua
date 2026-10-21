@@ -8,35 +8,10 @@ local config = wezterm.config_builder()
 config.font = wezterm.font 'JetBrains Mono'
 
 config.colors = {
-  background = '#111111',
-
-  cursor_bg = '#ffffff',
-  cursor_fg = '#111111',
-
-  ansi = {
-    '#000000',
-    '#CC0000',
-    '#00A600',
-    '#A6A600',
-    '#4D9BE6',
-    '#B200B2',
-    '#00A6B2',
-    '#BFBFBF',
-  },
-
-  brights = {
-    '#666666',
-    '#E50000',
-    '#00D900',
-    '#E5E500',
-    '#6CB6FF',
-    '#E500E5',
-    '#00E5E5',
-    '#FFFFFF',
-  },
+  background = '#000000',
 }
 
-config.colors.split = '#444444'
+config.color_scheme = 'GitHub Dark'
 
 -- ========================================
 -- キーバインド
