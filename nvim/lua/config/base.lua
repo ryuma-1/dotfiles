@@ -13,7 +13,6 @@ vim.opt.laststatus = 3
 vim.opt.directory = vim.fn.stdpath('data') .. '/swp'
 vim.opt.hidden = true
 vim.opt.showmatch = true
-vim.opt.clipboard = 'unnamedplus' -- 既存の "unnamedplus" と一致
 vim.opt.fileencoding = 'utf-8'
 vim.opt.fileencodings = 'ucs-boms,utf-8,euc-jp,cp932'
 vim.opt.fileformats = 'unix,dos,mac'

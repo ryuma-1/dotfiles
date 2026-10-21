@@ -91,10 +91,6 @@ ZVM_VI_ESCAPE_BINDKEY=jk
 # ノーマルモードの j を即時反応させるため ESC のみにする．
 ZVM_VI_OPPEND_ESCAPE_BINDKEY='^['
 
-# Vim の clipboard=unnamedplus と同じく，ヤンク・削除をシステムクリップボードへ同期する．
-# コピー/貼り付けコマンドは pbcopy/pbpaste などをプラグインが自動検出する．
-ZVM_SYSTEM_CLIPBOARD_ENABLED=true
-
 # =============================================================================
 # 4. antidote によるプラグイン管理
 # =============================================================================
@@ -236,16 +232,6 @@ function zvm_after_init() {
   if (( ! $+functions[compdef] )); then
     bindkey -M viins '^I' _lazy_compinit
   fi
-}
-
-# p/P をシステムクリップボードからの貼り付けに差し替える
-# ※ vicmd/visual のキーは初回ノーマルモード移行時に遅延登録されるため，
-#    zvm_after_init ではなくこの関数の中で上書きしないとデフォルトに戻される
-function zvm_after_lazy_keybindings() {
-  zvm_bindkey vicmd  'p' zvm_paste_clipboard_after
-  zvm_bindkey vicmd  'P' zvm_paste_clipboard_before
-  zvm_bindkey visual 'p' zvm_visual_paste_clipboard
-  zvm_bindkey visual 'P' zvm_visual_paste_clipboard
 }
 
 # --- rupa/z ---
