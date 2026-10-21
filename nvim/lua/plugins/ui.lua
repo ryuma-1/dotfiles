@@ -228,6 +228,8 @@ return {
                 -- Slanted tab edges, as shown in the bufferline.nvim README
                 separator_style = 'slant',
                 diagnostics = 'nvim_lsp',
+                -- The terminal cannot shrink a single glyph, so a visually smaller one replaces the default 󰅖
+                buffer_close_icon = '×',
                 -- Reveal the close icon only while hovering, so idle tabs stay uncluttered.
                 -- Requires 'mousemoveevent' (set in config/base.lua)
                 hover = {
