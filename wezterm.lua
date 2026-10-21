@@ -161,6 +161,25 @@ config.keys = {
     action = wezterm.action.QuitApplication,
   },
 
+  -- ----------------------------------------
+  -- コピー
+  -- Ctrl+Shift+c
+  -- 端末上の選択があればそれをコピーし，無ければ CSI u 形式の Ctrl+Shift+c を送る
+  -- (zsh-vi-mode のビジュアル選択を zsh 側でクリップボードへコピーするため)
+  -- ----------------------------------------
+
+  {
+    key = 'C',
+    mods = 'CTRL|SHIFT',
+    action = wezterm.action_callback(function(window, pane)
+      if window:get_selection_text_for_pane(pane) ~= '' then
+        window:perform_action(wezterm.action.CopyTo 'Clipboard', pane)
+      else
+        window:perform_action(wezterm.action.SendString '\x1b[99;6u', pane)
+      end
+    end),
+  },
+
   -- ========================================
   -- Alt + 0〜9
   -- タブを直接選択

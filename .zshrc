@@ -234,6 +234,20 @@ function zvm_after_init() {
   fi
 }
 
+# ビジュアルモードの選択範囲をシステムクリップボードへコピーする (y は従来どおりクリップボードに同期しない)
+function zvm_visual_copy_clipboard() {
+  zvm_yank
+  ZVM_SYSTEM_CLIPBOARD_ENABLED=true zvm_clipboard_copy_buffer
+  zvm_exit_visual_mode
+}
+
+# ※ visual のキーは初回ノーマルモード移行時に遅延登録されるため，この関数の中で登録する
+function zvm_after_lazy_keybindings() {
+  zvm_define_widget zvm_visual_copy_clipboard
+  # WezTerm が選択なしの Ctrl+Shift+c で送る CSI u シーケンス
+  zvm_bindkey visual '^[[99;6u' zvm_visual_copy_clipboard
+}
+
 # --- rupa/z ---
 # `z <キーワード>` でよく使うディレクトリへジャンプ可能
 
