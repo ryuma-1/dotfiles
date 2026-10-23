@@ -318,3 +318,6 @@ fi
 
 # wft: share state across machines via pCloud
 export WFT_STATE_DIR="$HOME/pCloudDrive/wft"
+
+# zsh-bd
+. $HOME/.zsh/plugins/bd/bd.zsh
