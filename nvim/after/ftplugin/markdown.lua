@@ -27,18 +27,32 @@ local function wrap_visual_selection(marker)
   local start_pos = vim.fn.getpos("'<")
   local end_pos = vim.fn.getpos("'>")
   local start_line, start_col = start_pos[2] - 1, start_pos[3] - 1
-  local end_line, end_col = end_pos[2] - 1, end_pos[3]
+  local end_line = end_pos[2] - 1
+  -- '> は最終文字の先頭バイトを指すため，マルチバイト文字 (日本語) の分だけ終端を進める
+  -- (行単位 Visual では列が巨大値になるので行長で丸める)
+  local end_text = vim.fn.getline(end_pos[2])
+  local end_col = math.min(end_pos[3], #end_text)
+  end_col = end_col - 1 + #vim.fn.strcharpart(end_text:sub(math.max(end_col, 1)), 0, 1)
 
+  local n = #marker
+  local start_text = vim.fn.getline(start_pos[2])
+  if start_text:sub(start_col - n + 1, start_col) == marker and end_text:sub(end_col + 1, end_col + n) == marker then
+    vim.api.nvim_buf_set_text(0, end_line, end_col, end_line, end_col + n, {})
+    vim.api.nvim_buf_set_text(0, start_line, start_col - n, start_line, start_col, {})
+    return
+  end
   vim.api.nvim_buf_set_text(0, end_line, end_col, end_line, end_col, { marker })
   vim.api.nvim_buf_set_text(0, start_line, start_col, start_line, start_col, { marker })
 end
 
--- Normal モードではカーソル下の単語を対象にする
+-- Visual 中は '< '> がまだ前回の選択のままなので，一度抜けて確定させる
+-- (Normal モードではカーソル下の単語を対象にする)
+local function update_visual_marks()
+  vim.cmd('normal! ' .. (vim.fn.mode() == 'n' and 'viw' or '') .. vim.keycode('<Esc>'))
+end
+
 local function toggle_decoration(marker)
-  if vim.fn.mode() == 'n' then
-    local esc = vim.api.nvim_replace_termcodes('<Esc>', true, false, true)
-    vim.cmd('normal! viw' .. esc)
-  end
+  update_visual_marks()
   wrap_visual_selection(marker)
 end
 
@@ -62,6 +76,7 @@ local function toggle_checkbox()
     return
   end
 
+  update_visual_marks()
   local start_line = vim.fn.getpos("'<")[2] - 1
   local end_line = vim.fn.getpos("'>")[2] - 1
   for lnum = start_line, end_line do

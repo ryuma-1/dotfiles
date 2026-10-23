@@ -69,6 +69,35 @@ local function delete_unpinned_buffers(keep_current)
     end
 end
 
+--- Open the snacks jumps picker with only the past (<C-o> side) or future (<C-i> side) entries.
+--- Snacks.picker.jumps() always lists the whole jumplist and ignores the current position, so items are built here.
+--- Entries are ordered nearest first and labelled with the count of <C-o>/<C-i> presses that reach them.
+---@param past boolean true for the entries <C-o> goes back to, false for the ones <C-i> goes forward to
+local function pick_jumps(past)
+    local jumps, cur = unpack(vim.fn.getjumplist())
+    -- cur is 0-based, so the entry the cursor is on (if any) is jumps[cur + 1]
+    local from, to, step = cur, 1, -1
+    if not past then
+        from, to, step = cur + 2, #jumps, 1
+    end
+    local items = {}
+    for i = from, to, step do
+        local jump = jumps[i]
+        local buf = jump.bufnr and vim.api.nvim_buf_is_valid(jump.bufnr) and jump.bufnr or nil
+        local file = buf and vim.api.nvim_buf_get_name(buf) or jump.filename
+        local line = buf and vim.api.nvim_buf_get_lines(buf, jump.lnum - 1, jump.lnum, false)[1] or nil
+        table.insert(items, {
+            label = tostring(math.abs(i - 1 - cur)),
+            buf = buf,
+            file = file,
+            line = line,
+            text = table.concat({ file or '', line or '' }, ' '),
+            pos = jump.lnum > 0 and { jump.lnum, jump.col } or nil,
+        })
+    end
+    Snacks.picker.jumps({ title = past and 'Jumps (past)' or 'Jumps (future)', finder = function() return items end })
+end
+
 return {
     -- 囲い文字操作
     { 'machakann/vim-sandwich', event = 'VeryLazy' },
@@ -320,6 +349,8 @@ return {
             { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
             { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
             { "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
+            { "<leader>o",  function() pick_jumps(true) end, desc = "Jumps (past)" },
+            { "<leader>i",  function() pick_jumps(false) end, desc = "Jumps (future)" },
             { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
         },
         init = function()
