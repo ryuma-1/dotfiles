@@ -18,6 +18,7 @@ local lsp_keybindings = function(bufnr)
     map('gn', '<cmd>Lspsaga rename<CR>', 'LSP Rename')
     map('gca', '<cmd>Lspsaga code_action<CR>', 'LSP Code Action')
     map('gh', '<cmd>Lspsaga hover_doc<CR>', 'LSP Hover Doc')
+    map('gp', '<cmd>Lspsaga peek_definition<CR>', 'LSP Peek Definition')
     map('gf', function() vim.lsp.buf.format({ bufnr = bufnr }) end, 'Format buffer')
 end
 
