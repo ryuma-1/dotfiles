@@ -108,6 +108,9 @@ function M.apply_code_bg()
     for _, group in ipairs({ 'WinBar', 'WinBarNC' }) do
         set_bg_keep_fg(group)
     end
+    -- Themes color float borders close to their own float bg, which vanishes on the black bg.
+    -- Set before the Snacks groups below, which copy FloatBorder's fg when their bg is replaced
+    vim.api.nvim_set_hl(0, 'FloatBorder', { fg = '#ffffff', bg = M.code_bg })
     -- The body has no theme color and would otherwise link to the gray NormalFloat
     vim.api.nvim_set_hl(0, 'SnacksPicker', { bg = M.code_bg })
     for _, group in ipairs({ 'SnacksPickerBorder', 'SnacksPickerTitle', 'SnacksPickerPrompt', 'SnacksPickerInputBorder' }) do
