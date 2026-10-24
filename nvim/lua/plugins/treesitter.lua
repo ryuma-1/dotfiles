@@ -9,8 +9,8 @@ return {
         dependencies = { 'mason-org/mason.nvim' },
         config = function()
             ---Parsers to install automatically.
-            ---Kept minimal on purpose; only the languages needed for TS/JS, Go, Ruby, Python, Shell and LaTeX.
-            local ensure_parsers = { 'typescript', 'tsx', 'javascript', 'go', 'ruby', 'python', 'bash', 'latex' }
+            ---Kept minimal on purpose; only the languages needed for TS/JS, Go, Ruby, Python, Shell, LaTeX, HTML and CSS.
+            local ensure_parsers = { 'typescript', 'tsx', 'javascript', 'go', 'ruby', 'python', 'bash', 'latex', 'html', 'css' }
 
             ---Install the configured parsers with nvim-treesitter.
             ---Already installed parsers are a no-op, so this is safe on every startup.
