@@ -275,8 +275,18 @@ return {
         -- `nvim <dir>` のディレクトリバッファを起動時に乗っ取るため，キー押下を待たずに読み込む
         lazy = false,
         keys = {
-            { "<leader>b", "<cmd>NvimTreeToggle<CR>", desc = "NvimTreeToggle" },
-            { "<leader>e", "<cmd>NvimTreeFocus<CR>", desc = "NvimTreeFocus" },
+            -- ツリー上なら閉じ，それ以外ならツリーを開いてフォーカスする (Toggle と Focus を統合)
+            {
+                "<leader>e",
+                function()
+                    if vim.bo.filetype == 'NvimTree' then
+                        vim.cmd('NvimTreeClose')
+                    else
+                        vim.cmd('NvimTreeFocus')
+                    end
+                end,
+                desc = "NvimTree Focus / Close",
+            },
         },
         opts = {},
     },
@@ -348,6 +358,7 @@ return {
         keys = {
             { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
             { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
+            { "<leader>b",  function() Snacks.picker.buffers() end, desc = "Buffers" },
             { "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
             { "<leader>o",  function() pick_jumps(true) end, desc = "Jumps (past)" },
             { "<leader>i",  function() pick_jumps(false) end, desc = "Jumps (future)" },
