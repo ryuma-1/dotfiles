@@ -338,28 +338,6 @@ return {
             end,
         },
     },
-    -- Scrollbar that marks diagnostics and git changes, giving a whole-file overview like VSCode
-    {
-        'petertriho/nvim-scrollbar',
-        event = 'VeryLazy',
-        -- hlslens is a dependency so its own setup runs first; the search handler patches hlslens.config
-        -- directly, and a later hlslens setup would drop the scrollbar callback
-        dependencies = { 'lewis6991/gitsigns.nvim', 'kevinhwang91/nvim-hlslens' },
-        ---Sets up the scrollbar, then registers the gitsigns and search handlers.
-        ---The handlers are registered explicitly (not via `handlers.*`) as the README recommends,
-        ---so they are guaranteed to be wired after gitsigns and hlslens themselves are loaded.
-        config = function()
-            require('scrollbar').setup({
-                marks = {
-                    -- Search marks take their fg from the Search group, but monokai-pro defines only a bg there,
-                    -- so they became black on the black code bg; Monokai Pro yellow is set explicitly instead
-                    Search = { color = '#FFD866' },
-                },
-            })
-            require('scrollbar.handlers.gitsigns').setup()
-            require('scrollbar.handlers.search').setup()
-        end,
-    },
     -- Shows the index and total count of search matches as virtual text next to each match
     {
         'kevinhwang91/nvim-hlslens',
