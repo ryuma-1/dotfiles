@@ -163,6 +163,7 @@ setopt auto_param_keys    # カッコの対応などを自動的に補完する
 setopt complete_in_word   # 語の途中でもカーソル位置で補完を試みる
 setopt always_last_prompt # カーソル位置は保持したままファイル名一覧を順次その場で表示する
 setopt list_packed        # 補完候補の一覧を詰めて表示し、画面を節約する
+setopt glob_complete      # 補完候補の一覧でワイルドカードを展開する
 
 # --- zstyle を使った詳細な補完設定 ---
 # (zstyle は設定値を登録するだけなので compinit より前に書いても問題ない)
