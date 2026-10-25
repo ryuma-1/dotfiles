@@ -54,6 +54,8 @@ return {
             vim.g.vimtex_syntax_enabled = 0
             -- warning のみのときは quickfix を自動で開かない (error 時は開く)
             vim.g.vimtex_quickfix_open_on_warning = 0
+            -- 引用が無い文書で BibTeX (.blg) が出す無害なエラーを無視する
+            vim.g.vimtex_quickfix_ignore_filters = { [[I found no \\citation commands]] }
         end
     },
     -- その他特定用途
