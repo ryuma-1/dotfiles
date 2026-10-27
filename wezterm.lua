@@ -267,7 +267,28 @@ end
 local copy_mode = wezterm.gui.default_key_tables().copy_mode
 table.insert(copy_mode, { key = 'u', mods = 'NONE', action = smooth_half_page(-1) })
 table.insert(copy_mode, { key = 'd', mods = 'NONE', action = smooth_half_page(1) })
-config.key_tables = { copy_mode = copy_mode }
+-- ========================================
+-- Leader ロック
+-- Leader → Leader で Enter / Escape を押すまで Leader 状態を維持する
+-- (LEADER 付きのバインドを修飾キーなしでコピーする)
+-- ========================================
+
+local leader_lock = {
+  { key = 'Enter', mods = 'NONE', action = wezterm.action.PopKeyTable },
+  { key = 'Escape', mods = 'NONE', action = wezterm.action.PopKeyTable },
+}
+for _, k in ipairs(config.keys) do
+  if k.mods == 'LEADER' then
+    table.insert(leader_lock, { key = k.key, mods = 'NONE', action = k.action })
+  end
+end
+table.insert(config.keys, {
+  key = 'Space',
+  mods = 'LEADER|CTRL',
+  action = wezterm.action.ActivateKeyTable { name = 'leader_lock', one_shot = false },
+})
+
+config.key_tables = { copy_mode = copy_mode, leader_lock = leader_lock }
 
 -- ========================================
 -- Leader 入力中はタブバー右端に色付きで表示し，押せるキーを並べる
@@ -277,17 +298,18 @@ config.key_tables = { copy_mode = copy_mode }
 local leader_hint = ' hjkl:pane  H/L:tab  s/v:split  w/W:close  x:copy  t:tab  n:win  e:quit '
 
 wezterm.on('update-status', function(window, _)
-  if not window:leader_is_active() then
+  local locked = window:active_key_table() == 'leader_lock'
+  if not (window:leader_is_active() or locked) then
     window:set_right_status('')
     return
   end
   window:set_right_status(wezterm.format {
     { Foreground = { Color = '#c9d1d9' } },
-    { Text = leader_hint },
-    { Background = { Color = '#79c0ff' } },
+    { Text = leader_hint .. (locked and ' Enter/Esc:unlock ' or ' C-Space:lock ') },
+    { Background = { Color = locked and '#ffa657' or '#79c0ff' } },
     { Foreground = { Color = '#000000' } },
     { Attribute = { Intensity = 'Bold' } },
-    { Text = ' LEADER ' },
+    { Text = locked and ' LEADER LOCK ' or ' LEADER ' },
   })
 end)
 
