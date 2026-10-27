@@ -269,6 +269,28 @@ table.insert(copy_mode, { key = 'u', mods = 'NONE', action = smooth_half_page(-1
 table.insert(copy_mode, { key = 'd', mods = 'NONE', action = smooth_half_page(1) })
 config.key_tables = { copy_mode = copy_mode }
 
+-- ========================================
+-- Leader 入力中はタブバー右端に色付きで表示し，押せるキーを並べる
+-- (config.keys の LEADER キーを変えたらここも更新する)
+-- ========================================
+
+local leader_hint = ' hjkl:pane  H/L:tab  s/v:split  w/W:close  x:copy  t:tab  n:win  e:quit '
+
+wezterm.on('update-status', function(window, _)
+  if not window:leader_is_active() then
+    window:set_right_status('')
+    return
+  end
+  window:set_right_status(wezterm.format {
+    { Foreground = { Color = '#c9d1d9' } },
+    { Text = leader_hint },
+    { Background = { Color = '#79c0ff' } },
+    { Foreground = { Color = '#000000' } },
+    { Attribute = { Intensity = 'Bold' } },
+    { Text = ' LEADER ' },
+  })
+end)
+
 
 -- ----------------------------------------
 -- ローカル設定の読み込み
