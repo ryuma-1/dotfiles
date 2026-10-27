@@ -66,6 +66,17 @@ config.keys = {
   },
 
   -- ----------------------------------------
+  -- タブ移動モード (h/l でタブの位置を入れ替え，Enter/Esc で終了)
+  -- Ctrl+Space + m
+  -- ----------------------------------------
+
+  {
+    key = 'm',
+    mods = 'LEADER',
+    action = wezterm.action.ActivateKeyTable { name = 'move_tab', one_shot = false },
+  },
+
+  -- ----------------------------------------
   -- 上下分割
   -- Ctrl+Space + s
   -- ----------------------------------------
@@ -288,16 +299,34 @@ table.insert(config.keys, {
   action = wezterm.action.ActivateKeyTable { name = 'leader_lock', one_shot = false },
 })
 
-config.key_tables = { copy_mode = copy_mode, leader_lock = leader_lock }
+local move_tab = {
+  { key = 'h', mods = 'NONE', action = wezterm.action.MoveTabRelative(-1) },
+  { key = 'l', mods = 'NONE', action = wezterm.action.MoveTabRelative(1) },
+  { key = 'Enter', mods = 'NONE', action = wezterm.action.PopKeyTable },
+  { key = 'Escape', mods = 'NONE', action = wezterm.action.PopKeyTable },
+}
+
+config.key_tables = { copy_mode = copy_mode, leader_lock = leader_lock, move_tab = move_tab }
 
 -- ========================================
 -- Leader 入力中はタブバー右端に色付きで表示し，押せるキーを並べる
 -- (config.keys の LEADER キーを変えたらここも更新する)
 -- ========================================
 
-local leader_hint = ' hjkl:pane  H/L:tab  s/v:split  w/W:close  x:copy  t:tab  n:win  e:quit '
+local leader_hint = ' hjkl:pane  H/L:tab  m:move tab  s/v:split  w/W:close  x:copy  t:tab  n:win  e:quit '
 
 wezterm.on('update-status', function(window, _)
+  if window:active_key_table() == 'move_tab' then
+    window:set_right_status(wezterm.format {
+      { Foreground = { Color = '#c9d1d9' } },
+      { Text = ' h/l:move  Enter/Esc:done ' },
+      { Background = { Color = '#d2a8ff' } },
+      { Foreground = { Color = '#000000' } },
+      { Attribute = { Intensity = 'Bold' } },
+      { Text = ' MOVE TAB ' },
+    })
+    return
+  end
   local locked = window:active_key_table() == 'leader_lock'
   if not (window:leader_is_active() or locked) then
     window:set_right_status('')
