@@ -173,6 +173,27 @@ config.keys = {
   },
 
   -- ----------------------------------------
+  -- スクロールバックを nvim で開く
+  -- Ctrl+Space + o
+  -- ----------------------------------------
+
+  {
+    key = 'o',
+    mods = 'LEADER',
+    action = wezterm.action_callback(function(window, pane)
+      local name = os.tmpname()
+      local f = io.open(name, 'w+')
+      f:write(pane:get_lines_as_text(pane:get_dimensions().scrollback_rows))
+      f:close()
+      -- 読み込んだ直後に nvim 側で一時ファイルを消す (バッファは残る)
+      window:perform_action(
+        wezterm.action.SpawnCommandInNewTab { args = { 'nvim', '+', '-c', 'call delete(@%)', name } },
+        pane
+      )
+    end),
+  },
+
+  -- ----------------------------------------
   -- コピー
   -- Ctrl+Shift+c
   -- 端末上の選択があればそれをコピーし，無ければ CSI u 形式の Ctrl+Shift+c を送る
@@ -313,7 +334,7 @@ config.key_tables = { copy_mode = copy_mode, leader_lock = leader_lock, move_tab
 -- (config.keys の LEADER キーを変えたらここも更新する)
 -- ========================================
 
-local leader_hint = ' hjkl:pane  H/L:tab  m:move tab  s/v:split  w/W:close  x:copy  t:tab  n:win  e:quit '
+local leader_hint = ' hjkl:pane  H/L:tab  m:move tab  s/v:split  w/W:close  x:copy  t:tab  n:win  o:nvim  e:quit '
 
 wezterm.on('update-status', function(window, _)
   if window:active_key_table() == 'move_tab' then
