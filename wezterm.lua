@@ -1,6 +1,16 @@
 local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
+-- ローカル設定 (~/.config/wezterm/local.lua)．config へのマージは末尾で行う
+local ok, local_config = pcall(require, 'local')
+if not ok then
+  local_config = {}
+end
+
+-- config のフィールドではないので取り出しておく (マージすると未知のキーでエラーになる)
+local leader_lock_mods = local_config.leader_lock_mods or 'CTRL'
+local_config.leader_lock_mods = nil
+
 -- ========================================
 -- 基本設定
 -- ========================================
@@ -360,7 +370,7 @@ for _, k in ipairs(config.keys) do
 end
 table.insert(config.keys, {
   key = 'Space',
-  mods = 'LEADER|CTRL',
+  mods = 'LEADER|' .. leader_lock_mods,
   action = wezterm.action.ActivateKeyTable { name = 'leader_lock', one_shot = false },
 })
 
@@ -410,7 +420,7 @@ wezterm.on('update-status', function(window, _)
   end
   window:set_right_status(wezterm.format {
     { Foreground = { Color = '#c9d1d9' } },
-    { Text = leader_hint .. (locked and ' Enter/Esc:unlock ' or ' C-Space:lock ') },
+    { Text = leader_hint .. (locked and ' Enter/Esc:unlock ' or ' ' .. leader_lock_mods .. '+Space:lock ') },
     { Background = { Color = locked and '#ffa657' or '#79c0ff' } },
     { Foreground = { Color = '#000000' } },
     { Attribute = { Intensity = 'Bold' } },
@@ -423,12 +433,8 @@ end)
 -- ローカル設定の読み込み
 -- ----------------------------------------
 
-local ok, local_config = pcall(require, 'local')
-
-if ok then
-  for key, value in pairs(local_config) do
-    config[key] = value
-  end
+for key, value in pairs(local_config) do
+  config[key] = value
 end
 
 return config
