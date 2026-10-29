@@ -17,11 +17,14 @@ local_config.leader_lock_mods = nil
 
 config.font = wezterm.font 'HackGenConsoleNF'
 
-config.colors = {
-  background = '#000000',
-}
-
-config.color_scheme = 'GitHub Dark'
+-- 白系の文字を完全な白 (#ffffff) にするため組み込みスキームを上書きする
+local scheme = wezterm.color.get_builtin_schemes()['GitHub Dark']
+scheme.background = '#000000'
+scheme.foreground = '#ffffff'
+scheme.ansi[8] = '#ffffff' -- white (Lua は 1 始まりなので 8 番目が色番号 7)
+scheme.brights[8] = '#ffffff' -- bright white
+config.color_schemes = { ['GitHub Dark Pure'] = scheme }
+config.color_scheme = 'GitHub Dark Pure'
 
 -- ========================================
 -- キーバインド
