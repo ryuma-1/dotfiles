@@ -327,6 +327,17 @@ wezterm.on('update-status', function(window, _)
     })
     return
   end
+  if window:active_key_table() == 'copy_mode' then
+    window:set_right_status(wezterm.format {
+      { Foreground = { Color = '#c9d1d9' } },
+      { Text = ' v/V:select  y:copy  u/d:half page  q/Esc:quit ' },
+      { Background = { Color = '#7ee787' } },
+      { Foreground = { Color = '#000000' } },
+      { Attribute = { Intensity = 'Bold' } },
+      { Text = ' COPY ' },
+    })
+    return
+  end
   local locked = window:active_key_table() == 'leader_lock'
   if not (window:leader_is_active() or locked) then
     window:set_right_status('')
