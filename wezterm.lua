@@ -30,17 +30,6 @@ config.color_scheme = 'GitHub Dark Pure'
 -- キーバインド
 -- ========================================
 
--- Leader f でフォーカス中のペイン (tab_id -> pane_id)．フォーカス中は Leader hjkl でペインを移動しない
-local focused = {}
-
-local function activate_pane(dir)
-  return wezterm.action_callback(function(window, pane)
-    if focused[pane:tab():tab_id()] ~= pane:pane_id() then
-      window:perform_action(wezterm.action.ActivatePaneDirection(dir), pane)
-    end
-  end)
-end
-
 config.keys = {
 
   -- ----------------------------------------
@@ -51,25 +40,25 @@ config.keys = {
   {
     key = 'h',
     mods = 'LEADER',
-    action = activate_pane 'Left',
+    action = wezterm.action.ActivatePaneDirection 'Left',
   },
 
   {
     key = 'j',
     mods = 'LEADER',
-    action = activate_pane 'Down',
+    action = wezterm.action.ActivatePaneDirection 'Down',
   },
 
   {
     key = 'k',
     mods = 'LEADER',
-    action = activate_pane 'Up',
+    action = wezterm.action.ActivatePaneDirection 'Up',
   },
 
   {
     key = 'l',
     mods = 'LEADER',
-    action = activate_pane 'Right',
+    action = wezterm.action.ActivatePaneDirection 'Right',
   },
 
   -- ----------------------------------------
@@ -127,36 +116,36 @@ config.keys = {
   },
 
   -- ----------------------------------------
-  -- アクティブペインを 9 割の大きさに広げる (もう一度押すと半分に戻す．広げている間は hjkl で移動しない)
-  -- Ctrl+Space + f
+  -- アクティブペインをタブ全体に広げる (もう一度押すと元に戻す)
+  -- Ctrl+Space + z
   -- ----------------------------------------
 
   {
-    key = 'f',
+    key = 'z',
     mods = 'LEADER',
-    action = wezterm.action_callback(function(window, pane)
-      local tab = pane:tab()
-      local restore = focused[tab:tab_id()] == pane:pane_id()
-      focused[tab:tab_id()] = not restore and pane:pane_id() or nil
-      local size = tab:get_size()
-      for _, p in ipairs(tab:panes_with_info()) do
-        if p.is_active then
-          -- 左右に並んでいれば幅，上下に並んでいれば高さを，それぞれ独立に変える
-          for _, axis in ipairs {
-            { total = size.cols, cur = p.width, first = p.left == 0, back = 'Left', fwd = 'Right' },
-            { total = size.rows, cur = p.height, first = p.top == 0, back = 'Up', fwd = 'Down' },
-          } do
-            if axis.cur < axis.total then
-              local target = restore and math.floor((axis.total - 1) / 2) or math.floor(axis.total * 0.9)
-              local delta = target - axis.cur
-              -- AdjustPaneSize は境界線を指定方向へ動かすので，左/上のペインを広げるなら Right/Down
-              local dir = (axis.first == (delta > 0)) and axis.fwd or axis.back
-              window:perform_action(wezterm.action.AdjustPaneSize { dir, math.abs(delta) }, pane)
-            end
-          end
-        end
-      end
-    end),
+    action = wezterm.action.TogglePaneZoomState,
+  },
+
+  -- ----------------------------------------
+  -- 画面上の URL・ハッシュ・パスをヒント文字で選んでコピー
+  -- Ctrl+Space + q
+  -- ----------------------------------------
+
+  {
+    key = 'q',
+    mods = 'LEADER',
+    action = wezterm.action.QuickSelect,
+  },
+
+  -- ----------------------------------------
+  -- スクロールバックを検索
+  -- Ctrl+Space + /
+  -- ----------------------------------------
+
+  {
+    key = '/',
+    mods = 'LEADER',
+    action = wezterm.action.Search { CaseInSensitiveString = '' },
   },
 
   -- ----------------------------------------
@@ -391,7 +380,7 @@ config.key_tables = { copy_mode = copy_mode, leader_lock = leader_lock, move_tab
 -- (config.keys の LEADER キーを変えたらここも更新する)
 -- ========================================
 
-local leader_hint = ' hjkl:pane  H/L:tab  m:move tab  s/v:split  f:focus  w/W:close  x:copy  t:tab  n:win  o:nvim  e:quit '
+local leader_hint = ' hjkl:pane  H/L:tab  m:move tab  s/v:split  z:zoom  q:select  /:search  w/W:close  x:copy  t:tab  n:win  o:nvim  e:quit '
 
 wezterm.on('update-status', function(window, _)
   if window:active_key_table() == 'move_tab' then
