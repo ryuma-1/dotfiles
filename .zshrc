@@ -264,6 +264,9 @@ else
   alias xp='xclip -selection clipboard -o'
 fi
 
+# nvim の省略形
+alias n='nvim'
+
 # 特定のプロジェクトディレクトリへのショートカットのエイリアス
 alias cdm='cd ~/gitlab/ikeda-r/mydocuments/meeting'
 
