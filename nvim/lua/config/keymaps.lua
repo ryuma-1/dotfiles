@@ -5,8 +5,8 @@ vim.keymap.set('n', 'j', 'gj', { silent = true })
 vim.keymap.set('n', 'k', 'gk', { silent = true })
 vim.keymap.set('n', 'zx', '<CMD>CenterCursorToggle<CR>zz', { silent = true })
 
--- Enter: 現在行の下に新規行を挿入してインサートモードへ (VSCode: insertLineAfter)
-vim.keymap.set('n', '<CR>', 'o', { silent = true })
+-- Enter: カーソル位置で行を分割し，カーソル以降を次の行へ送る
+vim.keymap.set('n', '<CR>', 'i<CR><ESC>', { silent = true })
 -- Shift+Enter: 現在行の上に新規行を挿入してインサートモードへ (VSCode: insertLineBefore)
 vim.keymap.set('n', '<S-CR>', 'O', { silent = true })
 
