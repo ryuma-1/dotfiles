@@ -61,6 +61,12 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHo
   pattern = "*",
   command = "if mode() != 'c' | checktime | endif",
 })
+-- 操作がなくても外部変更(Claude Code等)を拾うため、1秒ごとに checktime する
+vim.uv.new_timer():start(1000, 1000, vim.schedule_wrap(function()
+  if vim.fn.mode() ~= "c" and vim.fn.getcmdwintype() == "" then
+    vim.cmd("checktime")
+  end
+end))
 
 -- Tex Flavor
 vim.g.tex_flavor = 'latex'
