@@ -32,7 +32,16 @@ vim.opt.relativenumber = true
 vim.opt.cursorline = true
 vim.opt.backspace = 'indent,eol,start'
 vim.opt.pumblend = 30
-vim.opt.mouse = 'a'
+-- <leader>k でマウスの on/off を切り替え，次回起動時も状態を引き継ぐ
+local mouse_file = vim.fn.stdpath('state') .. '/mouse'
+local saved_mouse = vim.uv.fs_stat(mouse_file) and vim.fn.readfile(mouse_file) or {}
+vim.opt.mouse = saved_mouse[1] == 'off' and '' or 'a'
+vim.keymap.set('n', '<leader>k', function()
+    local state = vim.o.mouse == '' and 'on' or 'off'
+    vim.o.mouse = state == 'on' and 'a' or ''
+    vim.fn.writefile({ state }, mouse_file)
+    vim.notify('Mouse ' .. state)
+end, { silent = true, desc = 'Toggle mouse' })
 -- bufferline の hover イベントはマウス移動の通知が必要なため有効化する
 vim.opt.mousemoveevent = true
 vim.opt.tabstop = 4
