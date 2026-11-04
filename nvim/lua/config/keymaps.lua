@@ -1,8 +1,9 @@
 -- 基本操作
 vim.keymap.set('i', 'jk', '<ESC>', { silent = true })
 vim.keymap.set('n', '<ESC><ESC>', '<CMD>nohlsearch<CR>', { silent = true })
-vim.keymap.set('n', 'j', 'gj', { silent = true })
-vim.keymap.set('n', 'k', 'gk', { silent = true })
+-- カウントなしは表示行，10j のようなカウント付きは relativenumber と一致するよう論理行で移動
+vim.keymap.set('n', 'j', function() return vim.v.count == 0 and 'gj' or 'j' end, { silent = true, expr = true })
+vim.keymap.set('n', 'k', function() return vim.v.count == 0 and 'gk' or 'k' end, { silent = true, expr = true })
 vim.keymap.set('n', 'zx', '<CMD>CenterCursorToggle<CR>zz', { silent = true })
 
 -- Enter: カーソル位置で行を分割し，カーソル以降を次の行へ送る
