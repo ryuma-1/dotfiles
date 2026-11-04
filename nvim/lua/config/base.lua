@@ -80,6 +80,35 @@ end))
 -- Tex Flavor
 vim.g.tex_flavor = 'latex'
 
+-- 日本語入力モード: <leader>j で有効化すると，インサートで IME ON / それ以外で OFF にする
+if vim.fn.executable('ibus') == 1 then
+    local ime_on, ime_off = 'meltype', 'xkb:us::eng'
+    local desired, switching
+    -- 切替は非同期なので，<CR> の i<CR><ESC> のような連続切替で順序が前後しないよう直列に流す
+    local function switch_ime(engine)
+        desired = engine
+        if switching then return end
+        switching = true
+        vim.system({ 'ibus', 'engine', engine }, {}, vim.schedule_wrap(function()
+            switching = false
+            if desired ~= engine then switch_ime(desired) end
+        end))
+    end
+
+    local group = vim.api.nvim_create_augroup('JapaneseInputMode', { clear = true })
+    local enabled = false
+    vim.keymap.set('n', '<leader>j', function()
+        enabled = not enabled
+        vim.api.nvim_clear_autocmds({ group = group })
+        if enabled then
+            vim.api.nvim_create_autocmd('InsertEnter', { group = group, callback = function() switch_ime(ime_on) end })
+            vim.api.nvim_create_autocmd('InsertLeave', { group = group, callback = function() switch_ime(ime_off) end })
+            switch_ime(ime_off)
+        end
+        vim.notify('Japanese input mode ' .. (enabled and 'on' or 'off'))
+    end, { silent = true, desc = 'Toggle Japanese input mode' })
+end
+
 -- 自作コマンド: カーソル位置復元
 vim.api.nvim_create_autocmd('BufRead', {
     callback = function(opts)
