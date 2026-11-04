@@ -147,6 +147,9 @@ function _lazy_compinit() {
   bindkey -M viins '^I' expand-or-complete
   bindkey -M emacs '^I' expand-or-complete
 
+  # compinit が zsh-autosuggestions のラッパーを上書きするため，ここで予測を消す
+  POSTDISPLAY=
+
   # 今回押された Tab の分の補完を実行する
   zle expand-or-complete
 }
@@ -216,6 +219,8 @@ zstyle ':prompt:pure:prompt:success' color '#ad9eff'  # 成功時
 
 # --- zsh-autosuggestions (お好みで調整可) ---
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# Tab の補完後に新しいサジェストを出さない (補完結果と予測が一緒に適用されたように見えるため)
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(expand-or-complete)
 
 # --- zsh-history-substring-search ---
 # 上下矢印キーで履歴の部分文字列検索を行う
