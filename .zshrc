@@ -147,6 +147,9 @@ function _lazy_compinit() {
   bindkey -M viins '^I' expand-or-complete
   bindkey -M emacs '^I' expand-or-complete
 
+  # 補完結果と予測が一緒に適用されたように見えないよう，ここで予測を消す
+  POSTDISPLAY=
+
   # 今回押された Tab の分の補完を実行する
   zle expand-or-complete
 }
@@ -214,9 +217,6 @@ zstyle ':prompt:pure:git:dirty' detailed yes
 zstyle ':prompt:pure:prompt:success' color '#ad9eff'  # 成功時
 # ▲▲▲ ここまで追加 ▲▲▲
 
-# --- zsh-autosuggestions (お好みで調整可) ---
-export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-
 # --- zsh-history-substring-search ---
 # 上下矢印キーで履歴の部分文字列検索を行う
 bindkey "$terminfo[kcuu1]" history-substring-search-up
@@ -233,6 +233,9 @@ function zvm_after_init() {
   if (( ! $+functions[compdef] )); then
     bindkey -M viins '^I' _lazy_compinit
   fi
+
+  bindkey -M viins '^N' _deja_next_or_history
+  bindkey -M viins '^P' _deja_prev_or_history
 }
 
 # ビジュアルモードの選択範囲をシステムクリップボードへコピーする (y は従来どおりクリップボードに同期しない)
@@ -263,6 +266,9 @@ else
   alias xc='xclip -selection clipboard'
   alias xp='xclip -selection clipboard -o'
 fi
+
+# nvim の省略形
+alias n='nvim'
 
 # 特定のプロジェクトディレクトリへのショートカットのエイリアス
 alias cdm='cd ~/gitlab/ikeda-r/mydocuments/meeting'
@@ -322,3 +328,29 @@ export WFT_STATE_DIR="$HOME/pCloudDrive/wft"
 
 # zsh-bd
 . $HOME/.zsh/plugins/bd/bd.zsh
+
+# Tab は通常の補完に残し，候補の移動は Ctrl+n/p で行う (予測が無ければ履歴移動)
+DEJA_CYCLE_KEY=
+function _deja_next_or_history() {
+  if (( $#POSTDISPLAY && CURSOR == $#BUFFER )); then
+    zle deja-cycle
+  else
+    zle down-line-or-history
+  fi
+}
+function _deja_prev_or_history() {
+  if (( $#POSTDISPLAY && CURSOR == $#BUFFER )); then
+    # shortcut: deja に逆順移動が無いので内部変数 _DEJA_ALTERNATIVES を読んで n-1 回進める．逆順 widget が入ったら置き換える
+    repeat $(( $#_DEJA_ALTERNATIVES - 1 )) zle deja-cycle
+  else
+    zle up-line-or-history
+  fi
+}
+zle -N _deja_next_or_history
+zle -N _deja_prev_or_history
+
+if [[ -r "$HOME/.local/share/deja/init.zsh" ]]; then
+  source "$HOME/.local/share/deja/init.zsh"
+else
+  eval "$(deja init zsh)"
+fi

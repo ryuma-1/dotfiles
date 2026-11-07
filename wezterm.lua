@@ -1,17 +1,30 @@
 local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
+-- ローカル設定 (~/.config/wezterm/local.lua)．config へのマージは末尾で行う
+local ok, local_config = pcall(require, 'local')
+if not ok then
+  local_config = {}
+end
+
+-- config のフィールドではないので取り出しておく (マージすると未知のキーでエラーになる)
+local leader_lock_mods = local_config.leader_lock_mods or 'CTRL'
+local_config.leader_lock_mods = nil
+
 -- ========================================
 -- 基本設定
 -- ========================================
 
 config.font = wezterm.font 'HackGen Console NF'
 
-config.colors = {
-  background = '#000000',
-}
-
-config.color_scheme = 'GitHub Dark'
+-- 白系の文字を完全な白 (#ffffff) にするため組み込みスキームを上書きする
+local scheme = wezterm.color.get_builtin_schemes()['GitHub Dark']
+scheme.background = '#000000'
+scheme.foreground = '#ffffff'
+scheme.ansi[8] = '#ffffff' -- white (Lua は 1 始まりなので 8 番目が色番号 7)
+scheme.brights[8] = '#ffffff' -- bright white
+config.color_schemes = { ['GitHub Dark Pure'] = scheme }
+config.color_scheme = 'GitHub Dark Pure'
 
 -- ========================================
 -- キーバインド
@@ -66,6 +79,17 @@ config.keys = {
   },
 
   -- ----------------------------------------
+  -- タブ移動モード (h/l でタブの位置を入れ替え，Enter/Esc で終了)
+  -- Ctrl+Space + m
+  -- ----------------------------------------
+
+  {
+    key = 'm',
+    mods = 'LEADER',
+    action = wezterm.action.ActivateKeyTable { name = 'move_tab', one_shot = false },
+  },
+
+  -- ----------------------------------------
   -- 上下分割
   -- Ctrl+Space + s
   -- ----------------------------------------
@@ -89,6 +113,39 @@ config.keys = {
     action = wezterm.action.SplitHorizontal {
       domain = 'CurrentPaneDomain',
     },
+  },
+
+  -- ----------------------------------------
+  -- アクティブペインをタブ全体に広げる (もう一度押すと元に戻す)
+  -- Ctrl+Space + z
+  -- ----------------------------------------
+
+  {
+    key = 'z',
+    mods = 'LEADER',
+    action = wezterm.action.TogglePaneZoomState,
+  },
+
+  -- ----------------------------------------
+  -- 画面上の URL・ハッシュ・パスをヒント文字で選んでコピー
+  -- Ctrl+Space + q
+  -- ----------------------------------------
+
+  {
+    key = 'q',
+    mods = 'LEADER',
+    action = wezterm.action.QuickSelect,
+  },
+
+  -- ----------------------------------------
+  -- スクロールバックを検索
+  -- Ctrl+Space + /
+  -- ----------------------------------------
+
+  {
+    key = '/',
+    mods = 'LEADER',
+    action = wezterm.action.Search { CaseInSensitiveString = '' },
   },
 
   -- ----------------------------------------
@@ -159,6 +216,27 @@ config.keys = {
     key = 'e',
     mods = 'LEADER',
     action = wezterm.action.QuitApplication,
+  },
+
+  -- ----------------------------------------
+  -- スクロールバックを nvim で開く
+  -- Ctrl+Space + o
+  -- ----------------------------------------
+
+  {
+    key = 'o',
+    mods = 'LEADER',
+    action = wezterm.action_callback(function(window, pane)
+      local name = os.tmpname()
+      local f = io.open(name, 'w+')
+      f:write(pane:get_lines_as_text(pane:get_dimensions().scrollback_rows))
+      f:close()
+      -- 読み込んだ直後に nvim 側で一時ファイルを消す (バッファは残る)
+      window:perform_action(
+        wezterm.action.SpawnCommandInNewTab { args = { 'nvim', '+', '-c', 'call delete(@%)', name } },
+        pane
+      )
+    end),
   },
 
   -- ----------------------------------------
@@ -267,19 +345,88 @@ end
 local copy_mode = wezterm.gui.default_key_tables().copy_mode
 table.insert(copy_mode, { key = 'u', mods = 'NONE', action = smooth_half_page(-1) })
 table.insert(copy_mode, { key = 'd', mods = 'NONE', action = smooth_half_page(1) })
-config.key_tables = { copy_mode = copy_mode }
+-- ========================================
+-- Leader ロック
+-- Leader → Leader で Enter / Escape を押すまで Leader 状態を維持する
+-- (LEADER 付きのバインドを修飾キーなしでコピーする)
+-- ========================================
+
+local leader_lock = {
+  { key = 'Enter', mods = 'NONE', action = wezterm.action.PopKeyTable },
+  { key = 'Escape', mods = 'NONE', action = wezterm.action.PopKeyTable },
+}
+for _, k in ipairs(config.keys) do
+  if k.mods == 'LEADER' then
+    table.insert(leader_lock, { key = k.key, mods = 'NONE', action = k.action })
+  end
+end
+table.insert(config.keys, {
+  key = 'Space',
+  mods = 'LEADER|' .. leader_lock_mods,
+  action = wezterm.action.ActivateKeyTable { name = 'leader_lock', one_shot = false },
+})
+
+local move_tab = {
+  { key = 'h', mods = 'NONE', action = wezterm.action.MoveTabRelative(-1) },
+  { key = 'l', mods = 'NONE', action = wezterm.action.MoveTabRelative(1) },
+  { key = 'Enter', mods = 'NONE', action = wezterm.action.PopKeyTable },
+  { key = 'Escape', mods = 'NONE', action = wezterm.action.PopKeyTable },
+}
+
+config.key_tables = { copy_mode = copy_mode, leader_lock = leader_lock, move_tab = move_tab }
+
+-- ========================================
+-- Leader 入力中はタブバー右端に色付きで表示し，押せるキーを並べる
+-- (config.keys の LEADER キーを変えたらここも更新する)
+-- ========================================
+
+local leader_hint = ' hjkl:pane  H/L:tab  m:move tab  s/v:split  z:zoom  q:select  /:search  w/W:close  x:copy  t:tab  n:win  o:nvim  e:quit '
+
+wezterm.on('update-status', function(window, _)
+  if window:active_key_table() == 'move_tab' then
+    window:set_right_status(wezterm.format {
+      { Foreground = { Color = '#c9d1d9' } },
+      { Text = ' h/l:move  Enter/Esc:done ' },
+      { Background = { Color = '#d2a8ff' } },
+      { Foreground = { Color = '#000000' } },
+      { Attribute = { Intensity = 'Bold' } },
+      { Text = ' MOVE TAB ' },
+    })
+    return
+  end
+  if window:active_key_table() == 'copy_mode' then
+    window:set_right_status(wezterm.format {
+      { Foreground = { Color = '#c9d1d9' } },
+      { Text = ' v/V:select  y:copy  u/d:half page  q/Esc:quit ' },
+      { Background = { Color = '#7ee787' } },
+      { Foreground = { Color = '#000000' } },
+      { Attribute = { Intensity = 'Bold' } },
+      { Text = ' COPY ' },
+    })
+    return
+  end
+  local locked = window:active_key_table() == 'leader_lock'
+  if not (window:leader_is_active() or locked) then
+    window:set_right_status('')
+    return
+  end
+  window:set_right_status(wezterm.format {
+    { Foreground = { Color = '#c9d1d9' } },
+    { Text = leader_hint .. (locked and ' Enter/Esc:unlock ' or ' ' .. leader_lock_mods .. '+Space:lock ') },
+    { Background = { Color = locked and '#ffa657' or '#79c0ff' } },
+    { Foreground = { Color = '#000000' } },
+    { Attribute = { Intensity = 'Bold' } },
+    { Text = locked and ' LEADER LOCK ' or ' LEADER ' },
+  })
+end)
 
 
 -- ----------------------------------------
 -- ローカル設定の読み込み
 -- ----------------------------------------
 
-local ok, local_config = pcall(require, 'local')
-
-if ok then
-  for key, value in pairs(local_config) do
-    config[key] = value
-  end
+for key, value in pairs(local_config) do
+  config[key] = value
 end
 
 return config

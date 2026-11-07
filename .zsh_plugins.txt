@@ -18,9 +18,6 @@ agkozak/zsh-z
 # 履歴の部分文字列検索 (上下矢印用)
 zsh-users/zsh-history-substring-search
 
-# 入力補完のサジェスト (灰色のゴーストテキスト)
-zsh-users/zsh-autosuggestions
-
 # シンタックスハイライト。zsh-vi-mode より前に、同期的に読み込む(defer厳禁)
 zsh-users/zsh-syntax-highlighting
 
