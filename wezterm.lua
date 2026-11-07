@@ -5,7 +5,7 @@ local config = wezterm.config_builder()
 -- 基本設定
 -- ========================================
 
-config.font = wezterm.font 'HackGenConsoleNF'
+config.font = wezterm.font 'HackGen Console NF'
 
 config.colors = {
   background = '#000000',
