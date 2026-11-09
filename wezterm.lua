@@ -16,6 +16,17 @@ local_config.leader_lock_mods = nil
 -- ========================================
 
 config.font = wezterm.font 'HackGen Console NF'
+if wezterm.target_triple:find('linux') then
+  -- XWayland だと XIM サーバー (ibus-x11) が起動しておらず Mozc で変換できないため，
+  -- ネイティブ Wayland (text-input-v3) で IME を使う
+  config.enable_wayland = true
+  -- GNOME Wayland ではタイトルバーが出ないので，ボタンをタブバーに表示してドラッグ移動もタブバーで行う
+  config.window_decorations = 'INTEGRATED_BUTTONS | RESIZE'
+  -- 既定の Windows 風ボタンではなく GNOME (Ubuntu) 風の丸いボタンにする
+  config.integrated_title_button_style = 'Gnome'
+else
+  config.window_decorations = 'TITLE | RESIZE'
+end
 
 -- 白系の文字を完全な白 (#ffffff) にするため組み込みスキームを上書きする
 local scheme = wezterm.color.get_builtin_schemes()['GitHub Dark']
