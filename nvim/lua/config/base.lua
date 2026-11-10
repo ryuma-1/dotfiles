@@ -82,7 +82,7 @@ vim.g.tex_flavor = 'latex'
 
 -- 日本語入力モード: <leader>j で有効化すると，インサートで IME ON / それ以外で OFF にする
 if vim.fn.executable('ibus') == 1 then
-    local ime_on, ime_off = 'meltype', 'xkb:us::eng'
+    local ime_on, ime_off = 'mozc-on', 'xkb:us::eng'
     local desired, switching
     -- 切替は非同期なので，<CR> の i<CR><ESC> のような連続切替で順序が前後しないよう直列に流す
     local function switch_ime(engine)

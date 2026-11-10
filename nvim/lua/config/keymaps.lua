@@ -79,3 +79,25 @@ vim.keymap.set('n', '<leader>x', ':Lazy<CR>', { silent = true })
 -- LSP リネームは lspsaga の gn に割り当てたため，Neovim 標準の grn は不要になる
 -- 残すと Lspsaga finder の gr が後続キー待ち (timeoutlen) で遅延する原因にもなるため削除する
 vim.keymap.del('n', 'grn')
+
+-- Reading モード: バッファの編集を禁止し，u/d で半画面スクロールする (バッファごとにトグル)
+-- d は surround 等の d から始まるマップと衝突して待たされるため nowait にする
+-- remap: neoscroll の <C-u>/<C-d> マップを経由させてなめらかにスクロールさせる
+local function toggle_reading_mode()
+    if vim.b.reading_mode then
+        vim.bo.modifiable = vim.b.reading_mode_prev_modifiable
+        vim.keymap.del('n', 'u', { buffer = 0 })
+        vim.keymap.del('n', 'd', { buffer = 0 })
+        vim.b.reading_mode = nil
+        vim.notify('Reading mode: off')
+    else
+        vim.b.reading_mode_prev_modifiable = vim.bo.modifiable
+        vim.bo.modifiable = false
+        vim.keymap.set('n', 'u', '<C-u>', { buffer = 0, nowait = true, silent = true, remap = true })
+        vim.keymap.set('n', 'd', '<C-d>', { buffer = 0, nowait = true, silent = true, remap = true })
+        vim.b.reading_mode = true
+        vim.notify('Reading mode: on')
+    end
+end
+vim.api.nvim_create_user_command('ReadingMode', toggle_reading_mode, {})
+vim.keymap.set('n', '<leader>R', toggle_reading_mode, { silent = true, desc = 'Toggle reading mode' })
