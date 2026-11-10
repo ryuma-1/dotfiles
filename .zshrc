@@ -354,3 +354,6 @@ if [[ -r "$HOME/.local/share/deja/init.zsh" ]]; then
 else
   eval "$(deja init zsh)"
 fi
+
+# Unity CLI
+. "/Users/ryuma/.unity/env"
