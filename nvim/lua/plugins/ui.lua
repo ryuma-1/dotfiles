@@ -221,7 +221,7 @@ return {
         event = 'VimEnter',
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         keys = {
-            { '<leader>wp', '<CMD>BufferLineTogglePin<CR>', desc = 'Toggle Pin Buffer' },
+            { '<leader>bp', '<CMD>BufferLineTogglePin<CR>', desc = 'Toggle Pin Buffer' },
         },
         opts = {
             options = {
@@ -389,6 +389,23 @@ return {
             -- Applied to the built-in marks/registers popups too (their default is 0ms).
             -- Kept below timeoutlen (1000ms) so the popup appears before an ambiguous mapping times out
             delay = 500,
+            -- Group names for the LazyVim-style <leader> layout
+            spec = {
+                { '<leader>a', group = 'ai' },
+                { '<leader>b', group = 'buffer' },
+                { '<leader>c', group = 'code' },
+                { '<leader>f', group = 'file/find' },
+                { '<leader>g', group = 'git' },
+                { '<leader>gh', group = 'hunks' },
+                { '<leader>m', group = 'markdown' },
+                { '<leader>q', group = 'quit' },
+                { '<leader>s', group = 'search' },
+                { '<leader>t', group = 'terminal' },
+                { '<leader>u', group = 'ui' },
+                { '<leader>x', group = 'diagnostics/quickfix' },
+                -- Every <C-w> key also works after <leader>w, as in LazyVim
+                { '<leader>w', group = 'windows', proxy = '<c-w>' },
+            },
         },
         keys = {
             {

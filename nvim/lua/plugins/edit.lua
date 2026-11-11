@@ -181,10 +181,10 @@ return {
         'Wansmer/treesj',
         dependencies = { 'nvim-treesitter/nvim-treesitter' },
         keys = {
-            { '<leader>st', function() require('treesj').toggle() end, desc = 'Toggle split/join (treesj)' },
+            { '<leader>cj', function() require('treesj').toggle() end, desc = 'Toggle split/join (treesj)' },
         },
         cmd = { 'TSJToggle', 'TSJSplit', 'TSJJoin' },
-        -- デフォルトの <leader>s は分割系 prefix (<leader>sh/sv) と衝突するため無効化し，必要なキーだけ keys で定義する
+        -- デフォルトの <leader>s* は検索系 prefix と衝突するため無効化し，必要なキーだけ keys で定義する
         opts = { use_default_keymaps = false, max_join_length = 150 },
     },
     -- Modern folding with treesitter/indent ranges and a preview of the folded lines
@@ -294,11 +294,11 @@ return {
     {
         'ojroques/nvim-bufdel',
         keys = {
-            { "<leader>ww", "<cmd>BufDel<CR>", desc = "Close Current Buffer" },
-            { "<leader>wa", function() delete_unpinned_buffers(false) end, desc = "Close All Unpinned Buffers" },
-            { "<leader>wo", function() delete_unpinned_buffers(true) end, desc = "Close Other Unpinned Buffers" },
-            { "<leader>wA", "<cmd>BufDelAll<CR>", desc = "Close All Buffers (including pinned)" },
-            { "<leader>wO", "<cmd>BufDelOthers<CR>", desc = "Close Other Buffers (including pinned)" },
+            { "<leader>bd", "<cmd>BufDel<CR>", desc = "Close Current Buffer" },
+            { "<leader>bP", function() delete_unpinned_buffers(false) end, desc = "Close All Unpinned Buffers" },
+            { "<leader>bo", function() delete_unpinned_buffers(true) end, desc = "Close Other Unpinned Buffers" },
+            { "<leader>bA", "<cmd>BufDelAll<CR>", desc = "Close All Buffers (including pinned)" },
+            { "<leader>bO", "<cmd>BufDelOthers<CR>", desc = "Close Other Buffers (including pinned)" },
         },
         opts = { next = 'tabs', quit = false },
     },
@@ -358,10 +358,11 @@ return {
         keys = {
             { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
             { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
-            { "<leader>b",  function() Snacks.picker.buffers() end, desc = "Buffers" },
+            { "<leader>,",  function() Snacks.picker.buffers() end, desc = "Buffers" },
+            { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
             { "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
-            { "<leader>o",  function() pick_jumps(true) end, desc = "Jumps (past)" },
-            { "<leader>i",  function() pick_jumps(false) end, desc = "Jumps (future)" },
+            { "<leader>sj", function() pick_jumps(true) end, desc = "Jumps (past)" },
+            { "<leader>sJ", function() pick_jumps(false) end, desc = "Jumps (future)" },
             { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
         },
         init = function()
@@ -410,7 +411,7 @@ return {
             -- Normal mode only, so these do not clash with the nvim-cmp insert-mode <C-n>/<C-p>
             { "<C-p>", "<Plug>(YankyPreviousEntry)", desc = "Cycle to previous yank entry" },
             { "<C-n>", "<Plug>(YankyNextEntry)", desc = "Cycle to next yank entry" },
-            { "<leader>y", function() Snacks.picker.yanky() end, mode = { "n", "x" }, desc = "Open Yank History" },
+            { "<leader>p", function() Snacks.picker.yanky() end, mode = { "n", "x" }, desc = "Open Yank History" },
         },
     },
     -- ファジーファインダー (Telescope)
@@ -419,10 +420,10 @@ return {
         cmd = 'Telescope',
         dependencies = { 'nvim-lua/plenary.nvim' },
         keys = {
-            { '<leader>p', '<CMD>Telescope find_files<CR>', desc = 'Telescope find files'},
+            { '<leader><space>', '<CMD>Telescope find_files<CR>', desc = 'Telescope find files'},
             { '<leader>ff', '<CMD>Telescope find_files<CR>', desc = 'Telescope find files'},
-            { '<leader>f', '<CMD>Telescope live_grep<CR>', desc = 'Telescope live grep'},
-            { '<leader>fg', '<CMD>Telescope live_grep<CR>', desc = 'Telescope live grep'},
+            { '<leader>/', '<CMD>Telescope live_grep<CR>', desc = 'Telescope live grep'},
+            { '<leader>sg', '<CMD>Telescope live_grep<CR>', desc = 'Telescope live grep'},
         },
         config = function()
             require('telescope').setup({

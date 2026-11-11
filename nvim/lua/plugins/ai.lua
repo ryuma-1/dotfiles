@@ -46,18 +46,18 @@ return {
             "MeanderingProgrammer/render-markdown.nvim",
         },
         keys = {
-            { "<leader>cc", "<cmd>AvanteChat<cr>", mode = "n", desc = "Avante: open chat" },
+            { "<leader>ac", "<cmd>AvanteChat<cr>", mode = "n", desc = "Avante: open chat" },
             -- フローティング入力で質問し，返答はバッファではなくサイドバーに表示する
             -- (edit() は LLM の出力でバッファを直接書き換えるため，質問用途には使わない)
-            { "<leader>ci", function() require("avante.api").ask({ floating = true }) end, mode = { "n", "v" }, desc = "Avante: inline chat" },
+            { "<leader>aa", function() require("avante.api").ask({ floating = true }) end, mode = { "n", "v" }, desc = "Avante: inline chat" },
             -- 選択範囲がある場合はその範囲を，無い場合は現在行を AI に書き換えさせる
-            { "<leader>ce", function() require("avante.api").edit() end, mode = { "n", "v" }, desc = "Avante: inline edit" },
+            { "<leader>ae", function() require("avante.api").edit() end, mode = { "n", "v" }, desc = "Avante: inline edit" },
         },
         opts = {
             provider = "copilot",
             selector = { provider = "telescope" },
             input = { provider = "snacks" },
-            -- ビジュアル選択時のヒントは既定キー (<leader>aa 等) を表示し，独自キーマップと食い違うため無効化する
+            -- ビジュアル選択時のヒントは既定キーの割り当てで表示され，独自キーマップと食い違うため無効化する
             selection = { hint_display = "none" },
             -- 既定の <leader>a* キーマップは keys で定義した独自キーと重複するため登録させない
             behaviour = { auto_set_keymaps = false },

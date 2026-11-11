@@ -14,15 +14,15 @@ return {
         'lewis6991/gitsigns.nvim',
         event = 'VeryLazy',
         keys = {
-            { '<leader>gh', '<cmd>Gitsigns preview_hunk<cr>', desc = 'Preview hunk' },
-            { '<leader>gi', '<cmd>Gitsigns preview_hunk_inline<cr>', desc = 'Preview hunk inline' },
-            { '<leader>gb', '<cmd>Gitsigns blame_line<cr>', desc = 'Blame line' },
-            { '<leader>ga', '<cmd>Gitsigns blame<cr>', desc = 'Blame buffer' },
-            { '<leader>gn', '<cmd>Gitsigns nav_hunk next<cr>', desc = 'Next hunk' },
-            { '<leader>gp', '<cmd>Gitsigns nav_hunk prev<cr>', desc = 'Prev hunk' },
+            { '<leader>ghP', '<cmd>Gitsigns preview_hunk<cr>', desc = 'Preview hunk' },
+            { '<leader>ghp', '<cmd>Gitsigns preview_hunk_inline<cr>', desc = 'Preview hunk inline' },
+            { '<leader>ghb', '<cmd>Gitsigns blame_line<cr>', desc = 'Blame line' },
+            { '<leader>ghB', '<cmd>Gitsigns blame<cr>', desc = 'Blame buffer' },
+            { ']h', '<cmd>Gitsigns nav_hunk next<cr>', desc = 'Next hunk' },
+            { '[h', '<cmd>Gitsigns nav_hunk prev<cr>', desc = 'Prev hunk' },
             -- ':' で呼ぶことでビジュアルモードの選択範囲が渡される
-            { '<leader>gs', ':Gitsigns stage_hunk<cr>', mode = { 'n', 'x' }, silent = true, desc = 'Stage hunk' },
-            { '<leader>gr', ':Gitsigns reset_hunk<cr>', mode = { 'n', 'x' }, silent = true, desc = 'Reset hunk' },
+            { '<leader>ghs', ':Gitsigns stage_hunk<cr>', mode = { 'n', 'x' }, silent = true, desc = 'Stage hunk' },
+            { '<leader>ghr', ':Gitsigns reset_hunk<cr>', mode = { 'n', 'x' }, silent = true, desc = 'Reset hunk' },
         },
         opts = {
             signcolumn = true,

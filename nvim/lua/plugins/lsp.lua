@@ -36,7 +36,7 @@ return {
         },
         ---Sets up lspsaga and closes the code action preview together with its action list.
         ---lspsaga closes the preview only from its own keys (`q`, `<CR>`, number shortcuts),
-        ---so leaving the list any other way (`:q`, `<leader>qq`, window moves) orphans the
+        ---so leaving the list any other way (`:q`, `<leader>wd`, window moves) orphans the
         ---preview, which is unfocusable and therefore cannot be closed by hand.
         ---@param opts table
         config = function(_, opts)
@@ -197,7 +197,7 @@ return {
                     vim.diagnostic.config({ virtual_text = false })
 
 
-                    vim.keymap.set('n', '<leader>la', '<cmd>Lspsaga show_workspace_diagnostics<CR>', {
+                    vim.keymap.set('n', '<leader>xX', '<cmd>Lspsaga show_workspace_diagnostics<CR>', {
                         buffer = bufnr, silent = true, desc = 'LSP Workspace Diagnostics',
                     })
                     vim.keymap.set('n', 'ge', '<cmd>Lspsaga show_cursor_diagnostics<CR>', {
@@ -218,7 +218,7 @@ return {
                         end,
                     })
 
-                    vim.keymap.set('n', '<leader>ul', function()
+                    vim.keymap.set('n', '<leader>uD', function()
                         vim.g.show_diagnostics = not vim.g.show_diagnostics
                         print(string.format("Show Diagnostic: %s", vim.g.show_diagnostics))
                     end, { buffer = bufnr, silent = true, desc = 'Change Diagnostic View' })

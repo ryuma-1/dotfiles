@@ -69,4 +69,4 @@ local function load_unity_log()
 end
 
 vim.api.nvim_create_user_command("UnityLog", load_unity_log, { desc = "Load Unity Editor.log into quickfix" })
-vim.keymap.set("n", "<leader>ue", load_unity_log, { noremap = true, silent = true, desc = "Unity: Editor.log to quickfix" })
+vim.keymap.set("n", "<leader>xu", load_unity_log, { noremap = true, silent = true, desc = "Unity: Editor.log to quickfix" })

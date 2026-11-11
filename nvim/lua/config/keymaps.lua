@@ -50,31 +50,28 @@ vim.keymap.set('n', '<A-h>', '<C-w>h', { silent = true })
 vim.keymap.set('n', '<A-j>', '<C-w>j', { silent = true })
 vim.keymap.set('n', '<A-k>', '<C-w>k', { silent = true })
 vim.keymap.set('n', '<A-l>', '<C-w>l', { silent = true })
--- Leader+w j/k: ウィンドウ上下フォーカス移動 (Alt+j/k と同等．既存の手癖のために残す)
-vim.keymap.set('n', '<leader>wj', '<C-w>j', { silent = true })
-vim.keymap.set('n', '<leader>wk', '<C-w>k', { silent = true })
+-- <leader>w は which-key の proxy で <C-w> として振る舞う (plugins/ui.lua)
 -- Ctrl+Alt+h/l: ウィンドウを画面左右端へ移動 (VSCode: moveEditorToLeftGroup 等)
 -- Ctrl+Alt+j/k は行移動に割り当てたため，上下端への移動は持たない
 vim.keymap.set('n', '<C-A-h>', '<C-w>H', { silent = true })
 vim.keymap.set('n', '<C-A-l>', '<C-w>L', { silent = true })
--- <leader>s を分割系の prefix にまとめ，treesj の <leader>st と共存させる
-vim.keymap.set('n', '<leader>sh', ':split<CR>', { silent = true })
-vim.keymap.set('n', '<leader>sv', ':vsplit<CR>', { silent = true })
--- <leader>q を終了系の prefix にまとめ，<leader>qo (他ウィンドウを閉じる) と共存させる
-vim.keymap.set('n', '<leader>qq', '<C-w>q', { silent = true })
-vim.keymap.set('n', '<leader>qa', '<CMD>qa<CR>', { silent = true })
+-- LazyVim 風の分割・終了キー
+vim.keymap.set('n', '<leader>-', '<CMD>split<CR>', { silent = true, desc = 'Split Window Below' })
+vim.keymap.set('n', '<leader>|', '<CMD>vsplit<CR>', { silent = true, desc = 'Split Window Right' })
+vim.keymap.set('n', '<leader>wd', '<C-w>q', { silent = true, desc = 'Delete Window' })
+vim.keymap.set('n', '<leader>qq', '<CMD>qa<CR>', { silent = true, desc = 'Quit All' })
 -- :only は avante のサイドバーを閉じた際に連鎖して閉じられる入力欄で E445 となり，
 -- 以降のウィンドウ (Trouble 等) が残るため，1 つずつ閉じて既に閉じられたものは飛ばす
-vim.keymap.set('n', '<leader>qo', function()
+vim.keymap.set('n', '<leader>wo', function()
     local current = vim.api.nvim_get_current_win()
     for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
         if win ~= current and vim.api.nvim_win_is_valid(win) then
             vim.api.nvim_win_close(win, false)
         end
     end
-end, { silent = true })
--- <leader>x: プラグイン管理UI (VSCode: view.extensions)
-vim.keymap.set('n', '<leader>x', ':Lazy<CR>', { silent = true })
+end, { silent = true, desc = 'Close Other Windows' })
+-- <leader>l: プラグイン管理UI (LazyVim と同じ)
+vim.keymap.set('n', '<leader>l', '<CMD>Lazy<CR>', { silent = true, desc = 'Lazy' })
 
 -- LSP リネームは lspsaga の gn に割り当てたため，Neovim 標準の grn は不要になる
 -- 残すと Lspsaga finder の gr が後続キー待ち (timeoutlen) で遅延する原因にもなるため削除する
@@ -100,4 +97,4 @@ local function toggle_reading_mode()
     end
 end
 vim.api.nvim_create_user_command('ReadingMode', toggle_reading_mode, {})
-vim.keymap.set('n', '<leader>R', toggle_reading_mode, { silent = true, desc = 'Toggle reading mode' })
+vim.keymap.set('n', '<leader>ur', toggle_reading_mode, { silent = true, desc = 'Toggle reading mode' })

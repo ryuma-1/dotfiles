@@ -32,11 +32,11 @@ vim.opt.relativenumber = true
 vim.opt.cursorline = true
 vim.opt.backspace = 'indent,eol,start'
 vim.opt.pumblend = 30
--- <leader>k でマウスの on/off を切り替え，次回起動時も状態を引き継ぐ
+-- <leader>um でマウスの on/off を切り替え，次回起動時も状態を引き継ぐ
 local mouse_file = vim.fn.stdpath('state') .. '/mouse'
 local saved_mouse = vim.uv.fs_stat(mouse_file) and vim.fn.readfile(mouse_file) or {}
 vim.opt.mouse = saved_mouse[1] == 'off' and '' or 'a'
-vim.keymap.set('n', '<leader>k', function()
+vim.keymap.set('n', '<leader>um', function()
     local state = vim.o.mouse == '' and 'on' or 'off'
     vim.o.mouse = state == 'on' and 'a' or ''
     vim.fn.writefile({ state }, mouse_file)
@@ -80,7 +80,7 @@ end))
 -- Tex Flavor
 vim.g.tex_flavor = 'latex'
 
--- 日本語入力モード: <leader>j で有効化すると，インサートで IME ON / それ以外で OFF にする
+-- 日本語入力モード: <leader>uj で有効化すると，インサートで IME ON / それ以外で OFF にする
 if vim.fn.executable('ibus') == 1 then
     local ime_on, ime_off = 'mozc-on', 'xkb:us::eng'
     local desired, switching
@@ -97,7 +97,7 @@ if vim.fn.executable('ibus') == 1 then
 
     local group = vim.api.nvim_create_augroup('JapaneseInputMode', { clear = true })
     local enabled = false
-    vim.keymap.set('n', '<leader>j', function()
+    vim.keymap.set('n', '<leader>uj', function()
         enabled = not enabled
         vim.api.nvim_clear_autocmds({ group = group })
         if enabled then
