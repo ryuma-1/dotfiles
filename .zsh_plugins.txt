@@ -12,9 +12,6 @@ zsh-users/zsh-completions kind:fpath path:src
 # プロンプトテーマ (pure)。fpath に追加してから prompt_pure_setup を呼ぶ
 sindresorhus/pure kind:fpath
 
-# ディレクトリジャンプ
-agkozak/zsh-z
-
 # 履歴の部分文字列検索 (上下矢印用)
 zsh-users/zsh-history-substring-search
 

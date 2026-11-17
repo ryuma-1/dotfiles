@@ -126,36 +126,22 @@ source "$zsh_plugins"
 # =============================================================================
 # 5. 補完機能 (Completion) の設定
 # =============================================================================
-# compinit は起動時には実行せず，最初に Tab が押されたときに実行する (遅延初期化)．
+# fzf-tab は compinit 済みであることが前提のため，起動時に compinit を実行する．
 # zsh-completions が上記で fpath に追加済みなので，そのまま compinit で認識される．
 autoload -Uz compinit
+# .zcompdump が 24 時間以上古ければフルチェック，そうでなければキャッシュを使う．
+# -i: 安全でないディレクトリがあっても確認プロンプトを出さずに無視する
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit -i
+else
+  compinit -C
+fi
 
-function _lazy_compinit() {
-  # .zcompdump が 24 時間以上古ければフルチェック，そうでなければキャッシュを使う．
-  # -i: 安全でないディレクトリがあっても確認プロンプトを出さずに無視する
-  #     (ZLE ウィジェット内では y/n の入力待ちができないため)
-  if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
-    compinit -i
-  else
-    compinit -C
-  fi
+# bun の補完 (内部で compdef を使うため compinit の後に読み込む)
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
-  # bun の補完 (内部で compdef を使うため compinit の後に読み込む)
-  [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-
-  # 以降の Tab は通常の補完ウィジェットに戻す
-  bindkey -M viins '^I' expand-or-complete
-  bindkey -M emacs '^I' expand-or-complete
-
-  # 補完結果と予測が一緒に適用されたように見えないよう，ここで予測を消す
-  POSTDISPLAY=
-
-  # 今回押された Tab の分の補完を実行する
-  zle expand-or-complete
-}
-zle -N _lazy_compinit
-bindkey -M viins '^I' _lazy_compinit
-bindkey -M emacs '^I' _lazy_compinit
+# fzf-tab: compinit の後に読み込む (zsh 5.9 の zsh-syntax-highlighting はウィジェットを包まないので後でも問題ない)
+source ~/git/fzf-tab/fzf-tab.plugin.zsh
 
 # --- 補完の基本動作 (setopt) ---
 setopt auto_param_slash   # ディレクトリ名の補完で末尾に / を自動的に付加する
@@ -229,13 +215,16 @@ function zvm_after_init() {
   bindkey -M vicmd 'j' history-substring-search-down
 
   # zsh-vi-mode が viins を再構築して Tab の割り当てが戻されるため，ここで再設定する．
-  # ただし既に compinit 済み (= _lazy_compinit が実行済み) なら通常の補完のままにする．
-  if (( ! $+functions[compdef] )); then
-    bindkey -M viins '^I' _lazy_compinit
-  fi
+  # (この後に読む fzf は ** 以外の Tab をここで割り当てたウィジェットに渡す)
+  bindkey -M viins '^I' fzf-tab-complete
 
   bindkey -M viins '^N' _deja_next_or_history
   bindkey -M viins '^P' _deja_prev_or_history
+
+  # fzf: zsh-vi-mode の初期化が終わった後に読み込む
+  # （先に読むと vi モードがキー割り当てを上書きしてしまう）
+  # zvm_exec_commands が local の commands で $commands を隠すため command -v で確認する
+  command -v fzf >/dev/null && source <(fzf --zsh)
 }
 
 # ビジュアルモードの選択範囲をシステムクリップボードへコピーする (y は従来どおりクリップボードに同期しない)
@@ -317,7 +306,7 @@ mts () {
   cd - > /dev/null
 }
 
-# bun completions は compdef を使うため _lazy_compinit 内で読み込む (5. 補完機能 を参照)
+# bun completions は compdef を使うため compinit の直後で読み込む (5. 補完機能 を参照)
 
 if [[ -f ~/.zshrc.local ]]; then
     source ~/.zshrc.local
@@ -354,6 +343,8 @@ if [[ -r "$HOME/.local/share/deja/init.zsh" ]]; then
 else
   eval "$(deja init zsh)"
 fi
+
+eval "$(zoxide init zsh)"
 
 # Unity CLI
 . "/Users/ryuma/.unity/env"
