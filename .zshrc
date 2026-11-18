@@ -126,22 +126,41 @@ source "$zsh_plugins"
 # =============================================================================
 # 5. 補完機能 (Completion) の設定
 # =============================================================================
-# fzf-tab は compinit 済みであることが前提のため，起動時に compinit を実行する．
+# compinit は起動時には実行せず，最初に Tab が押されたときに実行する (遅延初期化)．
 # zsh-completions が上記で fpath に追加済みなので，そのまま compinit で認識される．
 autoload -Uz compinit
-# .zcompdump が 24 時間以上古ければフルチェック，そうでなければキャッシュを使う．
-# -i: 安全でないディレクトリがあっても確認プロンプトを出さずに無視する
-if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
-  compinit -i
-else
-  compinit -C
-fi
 
-# bun の補完 (内部で compdef を使うため compinit の後に読み込む)
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+function _lazy_compinit() {
+  # .zcompdump が 24 時間以上古ければフルチェック，そうでなければキャッシュを使う．
+  # -i: 安全でないディレクトリがあっても確認プロンプトを出さずに無視する
+  #     (ZLE ウィジェット内では y/n の入力待ちができないため)
+  if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+    compinit -i
+  else
+    compinit -C
+  fi
 
-# fzf-tab: compinit の後に読み込む (zsh 5.9 の zsh-syntax-highlighting はウィジェットを包まないので後でも問題ない)
-source ~/git/fzf-tab/fzf-tab.plugin.zsh
+  # bun の補完 (内部で compdef を使うため compinit の後に読み込む)
+  [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+  # 以降の Tab は通常の補完ウィジェットに戻す．
+  # fzf が Tab を握っている場合は ** 補完を残し，** 以外の委譲先だけを差し替える
+  if (( $+widgets[fzf-completion] )); then
+    fzf_default_completion=expand-or-complete
+  else
+    bindkey -M viins '^I' expand-or-complete
+    bindkey -M emacs '^I' expand-or-complete
+  fi
+
+  # 補完結果と予測が一緒に適用されたように見えないよう，ここで予測を消す
+  POSTDISPLAY=
+
+  # 今回押された Tab の分の補完を実行する
+  zle expand-or-complete
+}
+zle -N _lazy_compinit
+bindkey -M viins '^I' _lazy_compinit
+bindkey -M emacs '^I' _lazy_compinit
 
 # --- 補完の基本動作 (setopt) ---
 setopt auto_param_slash   # ディレクトリ名の補完で末尾に / を自動的に付加する
@@ -215,8 +234,11 @@ function zvm_after_init() {
   bindkey -M vicmd 'j' history-substring-search-down
 
   # zsh-vi-mode が viins を再構築して Tab の割り当てが戻されるため，ここで再設定する．
+  # ただし既に compinit 済み (= _lazy_compinit が実行済み) なら通常の補完のままにする．
   # (この後に読む fzf は ** 以外の Tab をここで割り当てたウィジェットに渡す)
-  bindkey -M viins '^I' fzf-tab-complete
+  if (( ! $+functions[compdef] )); then
+    bindkey -M viins '^I' _lazy_compinit
+  fi
 
   bindkey -M viins '^N' _deja_next_or_history
   bindkey -M viins '^P' _deja_prev_or_history
@@ -306,7 +328,7 @@ mts () {
   cd - > /dev/null
 }
 
-# bun completions は compdef を使うため compinit の直後で読み込む (5. 補完機能 を参照)
+# bun completions は compdef を使うため _lazy_compinit 内で読み込む (5. 補完機能 を参照)
 
 if [[ -f ~/.zshrc.local ]]; then
     source ~/.zshrc.local
