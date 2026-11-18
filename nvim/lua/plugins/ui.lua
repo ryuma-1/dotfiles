@@ -227,6 +227,8 @@ return {
             options = {
                 -- Slanted tab edges, as shown in the bufferline.nvim README
                 separator_style = 'slant',
+                -- Show the bufferline only when two or more buffers are open
+                always_show_bufferline = false,
                 diagnostics = 'nvim_lsp',
                 -- The terminal cannot shrink a single glyph, so a visually smaller one replaces the default 󰅖
                 buffer_close_icon = '×',
