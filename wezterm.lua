@@ -101,6 +101,17 @@ config.keys = {
   },
 
   -- ----------------------------------------
+  -- スクロールモード (j/k で 1 行，u/d で半ページ滑らかにスクロール，q/Esc で終了)
+  -- Ctrl+Space + u
+  -- ----------------------------------------
+
+  {
+    key = 'u',
+    mods = 'LEADER',
+    action = wezterm.action.ActivateKeyTable { name = 'scroll_mode', one_shot = false },
+  },
+
+  -- ----------------------------------------
   -- 上下分割
   -- Ctrl+Space + s
   -- ----------------------------------------
@@ -187,11 +198,11 @@ config.keys = {
 
   -- ----------------------------------------
   -- コピーモード (出力上を vim キーで移動・選択)
-  -- Ctrl+Space + x
+  -- Ctrl+Space + c
   -- ----------------------------------------
 
   {
-    key = 'x',
+    key = 'c',
     mods = 'LEADER',
     action = wezterm.action.ActivateCopyMode,
   },
@@ -356,6 +367,32 @@ end
 local copy_mode = wezterm.gui.default_key_tables().copy_mode
 table.insert(copy_mode, { key = 'u', mods = 'NONE', action = smooth_half_page(-1) })
 table.insert(copy_mode, { key = 'd', mods = 'NONE', action = smooth_half_page(1) })
+
+-- ========================================
+-- スクロールモード
+-- カーソルを持たず画面だけを滑らかにスクロールする
+-- ========================================
+
+local function smooth_scroll(direction, lines_of)
+  return wezterm.action_callback(function(window, pane)
+    for i = 1, lines_of(pane:get_dimensions().viewport_rows) do
+      wezterm.time.call_after(i * 0.008, function()
+        window:perform_action(wezterm.action.ScrollByLine(direction), pane)
+      end)
+    end
+  end)
+end
+local function one_line() return 1 end
+local function half_page(rows) return math.floor(rows / 2) end
+
+local scroll_mode = {
+  { key = 'j', mods = 'NONE', action = smooth_scroll(1, one_line) },
+  { key = 'k', mods = 'NONE', action = smooth_scroll(-1, one_line) },
+  { key = 'd', mods = 'NONE', action = smooth_scroll(1, half_page) },
+  { key = 'u', mods = 'NONE', action = smooth_scroll(-1, half_page) },
+  { key = 'q', mods = 'NONE', action = wezterm.action.PopKeyTable },
+  { key = 'Escape', mods = 'NONE', action = wezterm.action.PopKeyTable },
+}
 -- ========================================
 -- Leader ロック
 -- Leader → Leader で Enter / Escape を押すまで Leader 状態を維持する
@@ -384,14 +421,14 @@ local move_tab = {
   { key = 'Escape', mods = 'NONE', action = wezterm.action.PopKeyTable },
 }
 
-config.key_tables = { copy_mode = copy_mode, leader_lock = leader_lock, move_tab = move_tab }
+config.key_tables = { copy_mode = copy_mode, leader_lock = leader_lock, move_tab = move_tab, scroll_mode = scroll_mode }
 
 -- ========================================
 -- Leader 入力中はタブバー右端に色付きで表示し，押せるキーを並べる
 -- (config.keys の LEADER キーを変えたらここも更新する)
 -- ========================================
 
-local leader_hint = ' hjkl:pane  H/L:tab  m:move tab  s/v:split  z:zoom  q:select  /:search  w/W:close  x:copy  t:tab  n:win  o:nvim  e:quit '
+local leader_hint = ' hjkl:pane  H/L:tab  m:move tab  s/v:split  z:zoom  q:select  /:search  w/W:close  c:copy  u:scroll  t:tab  n:win  o:nvim  e:quit '
 
 wezterm.on('update-status', function(window, _)
   if window:active_key_table() == 'move_tab' then
@@ -402,6 +439,17 @@ wezterm.on('update-status', function(window, _)
       { Foreground = { Color = '#000000' } },
       { Attribute = { Intensity = 'Bold' } },
       { Text = ' MOVE TAB ' },
+    })
+    return
+  end
+  if window:active_key_table() == 'scroll_mode' then
+    window:set_right_status(wezterm.format {
+      { Foreground = { Color = '#c9d1d9' } },
+      { Text = ' j/k:line  u/d:half page  q/Esc:quit ' },
+      { Background = { Color = '#ffa657' } },
+      { Foreground = { Color = '#000000' } },
+      { Attribute = { Intensity = 'Bold' } },
+      { Text = ' SCROLL ' },
     })
     return
   end
