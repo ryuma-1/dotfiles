@@ -4,6 +4,9 @@ vim.opt_local.tabstop = 4
 vim.opt_local.shiftwidth = 4
 vim.opt_local.softtabstop = 4
 
+-- <leader>m はファイルタイプ固有キーの prefix．which-key のグループ名もバッファローカルに付ける
+pcall(function() require('which-key').add({ { '<leader>m', group = 'markdown', buffer = 0 } }) end)
+
 -- 箇条書き・タスクリストの自動継続 (autolist.nvim)
 -- (Vim 標準の formatoptions/comments では記号のみで [ ] チェックボックスや
 --  番号付きリストの採番まで再現できないため，専用プラグインに委譲する)

@@ -399,7 +399,7 @@ return {
                 { '<leader>f', group = 'file/find' },
                 { '<leader>g', group = 'git' },
                 { '<leader>gh', group = 'hunks' },
-                { '<leader>m', group = 'markdown' },
+                -- <leader>m は filetype 固有 (グループ名は after/ftplugin/*.lua でバッファごとに登録)
                 { '<leader>q', group = 'quit' },
                 { '<leader>s', group = 'search' },
                 { '<leader>t', group = 'terminal' },

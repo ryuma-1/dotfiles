@@ -33,3 +33,17 @@ for _, key in ipairs({ 'o', 'O' }) do
     return vim.api.nvim_get_current_line():match('^%s*\\item') and key .. '\\item ' or key
   end, { buffer = true, expr = true })
 end
+
+-- <leader>m はファイルタイプ固有キーの prefix (Markdown と同じ規約)．中身は vimtex のコマンド
+pcall(function() require('which-key').add({ { '<leader>m', group = 'tex', buffer = 0 } }) end)
+for lhs, spec in pairs({
+  c = { 'VimtexCompile', 'Toggle Compile' },
+  v = { 'VimtexView', 'View PDF' },
+  e = { 'VimtexErrors', 'Show Errors' },
+  k = { 'VimtexStop', 'Stop Compile' },
+  t = { 'VimtexTocToggle', 'Toggle TOC' },
+  x = { 'VimtexClean', 'Clean Aux Files' },
+}) do
+  vim.keymap.set('n', '<leader>m' .. lhs, '<cmd>' .. spec[1] .. '<CR>',
+    { buffer = true, silent = true, desc = 'TeX: ' .. spec[2] })
+end
