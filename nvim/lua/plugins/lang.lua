@@ -39,7 +39,8 @@ return {
     {
         'gaoDean/autolist.nvim',
         ft = 'markdown',
-        config = function() require('autolist').setup() end,
+        -- <leader>ml (AutolistCycleNext) で「-」と「1.」を交互に切り替えるため cycle を 2 種類に絞る
+        config = function() require('autolist').setup({ cycle = { '-', '1.' } }) end,
     },
     -- LaTeX 拡張 (VimTex)
     {

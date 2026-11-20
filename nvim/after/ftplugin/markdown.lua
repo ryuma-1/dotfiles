@@ -16,6 +16,8 @@ vim.keymap.set('n', 'O', 'O<cmd>AutolistNewBulletBefore<CR>', { buffer = true })
 -- <C-r> は Vim 標準の redo と衝突し Markdown で redo できなくなるため使わず，
 -- 他の Markdown 専用キー (<leader>m 系) に揃えて <leader>mr に割り当てる．
 vim.keymap.set('n', '<leader>mr', '<cmd>AutolistRecalculate<CR>', { buffer = true, silent = true, desc = 'Markdown: Recalculate List' })
+-- 現在のインデント階層のリストを「-」⇔「1.」で切り替える (同階層の項目すべてに反映される)
+vim.keymap.set('n', '<leader>ml', '<cmd>AutolistCycleNext<CR>', { buffer = true, silent = true, desc = 'Markdown: Toggle List Type' })
 -- Tab / Shift-Tab での箇条書き（チェックボックス含む）インデント変更は，
 -- nvim-cmp が InsertEnter 毎に <Tab> を再設定してここでの定義を上書きしてしまうため，
 -- lua/plugins/completion.lua の cmp mapping 側 (<C-t>/<C-d> + AutolistRecalculate) で処理する．
